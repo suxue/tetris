@@ -46,6 +46,10 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Group root = new Group();
     	Scene scene = new Scene(root, 800, 600, Color.WHITE);
+    	scene.getStylesheets().add(this.getClass().getResource(
+    		      "/resources/stylesheet.css"
+    		    ).toExternalForm());
+
     	
     	// Create Menu Bar and make its width auto-adjustable
     	MenuBar menuBar = new MenuBar();
@@ -67,37 +71,13 @@ public class Main extends Application {
     	final Button exitButton = new Button("Exit");
     	exitButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     	exitButton.setOnAction(new _CloseAppHandler());
+    	exitButton.setId("exitButton");
     	
-    	String cssDefault = "-fx-font-size:28pt;"
-    			+ "-fx-background-image: url('resources/button.png'); ";
-    	exitButton.setStyle(cssDefault);
-    	exitButton.setTextFill(Color.WHITE);
+    	BorderPane borderPane = new BorderPane();
+    	borderPane.setCenter(exitButton);
+    	borderPane.setTop(menuBar);
     	
-    	
-    	final DropShadow shadow = new DropShadow();
-    	//Adding the shadow when the mouse cursor is on
-    	exitButton.addEventHandler(MouseEvent.MOUSE_ENTERED, 
-    			new EventHandler<MouseEvent>() {
-    		@Override public void handle(MouseEvent e) {
-    			exitButton.setEffect(shadow);
-    		}
-    	});
-    	//Removing the shadow when the mouse cursor is off
-    	exitButton.addEventHandler(MouseEvent.MOUSE_EXITED, 
-    			new EventHandler<MouseEvent>() {
-    		@Override public void handle(MouseEvent e) {
-    			exitButton.setEffect(null);
-    		}
-    	});
-    	
-    	
-    	
-    	TilePane tileButtons = new TilePane(Orientation.HORIZONTAL);
-    	tileButtons.setPadding(new Insets(20, 10, 20, 0));
-    	tileButtons.setHgap(10.0);
-    	tileButtons.setVgap(8.0);
-    	tileButtons.getChildren().addAll(exitButton);
-    	root.getChildren().addAll(menuBar, tileButtons);
+    	root.getChildren().add(borderPane);
 
     	stage.setTitle("Demo");
     	stage.setScene(scene);

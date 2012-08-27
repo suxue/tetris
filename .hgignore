@@ -2,4 +2,4 @@ syntax: glob
 .classpath
 *.class
 *.orig
-resources/
+bin/

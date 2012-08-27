@@ -1,0 +1,10 @@
+#exitButton {
+    -fx-font-size:28pt;
+    -fx-background-image: url('images/button.png'); 
+    -fx-background-size: 100%;
+    -fx-background-repeat:no-repeat; 
+    -fx-text-fill: white;
+    -fx-opacity: 0.8;
+    -fx-underline: true;
+    -fx-background-position: center;
+}
