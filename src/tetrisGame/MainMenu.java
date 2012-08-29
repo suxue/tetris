@@ -1,4 +1,4 @@
-package info.crystalsnow.comp1110.demo;
+package tetrisGame;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -27,7 +27,7 @@ import javafx.scene.paint.Color;
 
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainMenu extends Application {
 	
 	private class _CloseAppHandler implements EventHandler<ActionEvent> {
 		@Override
