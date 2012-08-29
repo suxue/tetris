@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Program Files/Oracle/JavaFX 2.1 SDK/rt/lib/jfxrt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
