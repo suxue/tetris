@@ -76,7 +76,7 @@ public class Main extends Application {
             .root(root)
             .stylesheets(
                     this.getClass().getResource(
-                        "/resources/stylesheet.css"
+                        "/css/stylesheet.css"
                         ).toExternalForm())
             .width(800)
             .height(600)
