@@ -1,4 +1,4 @@
-Button {
+.button {
     -fx-font-size:28pt;
     -fx-background-size: 100%;
     -fx-background-repeat:no-repeat; 
@@ -6,13 +6,6 @@ Button {
     -fx-opacity: 0.8;
     -fx-underline: true;
     -fx-background-position: center;
-}
-
-#exitButton {
     -fx-background-image: url('../img/button.png'); 
 }
 
-
-#saveButton {
-    -fx-background-image: url('../img/button.png'); 
-}
