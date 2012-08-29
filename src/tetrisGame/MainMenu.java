@@ -2,9 +2,13 @@ package tetrisGame;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 import javafx.scene.Group;
 import javafx.scene.GroupBuilder;
@@ -22,12 +26,26 @@ import javafx.scene.control.SeparatorMenuItem;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderPaneBuilder;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBoxBuilder;
 
 import javafx.scene.paint.Color;
 
 import javafx.stage.Stage;
 
 public class MainMenu extends Application {
+	
+	static final double scaleFactor = 0.15;
+	
+	private Button createButton(String id, String text) {
+    	Button nb = ButtonBuilder.create()
+    			.text(text)
+    			.id(id)
+    			.maxHeight(Double.MAX_VALUE)
+    			.maxWidth(Double.MAX_VALUE)
+    			.build();
+    	return nb;
+	}
 	
 	private class _CloseAppHandler implements EventHandler<ActionEvent> {
 		@Override
@@ -58,17 +76,43 @@ public class MainMenu extends Application {
     	MenuBar menuBar = MenuBarBuilder.create().menus(fileMenu).build();
     	menuBar.prefWidthProperty().bind(stage.widthProperty());
     	
-    	Button exitButton = ButtonBuilder.create()
-    			.text("Exit")
-    			.id("exitButton")
-    			.maxHeight(Double.MAX_VALUE)
-    			.onAction(new _CloseAppHandler())
-    			.build();
-    	exitButton.maxWidthProperty().bind(stage.widthProperty().multiply(0.77));
-    	
+    	Button exitButton = createButton("exitButton", "Exit");
+    	exitButton.setOnAction(new _CloseAppHandler());
+    	final VBox vbox = VBoxBuilder.create()
+            .alignment(Pos.CENTER)
+            .children(createButton("saveButton", "Save"), exitButton)
+            .build();
+    	vbox.maxWidthProperty().bind(stage.widthProperty().multiply(0.77));
+
+        stage.widthProperty().addListener(new ChangeListener<Number>(){
+			@Override
+			public void changed(ObservableValue<? extends Number> observable,
+					Number oldValue, Number newValue) {
+                Insets oldInsets = vbox.getPadding(); 
+                Double newPadding = newValue.doubleValue() * scaleFactor;
+                Insets newInsets = new Insets(oldInsets.getTop(), newPadding,
+                    oldInsets.getBottom(), newPadding);
+                vbox.setPadding(newInsets);
+			}
+        });
+
+        stage.heightProperty().addListener(new ChangeListener<Number>(){
+			@Override
+			public void changed(ObservableValue<? extends Number> observable,
+					Number oldValue, Number newValue) {
+                Insets oldInsets = vbox.getPadding(); 
+                Double newPadding = newValue.doubleValue() * scaleFactor;
+                Insets newInsets = new Insets(newPadding, oldInsets.getLeft(),
+                    newPadding, oldInsets.getRight());
+                vbox.setPadding(newInsets);
+                vbox.setSpacing(newPadding);
+			}
+        });
+
+
     	BorderPane borderPane = BorderPaneBuilder.create()
-    			.center(exitButton)
-    			.top(menuBar) 
+    			.center(vbox)
+    			.top(menuBar)
     			.build();
     	
     	Group root = GroupBuilder.create().children(borderPane).build();    	
