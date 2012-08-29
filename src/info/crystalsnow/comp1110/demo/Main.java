@@ -1,8 +1,5 @@
 package info.crystalsnow.comp1110.demo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -20,7 +17,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuBarBuilder;
 import javafx.scene.control.MenuBuilder;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.SeparatorMenuItem;
 
