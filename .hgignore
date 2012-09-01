@@ -2,5 +2,6 @@ syntax: glob
 *.class
 *.orig
 *.swp
+*.stackdump
 bin/
 .refactorings/
