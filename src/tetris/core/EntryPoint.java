@@ -7,6 +7,9 @@
  */
 package tetris.core;
 
+import tetris.util.File;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -23,22 +26,8 @@ import gnu.getopt.LongOpt;
 public class EntryPoint extends Application {
     private static class ParsingSlave {
 
-        private String args[] = null;
-
-        ParsingSlave(String args[]) {
-            this.args = args;
-        }
-
         // utility functions
-        private void print(String s, String a) {
-            System.out.format(s + "\n", a);
-        }
-
-        private void echo(String s) {
-            System.out.println(s);
-        }
-
-        private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt...items)
+        static private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt...items)
         {
             ArrayList<LongOpt> l = new ArrayList<LongOpt>();
             for (LongOpt i : items) {
@@ -52,7 +41,7 @@ public class EntryPoint extends Application {
         }
 
 
-        void parseAndFill(GameState st) {
+        static private void intepret(String[] args) throws IOException {
             StringBuffer optionString = new StringBuffer("");   
             LongOpt[] longOptions = longOptBuilder(optionString
                     , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
@@ -70,17 +59,14 @@ public class EntryPoint extends Application {
 
                 switch (result) {
                     case 'h':
-                        print("Usage: %s [OPTION]...", gameState.getTitle());
-                        echo("  -h, --help\t\tprint this message");
-                        echo("  -v, --version\t\tshow version information");
+                        System.out.format(File.readResourceFile("/txt/help.txt")
+                                , gameState.getTitle());
                         System.exit(0);
                         break;
                     case 'v':
-                        System.out.format(
-                                "%s %s  Copyright (C) 2012  ANU, Tasneem, Karun, Hao\n"
-                                , gameState.getTitle()
-                                , gameState.getVersion()
-                                );
+                        System.out.format(File.readResourceFile("/txt/version.txt")
+                                    , gameState.getTitle()
+                                    , gameState.getVersion());
                         System.exit(0);
                         break;
                     case 'x':
@@ -130,9 +116,8 @@ public class EntryPoint extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        ParsingSlave ps = new ParsingSlave(args);
-        ps.parseAndFill(gameState);
+    public static void main(String[] args) throws IOException {
+        ParsingSlave.intepret(args);
         Application.launch(args);
     }
 }

@@ -1,0 +1,6 @@
+Usage: %s [OPTION]...
+  -h, --help        print this message
+  -v, --version     show version information
+  -x, --width       specify width of window
+  -y, --height      specify height of window
+
