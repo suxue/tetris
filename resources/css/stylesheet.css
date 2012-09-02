@@ -1,7 +1,7 @@
 .button {
     -fx-font-size:28pt;
     -fx-background-size: 100%;
-    -fx-background-repeat:no-repeat; 
+    -fx-background-repeat: no-repeat; 
     -fx-text-fill: white;
     -fx-opacity: 0.8;
     -fx-underline: true;

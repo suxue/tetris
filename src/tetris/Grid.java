@@ -1,4 +1,4 @@
-package tetrisGame;
+package tetris;
 
 
 import javafx.scene.Group;
