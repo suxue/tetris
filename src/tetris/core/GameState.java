@@ -7,6 +7,10 @@ public class GameState {
     private int resolutionX = 800;
     private int resolutionY = 600;
     
+    public GameState() {
+        super();
+    }
+    
     public String getVersion() {
         return version;
     }

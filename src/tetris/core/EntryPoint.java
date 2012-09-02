@@ -65,8 +65,8 @@ public class EntryPoint extends Application {
                         break;
                     case 'v':
                         System.out.format(File.readResourceFile("/txt/version.txt")
-                                    , gameState.getTitle()
-                                    , gameState.getVersion());
+                                , gameState.getTitle()
+                                , gameState.getVersion());
                         System.exit(0);
                         break;
                     case 'x':
