@@ -17,6 +17,8 @@ import javafx.beans.property.SimpleStringProperty;
 public class GameState {
     
     public class FrozenPropertyException extends Exception {
+        private static final long serialVersionUID = 5715318875069597835L;
+
         public FrozenPropertyException() {
             super("Error, frozen Property cannot be changed any more!");
         }
