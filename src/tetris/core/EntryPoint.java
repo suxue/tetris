@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
-import tetris.core.GameState.FrozenPropertyException;
 
 import tetris.util.File;
 
@@ -44,7 +43,7 @@ public class EntryPoint extends Application {
 
 
         private void interpret(String[] args) 
-                throws IOException, FrozenPropertyException 
+                throws IOException 
         { // begin interpret()
             
             StringBuffer optionString = new StringBuffer("");   

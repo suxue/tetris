@@ -10,19 +10,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 
 
 
 public class GameState {
     
-    public class FrozenPropertyException extends Exception {
-        private static final long serialVersionUID = 5715318875069597835L;
-
-        public FrozenPropertyException() {
-            super("Error, frozen Property cannot be changed any more!");
-        }
-    }
 
     private final SimpleStringProperty      version;
     public final ReadOnlyStringProperty versionProperty() {
@@ -30,7 +24,7 @@ public class GameState {
     }
     
     private final SimpleStringProperty      title;
-    public final ReadOnlyStringProperty titleProperty() {
+    public final StringProperty titleProperty() {
         return title;
     }
     
@@ -66,10 +60,7 @@ public class GameState {
         return width.getValue();
     }
 
-    public final void setWidth(int width) throws FrozenPropertyException {
-        if (widthProperty().isBound()) {
-            throw new FrozenPropertyException();
-        }
+    public final void setWidth(int width) {
         this.width.setValue(width);
     }
 
@@ -77,14 +68,15 @@ public class GameState {
         return height.getValue();
     }
 
-    public final void setHeight(int height) throws FrozenPropertyException {
-        if (widthProperty().isBound()) {
-            throw new FrozenPropertyException();
-        }
+    public final void setHeight(int height) {
         this.height.setValue(height);
     }
 
     public final String getTitle() {
         return title.getValue();
+    }
+    
+    public final void setTitle(String title) {
+        titleProperty().setValue(title);
     }
 }
