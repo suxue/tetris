@@ -7,27 +7,29 @@
  */
 package tetris.core;
 
-import tetris.util.File;
-
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 import javafx.application.Application;
-
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.SceneBuilder;
 
 import javafx.stage.Stage;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
+import tetris.core.GameState.FrozenPropertyException;
+
+import tetris.util.File;
+
 public class EntryPoint extends Application {
-    private static class ParsingSlave {
+    
+    private Game tetrisGame = new Game();
+
+    private class ParsingSlave {
 
         // utility functions
-        static private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt...items)
+        private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt...items)
         {
             ArrayList<LongOpt> l = new ArrayList<LongOpt>();
             for (LongOpt i : items) {
@@ -41,16 +43,19 @@ public class EntryPoint extends Application {
         }
 
 
-        static private void intepret(String[] args) throws IOException {
+        private void interpret(String[] args) 
+                throws IOException, FrozenPropertyException 
+        { // begin interpret()
+            
             StringBuffer optionString = new StringBuffer("");   
             LongOpt[] longOptions = longOptBuilder(optionString
-                    , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
-                    , new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'v')
-                    , new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'x')
-                    , new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null, 'y')
-                    );
+                , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
+                , new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'v')
+                , new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'x')
+                , new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null, 'y')
+            );
 
-            Getopt g = new Getopt(gameState.getTitle(), args 
+            Getopt g = new Getopt(tetrisGame.getTitle(), args 
                     ,optionString.toString(), longOptions);
 
             int result;
@@ -60,20 +65,20 @@ public class EntryPoint extends Application {
                 switch (result) {
                     case 'h':
                         System.out.format(File.readResourceFile("/txt/help.txt")
-                                , gameState.getTitle());
+                                , tetrisGame.getTitle());
                         System.exit(0);
                         break;
                     case 'v':
                         System.out.format(File.readResourceFile("/txt/version.txt")
-                                , gameState.getTitle()
-                                , gameState.getVersion());
+                                , tetrisGame.getTitle()
+                                , tetrisGame.getVersion());
                         System.exit(0);
                         break;
                     case 'x':
                         arg = g.getOptarg();
                         try {
                             int width = Integer.parseInt(arg);
-                            gameState.setResolutionX(width);
+                            tetrisGame.setWidth(width);
                         } catch (NumberFormatException e) {
                             System.err.format(
                                     "Sorry, [%s] is not a valid width value\n"
@@ -85,7 +90,7 @@ public class EntryPoint extends Application {
                         try {
                             int height = Integer.parseInt(arg);
                             System.out.println(height);
-                            gameState.setResolutionY(height);
+                            tetrisGame.setHeight(height);
                         } catch (NumberFormatException e) {
                             System.err.format(
                                     "Sorry, but [%s] is not a valid height value\n"
@@ -101,23 +106,16 @@ public class EntryPoint extends Application {
         }  // -- end parseAndFill()
     } // -- end class ParsingSlave
 
-    private static GameState gameState = new GameState();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle(gameState.getTitle());
-        Group root = new Group();
-        Scene scene = SceneBuilder.create()
-            .width(gameState.getResolutionX())
-            .height(gameState.getResolutionY())
-            .root(root)
-            .build();
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        Application.Parameters args = getParameters();
+        (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
+        tetrisGame.prepare(primaryStage);
+        tetrisGame.fire();
     }
 
     public static void main(String[] args) throws IOException {
-        ParsingSlave.intepret(args);
         Application.launch(args);
     }
 }
