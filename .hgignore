@@ -5,3 +5,7 @@ syntax: glob
 *.stackdump
 bin/
 .refactorings/
+build.xml
+manifest.mf
+nbproject/
+build/
