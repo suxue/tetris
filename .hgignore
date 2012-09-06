@@ -9,3 +9,6 @@ build.xml
 manifest.mf
 nbproject/
 build/
+.idea/
+*.eml
+*.iml
