@@ -1,0 +1,7 @@
+Setup
+=====
+
+To continue to develop upon this project, import this folder as an existing
+project to eclipse.
+
+Note: Don't forget add a user library named 'JavaFX'.
