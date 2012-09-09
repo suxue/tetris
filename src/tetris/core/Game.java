@@ -38,13 +38,12 @@ class GameRoot extends BorderPane {
     private static final double scaleFactor = 0.15;
 
     private Button _createButton(String id, String text) {
-        Button nb = ButtonBuilder.create()
+        return ButtonBuilder.create()
                 .text(text)
                 .id(id)
                 .maxHeight(Double.MAX_VALUE)
                 .maxWidth(Double.MAX_VALUE)
                 .build();
-        return nb;
     }
 
     private class CloseAppHandler implements EventHandler<ActionEvent> {
@@ -119,11 +118,10 @@ class GameRoot extends BorderPane {
 
 public class Game extends GameState {
     private Stage primaryStage;
-    private Scene primaryScene;
-    
+
     public void prepare(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        primaryScene =  SceneBuilder.create()
+        Scene primaryScene =  SceneBuilder.create()
                             .root(new GameRoot())
                             .stylesheets(
                                  this.getClass().getResource(

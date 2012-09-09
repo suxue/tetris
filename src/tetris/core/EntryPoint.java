@@ -23,7 +23,7 @@ import tetris.util.File;
 
 public class EntryPoint extends Application {
     
-    private Game tetrisGame = new Game();
+    private final Game tetrisGame = new Game();
 
     private class ParsingSlave {
 
@@ -88,7 +88,6 @@ public class EntryPoint extends Application {
                         arg = g.getOptarg();
                         try {
                             int height = Integer.parseInt(arg);
-                            System.out.println(height);
                             tetrisGame.setHeight(height);
                         } catch (NumberFormatException e) {
                             System.err.format(
@@ -109,7 +108,7 @@ public class EntryPoint extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Application.Parameters args = getParameters();
-        (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
+        (new ParsingSlave()).interpret((String[])args.getRaw().toArray());
         tetrisGame.prepare(primaryStage);
         tetrisGame.fire();
     }

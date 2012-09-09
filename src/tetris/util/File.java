@@ -7,8 +7,8 @@ import java.io.IOException;
 public class File {
     public static String readResourceFile(String filename) throws IOException {
         BufferedReader in = null;
-        StringBuffer sb = new StringBuffer();
-        String line = null;
+        StringBuilder sb = new StringBuilder();
+        String line;
         String fn = File.class.getResource(filename).getFile();
         try {
             in = new BufferedReader(new FileReader(fn));
@@ -17,7 +17,8 @@ public class File {
                 sb.append("\n");
             }
         } finally {
-            in.close();
+            if (in != null)
+                in.close();
         }
         return sb.toString();
     }
