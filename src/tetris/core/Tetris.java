@@ -203,7 +203,7 @@ class TetrisDynamic extends TetrisStatic implements  GameState {
 
     @Override
     public final void setHeight(double height) {
-        width().setValue(height);
+        height().setValue(height);
     }
 }
 
