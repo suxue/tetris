@@ -4,37 +4,24 @@
 
 package tetris.core;
 
-import javafx.beans.property.*;
-import tetris.api.GameState;
-import tetris.api.GameProperty;
 import javafx.application.Platform;
-
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuBarBuilder;
-import javafx.scene.control.MenuBuilder;
-import javafx.scene.control.MenuItemBuilder;
-import javafx.scene.control.SeparatorMenuItemBuilder;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
-
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import tetris.api.GameProperty;
+import tetris.api.GameState;
 
 class GameRoot extends BorderPane {
 
@@ -59,20 +46,20 @@ class GameRoot extends BorderPane {
     private class NewGameHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            setCenter(new  Grid());
+            setCenter(new Grid());
         }
     }
 
     GameRoot() {
         Menu fileMenu = MenuBuilder.create()
-            .text("Demo")
-            .items(   MenuItemBuilder.create().text("New")
-                       .onAction(new NewGameHandler()).build()
-                   , MenuItemBuilder.create().text("Save").build()
-                   , SeparatorMenuItemBuilder.create().build()
-                   , MenuItemBuilder.create().text("Exit")
-                      .onAction(new CloseAppHandler()).build())
-            .build();
+                .text("Demo")
+                .items(MenuItemBuilder.create().text("New")
+                        .onAction(new NewGameHandler()).build()
+                        , MenuItemBuilder.create().text("Save").build()
+                        , SeparatorMenuItemBuilder.create().build()
+                        , MenuItemBuilder.create().text("Exit")
+                        .onAction(new CloseAppHandler()).build())
+                .build();
 
         MenuBar menuBar = MenuBarBuilder.create().menus(fileMenu).build();
         menuBar.prefWidthProperty().bind(this.widthProperty());
@@ -83,17 +70,17 @@ class GameRoot extends BorderPane {
         newButton.setOnAction(new NewGameHandler());
         final VBox vbox = VBoxBuilder.create()
                 .alignment(Pos.CENTER)
-                .children(  newButton
-                            , _createButton("saveButton", "Save")
-                            ,  exitButton )
+                .children(newButton
+                        , _createButton("saveButton", "Save")
+                        , exitButton)
                 .build();
         vbox.maxWidthProperty().bind(this.widthProperty().multiply(0.77));
 
-        this.widthProperty().addListener(new ChangeListener<Number>(){
+        this.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable,
-                    Number oldValue, Number newValue) {
-                Insets oldInsets = vbox.getPadding(); 
+                                Number oldValue, Number newValue) {
+                Insets oldInsets = vbox.getPadding();
                 Double newPadding = newValue.doubleValue() * scaleFactor;
                 Insets newInsets = new Insets(oldInsets.getTop(), newPadding,
                         oldInsets.getBottom(), newPadding);
@@ -101,11 +88,11 @@ class GameRoot extends BorderPane {
             }
         });
 
-        this.heightProperty().addListener(new ChangeListener<Number>(){
+        this.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable,
-                    Number oldValue, Number newValue) {
-                Insets oldInsets = vbox.getPadding(); 
+                                Number oldValue, Number newValue) {
+                Insets oldInsets = vbox.getPadding();
                 Double newPadding = newValue.doubleValue() * scaleFactor;
                 Insets newInsets = new Insets(newPadding, oldInsets.getLeft(),
                         newPadding, oldInsets.getRight());
@@ -121,8 +108,8 @@ class GameRoot extends BorderPane {
 
 class TetrisStatic implements GameProperty {
 
-    private final static SimpleStringProperty  _version = new SimpleStringProperty("0.01");
-    private final static SimpleStringProperty  _name    = new SimpleStringProperty("Tetris Game");
+    private final static SimpleStringProperty _version = new SimpleStringProperty("0.01");
+    private final static SimpleStringProperty _name = new SimpleStringProperty("Tetris Game");
 
     @Override
     public final ReadOnlyStringProperty version() {
@@ -145,7 +132,7 @@ class TetrisStatic implements GameProperty {
     }
 }
 
-class TetrisDynamic extends TetrisStatic implements  GameState {
+class TetrisDynamic extends TetrisStatic implements GameState {
     private final SimpleStringProperty _title = new SimpleStringProperty();
     private final SimpleDoubleProperty _width = new SimpleDoubleProperty();
     private final SimpleDoubleProperty _height = new SimpleDoubleProperty();
@@ -158,7 +145,7 @@ class TetrisDynamic extends TetrisStatic implements  GameState {
     }
 
     TetrisDynamic() {
-       this(800, 600);
+        this(800, 600);
     }
 
     @Override
@@ -207,7 +194,7 @@ class TetrisDynamic extends TetrisStatic implements  GameState {
     }
 }
 
-public class Tetris extends TetrisDynamic  {
+public class Tetris extends TetrisDynamic {
     private Stage primaryStage;
 
     public void init(Stage primaryStage) {
@@ -216,7 +203,7 @@ public class Tetris extends TetrisDynamic  {
                 .getResource("/css/stylesheet.css")
                 .toExternalForm();
 
-        Scene primaryScene =  SceneBuilder.create()
+        Scene primaryScene = SceneBuilder.create()
                 .root(new GameRoot())
                 .stylesheets(csspath)
                 .width(getWidth())

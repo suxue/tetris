@@ -7,35 +7,27 @@
  */
 package tetris.core;
 
-import tetris.api.*;
-
-import java.io.IOException;
-
-import java.util.ArrayList;
-
-import javafx.application.Application;
-
-import javafx.stage.Stage;
-
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
-
-
+import javafx.application.Application;
+import javafx.stage.Stage;
 import tetris.util.File;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class EntryPoint extends Application {
-    
+
     private Tetris tetrisGame = new Tetris();
 
     private class ParsingSlave {
 
         // utility functions
-        private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt...items)
-        {
+        private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt... items) {
             ArrayList<LongOpt> l = new ArrayList<LongOpt>();
             for (LongOpt i : items) {
                 l.add(i);
-                shortArgs.append( (new Character((char)i.getVal())).toString());
+                shortArgs.append((new Character((char) i.getVal())).toString());
                 if (i.getHasArg() == LongOpt.REQUIRED_ARGUMENT) {
                     shortArgs.append(":");
                 }
@@ -44,20 +36,19 @@ public class EntryPoint extends Application {
         }
 
 
-        private void interpret(String[] args) 
-                throws IOException 
-        { // begin interpret()
-            
-            StringBuffer optionString = new StringBuffer("");   
+        private void interpret(String[] args)
+                throws IOException { // begin interpret()
+
+            StringBuffer optionString = new StringBuffer("");
             LongOpt[] longOptions = longOptBuilder(optionString
-                , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
-                , new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'v')
-                , new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'x')
-                , new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null, 'y')
+                    , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
+                    , new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'v')
+                    , new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'x')
+                    , new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null, 'y')
             );
 
-            Getopt g = new Getopt(tetrisGame.getTitle(), args 
-                    ,optionString.toString(), longOptions);
+            Getopt g = new Getopt(tetrisGame.getTitle(), args
+                    , optionString.toString(), longOptions);
 
             int result;
             String arg;
@@ -100,7 +91,7 @@ public class EntryPoint extends Application {
                     case '?': // unknown argument, getopt already printed error message
                         System.exit(-1);
                         // never reach here
-                        break;  
+                        break;
                 } // -- end switch
             } // -- end while
         }  // -- end parseAndFill()
