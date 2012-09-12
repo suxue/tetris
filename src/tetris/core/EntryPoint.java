@@ -108,7 +108,7 @@ public class EntryPoint extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Application.Parameters args = getParameters();
-        (new ParsingSlave()).interpret((String[])args.getRaw().toArray());
+        (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
         tetrisGame.prepare(primaryStage);
         tetrisGame.fire();
     }
