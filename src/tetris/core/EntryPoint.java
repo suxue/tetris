@@ -7,6 +7,8 @@
  */
 package tetris.core;
 
+import tetris.api.*;
+
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import tetris.util.File;
 
 public class EntryPoint extends Application {
     
-    private final Game tetrisGame = new Game();
+    private Tetris tetrisGame = new Tetris();
 
     private class ParsingSlave {
 
@@ -109,8 +111,8 @@ public class EntryPoint extends Application {
     public void start(Stage primaryStage) throws Exception {
         Application.Parameters args = getParameters();
         (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
-        tetrisGame.prepare(primaryStage);
-        tetrisGame.fire();
+        tetrisGame.init(primaryStage);
+        tetrisGame.start();
     }
 
     public static void main(String[] args) throws IOException {

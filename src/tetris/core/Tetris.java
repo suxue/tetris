@@ -4,6 +4,9 @@
 
 package tetris.core;
 
+import javafx.beans.property.*;
+import tetris.api.GameState;
+import tetris.api.GameProperty;
 import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
@@ -116,31 +119,123 @@ class GameRoot extends BorderPane {
     }
 }
 
-public class Game extends GameState {
+class TetrisStatic implements GameProperty {
+
+    private final static SimpleStringProperty  _version = new SimpleStringProperty("0.01");
+    private final static SimpleStringProperty  _name    = new SimpleStringProperty("Tetris Game");
+
+    @Override
+    public final ReadOnlyStringProperty version() {
+        return _version;
+    }
+
+    @Override
+    public final String getVersion() {
+        return version().getValue();
+    }
+
+    @Override
+    public final ReadOnlyStringProperty name() {
+        return _name;
+    }
+
+    @Override
+    public final String getName() {
+        return name().getValue();
+    }
+}
+
+class TetrisDynamic extends TetrisStatic implements  GameState {
+    private final SimpleStringProperty _title = new SimpleStringProperty();
+    private final SimpleDoubleProperty _width = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty _height = new SimpleDoubleProperty();
+
+    TetrisDynamic(double width, double height) {
+        super();
+        _title.setValue(name().getValue());
+        _width.setValue(width);
+        _height.setValue(height);
+    }
+
+    TetrisDynamic() {
+       this(800, 600);
+    }
+
+    @Override
+    public final StringProperty title() {
+        return _title;
+    }
+
+    @Override
+    public final String getTitle() {
+        return title().getValue();
+    }
+
+    @Override
+    public final void setTitle(String title) {
+        title().setValue(title);
+    }
+
+    @Override
+    public final DoubleProperty width() {
+        return _width;
+    }
+
+    @Override
+    public final double getWidth() {
+        return width().getValue();
+    }
+
+    @Override
+    public final void setWidth(double width) {
+        width().setValue(width);
+    }
+
+    @Override
+    public DoubleProperty height() {
+        return _height;
+    }
+
+    @Override
+    public double getHeight() {
+        return height().getValue();
+    }
+
+    @Override
+    public final void setHeight(double height) {
+        width().setValue(height);
+    }
+}
+
+public class Tetris extends TetrisDynamic  {
     private Stage primaryStage;
 
-    public void prepare(Stage primaryStage) {
+    public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        String csspath = this.getClass()
+                .getResource("/css/stylesheet.css")
+                .toExternalForm();
+
         Scene primaryScene =  SceneBuilder.create()
-                            .root(new GameRoot())
-                            .stylesheets(
-                                 this.getClass().getResource(
-                                "/css/stylesheet.css" ).toExternalForm())
-                            .width(getWidth())
-                            .height(getHeight())
-                            .fill(Color.AQUAMARINE)
-                            .build();
-      
-        primaryStage.titleProperty().bindBidirectional(titleProperty());
-        widthProperty().bind(primaryStage.widthProperty());
-        heightProperty().bind(primaryStage.heightProperty());
+                .root(new GameRoot())
+                .stylesheets(csspath)
+                .width(getWidth())
+                .height(getHeight())
+                .fill(Color.AQUAMARINE)
+                .build();
+
+        primaryStage.titleProperty().bindBidirectional(title());
+        width().bind(primaryStage.widthProperty());
+        height().bind(primaryStage.heightProperty());
         primaryStage.setScene(primaryScene);
     }
-    
-    public void fire() {
+
+
+    public void start() {
         primaryStage.show();
     }
-    
-    
-    
+
+    public void stop() {
+        Platform.exit();
+    }
 }
