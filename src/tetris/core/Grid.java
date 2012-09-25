@@ -14,40 +14,9 @@ public class Grid extends Group {
     static final int ROWS = 10;
     static final int COLS = 22;
     
-    private Group dots;
-    private double pixelsPerGrid;
-    
-    Grid(Group parent) {
-        pixelsPerGrid = Math.min(parent.getScene().getWidth()/ROWS, parent.getScene().getHeight())/COLS;
-        pixelsPerGrid =20;
-        dots = new Group();
+   
+   
         
-        for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLS; c++) {
-                GridCircle circle = new GridCircle(this, r, c, 10, Color.RED);
-                dots.getChildren().add(circle);
-            }
-        }
-        getChildren().add(dots);
-    }
-    
-    /**
-     * Convert a grid position to a pixel offset
-     * 
-     * @param value A grid position
-     * @return The pixel position corresponding to the input grid position
-     */
-    double gridToPixels(double value) {
-        return (value + 0.5) * pixelsPerGrid;
-    }
-    
-    /**
-     * @return return the scale function used to convert from grid positions
-     * to pixels
-     */
-    double gridScale() {
-        return pixelsPerGrid;
-    }
 
 
     public Grid() {
