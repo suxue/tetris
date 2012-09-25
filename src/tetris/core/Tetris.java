@@ -43,31 +43,21 @@ class GameRoot extends BorderPane {
         }
     }
 
-    private class NewGameHandler implements EventHandler<ActionEvent> {
-        @Override
-        public void handle(ActionEvent event) {
-            setCenter(new Grid());
-        }
-    }
 
-    GameRoot() {
-        Menu fileMenu = MenuBuilder.create()
-                .text("Demo")
-                .items(MenuItemBuilder.create().text("New")
-                        .onAction(new NewGameHandler()).build()
-                        , MenuItemBuilder.create().text("Save").build()
-                        , SeparatorMenuItemBuilder.create().build()
-                        , MenuItemBuilder.create().text("Exit")
-                        .onAction(new CloseAppHandler()).build())
-                .build();
-
-        MenuBar menuBar = MenuBarBuilder.create().menus(fileMenu).build();
-        menuBar.prefWidthProperty().bind(this.widthProperty());
-
+    GameRoot(final GameState gs) {
+        super();
         Button exitButton = _createButton("exitButton", "Exit");
         Button newButton = _createButton("newButton", "New Game");
         exitButton.setOnAction(new CloseAppHandler());
-        newButton.setOnAction(new NewGameHandler());
+        newButton.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        setCenter(new GameBoard(gs));
+                        System.out.println("hello");
+                    }
+                });
+
         final VBox vbox = VBoxBuilder.create()
                 .alignment(Pos.CENTER)
                 .children(newButton
@@ -102,7 +92,6 @@ class GameRoot extends BorderPane {
         });
 
         this.setCenter(vbox);
-        this.setTop(menuBar);
     }
 }
 
@@ -204,11 +193,11 @@ public class Tetris extends TetrisDynamic {
                 .toExternalForm();
 
         Scene primaryScene = SceneBuilder.create()
-                .root(new GameRoot())
+                .root(new GameRoot(this))
                 .stylesheets(csspath)
                 .width(getWidth())
                 .height(getHeight())
-                .fill(Color.AQUAMARINE)
+                .fill(Color.LIGHTSEAGREEN)
                 .build();
 
         primaryStage.titleProperty().bindBidirectional(title());

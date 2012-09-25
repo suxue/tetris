@@ -4,7 +4,7 @@ native = LF
 [patterns]
 **.pub          = LF
 **.jpg          = BIN
-**.jpg          = BIN
+**.png          = BIN
 **.class        = BIN
 **.txt          = NATIVE
 **.css          = NATIVE
