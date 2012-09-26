@@ -1,13 +1,22 @@
 package test_Tetris;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import org.junit.Test;
+
+
 
 public class GameWindow extends Application {
 
@@ -18,7 +27,6 @@ public class GameWindow extends Application {
     int windowOriginY= 30;
     Rectangle [][] arrayRect = new Rectangle [10] [22];
     Shapes currentShape;
-
     Group root = new Group();
 
     void generateShape(){
@@ -49,18 +57,51 @@ public class GameWindow extends Application {
         }
     }
 
-    void drawShape(){
-        int [][] position = currentShape.getStartPositions();
 
-        for(int i = 0; i < position.length; i ++){
-            arrayRect[position[i][0]][position[i][1]] = new Rectangle(windowOriginX + cellLength * position[i][0], windowOriginY + cellLength * position[i][1], cellLength, cellLength);
-            arrayRect[position[i][0]][position[i][1]].setStroke(Color.LIGHTGRAY);
-            arrayRect[position[i][0]][position[i][1]].setFill(currentShape.getColor());
-            root.getChildren().add(arrayRect[position[i][0]][position[i][1]]);
+
+
+    void drawShape(){
+        int [][] initialPosition = currentShape.getStartPositions();
+
+
+        for(int i = 0; i < initialPosition.length; i ++){
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]] = new Rectangle(windowOriginX + cellLength * initialPosition[i][0], windowOriginY + cellLength * initialPosition[i][1], cellLength, cellLength);
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]].setStroke(Color.LIGHTGRAY);
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]].setFill(currentShape.getColor());
+            root.getChildren().add(arrayRect[initialPosition[i][0]][initialPosition[i][1]]);
 
         }
 
     }
+
+
+    void movement(Direction direction){
+
+
+    }
+
+
+    /**
+     * Handle input events from the keyboard.
+     */
+    private final EventHandler<KeyEvent> inputHandler = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(final KeyEvent keyEvent) {
+            if (keyEvent.getCode() == KeyCode.Q) {
+                /* exit when Q is pressed */
+                System.exit(0);
+
+            } else if (keyEvent.getCode() == KeyCode.LEFT) {
+                /* send tetro left */
+                movement(Direction.LEFT);
+
+            } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+                /* send caterpillar right */
+
+            }
+        }
+    };
+
 
 
     public GameWindow(){
@@ -76,21 +117,14 @@ public class GameWindow extends Application {
         primaryStage.setScene(scene);
 
         Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-        
 
 
-    
+
+
         generateShape();
 
         root.getChildren().add(r);
-        //        for(int i = 0; i < 10; i++)
-        //            for(int j = 0; j < 22; j++)
-        //            {  
-        //                {
-        //                    arrayRect[i][j].setFill(Color.AQUA);
-        //                }
-        //                root.getChildren().add(arrayRect[i][j]);
-        //            }
+
         drawShape();
 
         primaryStage.show();
@@ -105,4 +139,17 @@ public class GameWindow extends Application {
         launch(args);    
     }
 
+
+    @Test
+    public void testRandomGenerator(){
+
+        int[][] testI= {{2,1},{1,0},{0,-1},{-1,-2}};
+        for (int i=0;i<4;i++)
+            for(int j=0;j<2;j++)                    
+                assertTrue(testI[i][j]==Shapes.J.rotation[i][j]);
+
+    }
 }
+
+
+
