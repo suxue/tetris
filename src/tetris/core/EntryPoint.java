@@ -18,9 +18,9 @@ import java.util.ArrayList;
 
 public class EntryPoint extends Application {
 
-    private Tetris tetrisGame = new Tetris();
+    public Tetris tetrisGame = new Tetris();
 
-    private class ParsingSlave {
+    public class ParsingSlave {
 
         // utility functions
         private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt... items) {
@@ -36,7 +36,7 @@ public class EntryPoint extends Application {
         }
 
 
-        private void interpret(String[] args)
+        public void interpret(String[] args)
                 throws IOException { // begin interpret()
 
             StringBuffer optionString = new StringBuffer("");
@@ -105,6 +105,7 @@ public class EntryPoint extends Application {
         tetrisGame.init(primaryStage);
         tetrisGame.start();
     }
+    
 
     public static void main(String[] args) throws IOException {
         Application.launch(args);
