@@ -10,7 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class GameWindow extends Application {
-    
+
     int windowWidth;
     int windowHeight;
     int cellLength;
@@ -20,7 +20,7 @@ public class GameWindow extends Application {
     Shapes currentShape;
 
     Group root = new Group();
-    
+
     void generateShape(){
         Random rand = new Random();
         int s = rand.nextInt(7);
@@ -48,18 +48,21 @@ public class GameWindow extends Application {
             break;
         }
     }
-    
-   void drawShape(){
-       int [][] position = currentShape.getStartPositions();
-       for(int i = 0; i < position.length; i ++){
-           arrayRect[position[i][0]][position[i][1]].setFill(currentShape.getColor());
-           root.getChildren().add(arrayRect[position[i][0]][position[i][1]]);
-           
-       }
-       
-   }
-    
-    
+
+    void drawShape(){
+        int [][] position = currentShape.getStartPositions();
+
+        for(int i = 0; i < position.length; i ++){
+            arrayRect[position[i][0]][position[i][1]] = new Rectangle(windowOriginX + cellLength * position[i][0], windowOriginY + cellLength * position[i][1], cellLength, cellLength);
+            arrayRect[position[i][0]][position[i][1]].setStroke(Color.LIGHTGRAY);
+            arrayRect[position[i][0]][position[i][1]].setFill(currentShape.getColor());
+            root.getChildren().add(arrayRect[position[i][0]][position[i][1]]);
+
+        }
+
+    }
+
+
     public GameWindow(){
         this.windowHeight = 850;
         this.cellLength = 35;
@@ -71,40 +74,35 @@ public class GameWindow extends Application {
         primaryStage.setTitle("Test Tetris");
         Scene scene = new Scene(root, windowWidth, windowHeight);
         primaryStage.setScene(scene);
-        
+
         Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
         
-        
-        
-        for(int i = 0; i < 10; i++)
-        for(int j = 0; j < 22; j++)
-        {    
-           arrayRect[i][j] = new Rectangle(windowOriginX + cellLength * i, windowOriginY + cellLength * j, cellLength, cellLength);
-        }
-        
+
+
+    
         generateShape();
 
         root.getChildren().add(r);
-//        for(int i = 0; i < 10; i++)
-//            for(int j = 0; j < 22; j++)
-//            {  
-//                {
-//                    arrayRect[i][j].setFill(Color.AQUA);
-//                }
-//                root.getChildren().add(arrayRect[i][j]);
-//            }
+        //        for(int i = 0; i < 10; i++)
+        //            for(int j = 0; j < 22; j++)
+        //            {  
+        //                {
+        //                    arrayRect[i][j].setFill(Color.AQUA);
+        //                }
+        //                root.getChildren().add(arrayRect[i][j]);
+        //            }
         drawShape();
-        
+
         primaryStage.show();
 
     }
-    
+
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-    launch(args);    
+        launch(args);    
     }
 
 }
