@@ -4,7 +4,7 @@
  *  Default values list here
  */
 
-package tetris.api;
+package tetris.api.game;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
@@ -15,11 +15,11 @@ public interface GameState {
     String getTitle();
     void setTitle(String title);
 
-    DoubleProperty width();
+    DoubleProperty widthProperty();
     double getWidth();
     void   setWidth(double width);
 
-    DoubleProperty height();
+    DoubleProperty heightProperty();
     double getHeight();
     void   setHeight(double height);
 }

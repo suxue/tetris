@@ -1,6 +1,7 @@
 package tetris.api;
 
 import javafx.scene.shape.Shape;
+import tetris.api.game.GameState;
 
 // a shape can mostly has four orientation
 //  see http://tetrisconcept.net/wiki/Orientation

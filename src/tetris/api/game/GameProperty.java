@@ -1,4 +1,4 @@
-package tetris.api;
+package tetris.api.game;
 
 import javafx.beans.property.ReadOnlyStringProperty;
 
