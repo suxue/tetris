@@ -1,10 +1,12 @@
 package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import tetris.api.game.Game;
+
+import java.util.ArrayList;
 
 
 public class TetrisGrid extends Rectangle {
@@ -13,16 +15,36 @@ public class TetrisGrid extends Rectangle {
     private static final int columnNumber = 10;
     private static final int rowNumber    = 20;
 
-    private DoubleProperty cellWidthProperty = new SimpleDoubleProperty();
-    private DoubleProperty cellHeightProperty = new SimpleDoubleProperty();
+    private DoubleProperty cellWidth = new SimpleDoubleProperty();
+    private DoubleProperty cellHeight = new SimpleDoubleProperty();
+
+    ReadOnlyDoubleProperty cellWidthProperty() {
+        return cellWidth;
+    }
+
+    ReadOnlyDoubleProperty cellHeighthProperty() {
+        return cellHeight;
+    }
+
+
+    class CellPool extends  ArrayList<Cell> {}
+    private CellPool cellPool = new CellPool();
 
     public TetrisGrid() {
         super();
         setFill(Color.WHITE);
-        cellWidthProperty.bind(widthProperty().divide(columnNumber));
-        cellHeightProperty.bind(heightProperty().divide(rowNumber));
+        cellWidth.bind(widthProperty().divide(columnNumber));
+        cellHeight.bind(heightProperty().divide(rowNumber));
+
+        // initialize cell pool
+        for (int i = 0; i < columnNumber * rowNumber; i++) {
+            getCellPool().add(new Cell(this));
+        }
+    }
+
+    CellPool getCellPool() {
+        return cellPool;
     }
 
 
-    // maintain a inner cell buffer
 }
