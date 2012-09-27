@@ -76,7 +76,7 @@ public class GameWindow extends Application {
 
         initialPosition = currentShape.getStartPositions();
        // Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-        //root.getChildren().add(r);
+        //ddroot.getChildren().add(r);
 
         for(int i = 0; i < initialPosition.length; i ++){
             arrayRect[initialPosition[i][0]][initialPosition[i][1]] = new Rectangle(windowOriginX + cellLength * initialPosition[i][0], windowOriginY + cellLength * initialPosition[i][1], cellLength, cellLength);
@@ -181,7 +181,7 @@ public class GameWindow extends Application {
     private void updateFPS(long elapsedNanos) {
         double elapsedSec = elapsedNanos / 1000000000.0;
         if (frameCount % 20 == 0) {
-         
+        drawCurrentShape();
           //  System.out.println("fps:" + 1/elapsedSec);
         }
     }
