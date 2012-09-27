@@ -27,7 +27,15 @@ public class TetrisGrid extends Rectangle {
     }
 
 
-    class CellPool extends  ArrayList<Cell> {}
+    class CellPool extends  ArrayList<Cell> {
+        Cell pop() {
+            assert this.size() != 0;
+            Cell tmp = this.get(this.size() - 1);
+            this.remove(this.size() - 1);
+            return tmp;
+        }
+    }
+
     private CellPool cellPool = new CellPool();
 
     public TetrisGrid() {
@@ -37,7 +45,7 @@ public class TetrisGrid extends Rectangle {
         cellHeight.bind(heightProperty().divide(rowNumber));
 
         // initialize cell pool
-        for (int i = 0; i < columnNumber * rowNumber; i++) {
+        for (int i = 0; i < columnNumber * rowNumber * 2; i++) {
             getCellPool().add(new Cell(this));
         }
     }
