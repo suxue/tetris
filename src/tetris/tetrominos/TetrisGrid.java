@@ -5,8 +5,11 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TetrisGrid extends Rectangle {
+public class TetrisGrid extends AnchorPane {
 
     // game is 10x20
     private static final int columnNumber = 10;
@@ -35,6 +38,7 @@ public class TetrisGrid extends Rectangle {
         return cellHeight;
     }
 
+
     private CellPool cellPool = new CellPool();
     private Game game = null;
 
@@ -49,21 +53,10 @@ public class TetrisGrid extends Rectangle {
         for (int i = 0; i < columnNumber * rowNumber * 2; i++) {
             getCellPool().add(new Cell());
         }
-
-
     }
 
     public CellPool getCellPool() {
         return cellPool;
     }
-
-    public void show(Node n) {
-        game.addNode(n);
-    }
-
-    public void hide(Node n) {
-        game.addNode(n);
-    }
-
 
 }

@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -92,10 +93,15 @@ public class GameBoard extends HBox {
         });
 
         final TetrisGrid mainZone = new TetrisGrid((Game)gameState);
-        mainZone.widthProperty().bind(mainZoneWidthProperty);
-        mainZone.heightProperty().bind(componentHeightProperty);
+        Rectangle x = new Rectangle();
+        mainZone.setTopAnchor(x, 0.0);
+        mainZone.setLeftAnchor(x, 0.0);
+        mainZone.setRightAnchor(x, 0.0);
+        mainZone.setBottomAnchor(x, 0.0);
+        mainZone.getChildren().add(x);
+        x.widthProperty().bind(mainZoneWidthProperty);
+        x.heightProperty().bind(componentHeightProperty);
         this.getChildren().add(mainZone);
-
         IShape i = new IShape(mainZone.getCellPool());
         i.attach(mainZone);
 

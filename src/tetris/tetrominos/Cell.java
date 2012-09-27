@@ -33,12 +33,16 @@ public class Cell extends Rectangle {
     private TetrisGrid grid = null;
     public void attach(TetrisGrid grid) {
         this.grid = grid;
-        grid.show(this);
+        grid.setTopAnchor(this, 0.0);
+        grid.setLeftAnchor(this, 0.0);
+        grid.setBottomAnchor(this, 0.0);
+        grid.setRightAnchor(this, 0.0);
+        grid.getChildren().add(this);
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
-        //TODO bind x/y cooridate
-        xProperty().bind(grid.getParent().layoutXProperty().multiply(-1).add(widthProperty().multiply(cellXProperty)));
-        yProperty().bind(grid.getParent().layoutYProperty().multiply(-1).add(widthProperty().multiply(cellYProperty)));
+
+        xProperty().bind(widthProperty().multiply(cellXProperty));
+        yProperty().bind(widthProperty().multiply(cellYProperty));
     }
 
     public void detach() {
@@ -46,6 +50,6 @@ public class Cell extends Rectangle {
         heightProperty().unbind();
         xProperty().unbind();
         yProperty().unbind();
-        grid.hide(this);
+        grid.getChildren().remove(this);
     }
 }
