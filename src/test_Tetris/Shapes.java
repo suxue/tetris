@@ -14,7 +14,7 @@ public enum Shapes {
     
     private final int[][] positions;
     private final Color color;
-    private final int[][] rotation;
+    final int[][] rotation;
     
     Shapes (int[][] positionArray, Color color, int[][] rotateArray) {
         this.positions = positionArray;
