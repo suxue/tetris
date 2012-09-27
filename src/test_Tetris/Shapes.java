@@ -1,7 +1,11 @@
        
 package test_Tetris;
 
+import static org.junit.Assert.*;
+
 import javafx.scene.paint.Color;
+
+import org.junit.Test;
 
 public enum Shapes {
     I(new int[][] {{3,1},{4,1},{5,1},{6,1}}, Color.RED, new int[][] {{2,1},{1,0},{0,-1},{-1,-2}}), 
@@ -14,12 +18,12 @@ public enum Shapes {
     
     private final int[][] positions;
     private final Color color;
-    private final int[][] rotation;
+    final int[][] rotation;
     
-    Shapes (int[][] positionArray, Color color, int[][] rotateArray) {
+    Shapes (int[][] positionArray, Color color, int[][] rotateShape) {
         this.positions = positionArray;
         this.color = color;
-        this.rotation = rotateArray;
+        this.rotation = rotateShape;
     }
 
     public int[][] getStartPositions() {
@@ -34,6 +38,18 @@ public enum Shapes {
         return rotation;
     }
 
-    
-};
+
+@Test
+public void testRandomGenerator(){
+    int x=0;int y=0;
+     int[][] testI= {{2,1},{1,0},{0,-1},{-1,-2}};
+      for (int i=0;i<4;i++)
+          for(int j=0;j<2;j++)
+              
+              //assertTrue(testI[i][j]==Shapes.I.rotation[i][j]);
+              assertTrue(x==y);
+    }
+}
+
+
 
