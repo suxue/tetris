@@ -38,7 +38,8 @@ public class GameWindow extends Application {
     Scene _primaryScene;
     Rectangle r1;
     int [][] initialPosition;
-    float gravity = 48;
+    double gravity = 20;
+    double gridMoved;
     
     void generateShape(){
         Random rand = new Random();
@@ -73,7 +74,8 @@ public class GameWindow extends Application {
 
     void drawShape(){
         initialPosition = currentShape.getStartPositions();
-
+        Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+        root.getChildren().add(r);
 
         for(int i = 0; i < initialPosition.length; i ++){
             arrayRect[initialPosition[i][0]][initialPosition[i][1]] = new Rectangle(windowOriginX + cellLength * initialPosition[i][0], windowOriginY + cellLength * initialPosition[i][1], cellLength, cellLength);
@@ -90,8 +92,7 @@ public class GameWindow extends Application {
         if (direction==Direction.LEFT){
             for(int i = 0; i < initialPosition.length; i ++){
                 initialPosition[i][0]--;                
-            }Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-            root.getChildren().add(r);
+            }
             drawShape();
         }
 
@@ -99,21 +100,31 @@ public class GameWindow extends Application {
                 for(int i = 0; i < initialPosition.length; i ++){
                     initialPosition[i][0]++;                
                 }    
-                Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-                root.getChildren().add(r);
+               
                 drawShape();
             }
+        else if (direction==Direction.DOWN){
+            moveDown();
+        }
         }
 
-    void moveDown(float gridMove){
-        for(int i = 0; i < initialPosition.length; i ++){
-            initialPosition[i][1] += (int) gridMove;                
-        }
-        Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-        root.getChildren().add(r);
+    void moveDown(){
+        System.out.println("movedY : "+initialPosition[0][1]*cellLength);
+        if(initialPosition[0][1]*cellLength<=windowHeight){
+
+            for(int i = 0; i < initialPosition.length; i ++){
+                //initialPosition[i][1] += (int) gridMove; 
+                initialPosition[i][1]++;
+            }
+        
         drawShape();
     }
+    else if(initialPosition[0][1]*cellLength>=windowHeight) {
+        drawShape();
+    }
+    }
     
+
     /**
      * Update the game state.
      * 
@@ -129,10 +140,10 @@ public class GameWindow extends Application {
             frameCount++;
             long nanos = nowNanos - lastFrame;
             updateFPS(nanos);
-            System.out.println("nanos:" + nanos);
-            float gridMoved = (gravity * nanos) / 1000000000;
-            System.out.println(gridMoved);
-            moveDown(gridMoved);
+           // System.out.println("SECONDS:" + (nanos / 1000000000) );
+            gridMoved = (gravity * nanos) / 1000000000;
+           // System.out.println(gridMoved);
+          
         }
         lastFrame = nowNanos;
     }
@@ -144,9 +155,10 @@ public class GameWindow extends Application {
      */
     private void updateFPS(long elapsedNanos) {
         double elapsedSec = elapsedNanos / 1000000000.0;
-        if (frameCount % 10 == 0) {
-            fps.setText(String.format("%.1f", 1/elapsedSec));
-            System.out.println("fps:" + 1/elapsedSec);
+        if (frameCount % 20 == 0) {
+          //  moveDown();
+          //  fps.setText(String.format("%.1f", 1/elapsedSec));
+          //  System.out.println("fps:" + 1/elapsedSec);
         }
     }
 
@@ -169,14 +181,19 @@ public class GameWindow extends Application {
                 movement(Direction.RIGHT);
                 System.out.println("Right Key Pressed");
             }
+            else if (keyEvent.getCode() == KeyCode.DOWN) {
+                /* send caterpillar down */
+                movement(Direction.DOWN);
+                System.out.println("Down Key Pressed");
+            }
         }
     };
 
 
 
     public GameWindow(){
-        this.windowHeight = 850;
-        this.cellLength = 35;
+        this.windowHeight = 820;
+        this.cellLength = 30;
         this.windowWidth = 650;
     }
 
@@ -205,6 +222,7 @@ public class GameWindow extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+               // System.err.println(now);
                 updateGameState(now);
             }
         }.start();
