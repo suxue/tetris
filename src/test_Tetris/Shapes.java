@@ -46,7 +46,7 @@ public void testRandomGenerator(){
       for (int i=0;i<4;i++)
           for(int j=0;j<2;j++)
               
-              //assertTrue(testI[i][j]==Shapes.I.rotation[i][j]);
+              assertTrue(testI[i][j]==Shapes.I.rotation[i][j]);
               assertTrue(x==y);
     }
 }

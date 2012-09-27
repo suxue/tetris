@@ -31,7 +31,7 @@ public class GameWindow extends Application {
     Stage _primaryStage;
     Scene _primaryScene;
     Rectangle r1;
-
+    int [][] initialPosition;
 
     
     void generateShape(){
@@ -66,7 +66,7 @@ public class GameWindow extends Application {
 
 
     void drawShape(){
-        int [][] initialPosition = currentShape.getStartPositions();
+        initialPosition = currentShape.getStartPositions();
 
 
         for(int i = 0; i < initialPosition.length; i ++){
@@ -81,7 +81,14 @@ public class GameWindow extends Application {
 
 
     void movement(Direction direction){
-
+        if (direction==Direction.LEFT){
+            for(int i = 0; i < initialPosition.length; i ++){
+                initialPosition[i][0]--;
+                
+            }drawShape();
+        }
+            
+        
 
     }
 
@@ -98,6 +105,7 @@ public class GameWindow extends Application {
             } else if (keyEvent.getCode() == KeyCode.LEFT) {
                 /* send tetro left */
                 movement(Direction.LEFT);
+                System.out.println("Right Key Pressed");
 
             } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                 /* send caterpillar right */
@@ -127,7 +135,7 @@ public class GameWindow extends Application {
         r1 = new Rectangle(450, 45, 150, 120 );
 
 
-        generateShape();
+       generateShape();
 
         root.getChildren().add(r);
 
@@ -152,9 +160,12 @@ public class GameWindow extends Application {
     public void testRandomShapeGenerator(){
 
         int[][] testI= {{2,1},{1,0},{0,-1},{-1,-2}};
+        int[][] testJ={{2,0},{1,1},{0,0},{-1,-1}};
         for (int i=0;i<4;i++)
-            for(int j=0;j<2;j++)                    
+            for(int j=0;j<2;j++)  {                  
                 assertTrue(testI[i][j]==Shapes.I.rotation[i][j]);
+                assertTrue(testJ[i][j]==Shapes.J.rotation[i][j]);
+            }
 
     }
 
