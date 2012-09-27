@@ -1,0 +1,9 @@
+I declare that the work I have submitted for Stage <?> of this
+assignment and all stages before it is entirely my own work, with the
+following documented exceptions:
+
+- The idea of SHapes came from a discussion with hao and tasneem
+
+- The code in class Shapes uses an idea suggested by karun
+
+Signed: Karun Agarwal (u5218464)
