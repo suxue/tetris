@@ -33,16 +33,13 @@ public class Cell extends Rectangle {
     private TetrisGrid grid = null;
     public void attach(TetrisGrid grid) {
         this.grid = grid;
-        grid.setTopAnchor(this, 0.0);
-        grid.setLeftAnchor(this, 0.0);
-        grid.setBottomAnchor(this, 0.0);
-        grid.setRightAnchor(this, 0.0);
         grid.getChildren().add(this);
+        this.setManaged(false);
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
 
-        xProperty().bind(widthProperty().multiply(cellXProperty));
-        yProperty().bind(widthProperty().multiply(cellYProperty));
+        xProperty().bind((widthProperty().multiply(cellXProperty)));
+        yProperty().bind((widthProperty().multiply(cellYProperty)));
     }
 
     public void detach() {

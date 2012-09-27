@@ -94,10 +94,6 @@ public class GameBoard extends HBox {
 
         final TetrisGrid mainZone = new TetrisGrid((Game)gameState);
         Rectangle x = new Rectangle();
-        mainZone.setTopAnchor(x, 0.0);
-        mainZone.setLeftAnchor(x, 0.0);
-        mainZone.setRightAnchor(x, 0.0);
-        mainZone.setBottomAnchor(x, 0.0);
         mainZone.getChildren().add(x);
         x.widthProperty().bind(mainZoneWidthProperty);
         x.heightProperty().bind(componentHeightProperty);
