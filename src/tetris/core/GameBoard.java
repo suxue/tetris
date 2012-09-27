@@ -8,16 +8,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import tetris.api.GameState;
-
+import tetris.api.game.GameState;
+import tetris.tetrominos.TetrisGrid;
 
 // response for drawing the interface
 public class GameBoard extends HBox {
-    private static final double ComponentHeightPercentage = 0.80;
-    private static final double ComponentWidthPercentage = 0.77;
 
+    /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
     private final DoubleProperty componentHeightProperty = new SimpleDoubleProperty();
     private final DoubleProperty topBottomPaddingProperty = new SimpleDoubleProperty();
@@ -25,31 +23,39 @@ public class GameBoard extends HBox {
     private final DoubleProperty mainZoneWidthProperty = new SimpleDoubleProperty();
     private final DoubleProperty rightPaneWidthProperty = new SimpleDoubleProperty();
 
+    /* layout constants */
+    static final double ComponentHeightPercentage;
+    static final double ComponentWidthPercentage;
+    static final double MainZoneWidthPercentage;
+    static final double RightPaneWidthPercentage;
+    static final double TetrominoZoneHeightPercentage;
+    static final double LevelZoneHeightPercentage;
+    static final double ScoreZoneHeightPercentage;
+    static  {
+        ComponentHeightPercentage = 0.80;
+        ScoreZoneHeightPercentage = 0.20;
+        ComponentWidthPercentage = 0.77;
+        MainZoneWidthPercentage = 0.60;
+        RightPaneWidthPercentage = 0.30;
+        TetrominoZoneHeightPercentage = 0.40;
+        LevelZoneHeightPercentage = 0.20;
+    }
 
-    private static final double MainZoneWidthPercentage = 0.60;
-    private static final double RightPaneWidthPercentage = 0.30;
-    private static final double TetriminoZoneHeightPercentage = 0.40;
-    private static final double LevelZoneHeightPercentage = 0.20;
-    private static final double ScoreZoneHeightPercentage = 0.20;
 
-    private final DoubleProperty unitWidthPixcelsProperty = new SimpleDoubleProperty();
-    private final DoubleProperty unitHeightPixcelsProperty = new SimpleDoubleProperty();
 
-    public GameBoard(GameState gs) {
+    public GameBoard(GameState gameState) {
 
-        componentWidthProperty.bind(gs.width().multiply(ComponentWidthPercentage));
-        componentHeightProperty.bind(gs.height().multiply(ComponentHeightPercentage));
-        topBottomPaddingProperty.bind(gs.height().subtract(componentHeightProperty).divide(2.0f));
-        leftRightPaddingProperty.bind(gs.width().subtract(componentWidthProperty).divide(2.0f));
+        componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
+        componentHeightProperty.bind(gameState.heightProperty().multiply(ComponentHeightPercentage));
+        topBottomPaddingProperty.bind(gameState.heightProperty().subtract(componentHeightProperty).divide(2.0f));
+        leftRightPaddingProperty.bind(gameState.widthProperty().subtract(componentWidthProperty).divide(2.0f));
         mainZoneWidthProperty.bind(componentWidthProperty.multiply(MainZoneWidthPercentage));
         rightPaneWidthProperty.bind(componentWidthProperty.multiply(RightPaneWidthPercentage));
 
-        unitHeightPixcelsProperty.bind(componentHeightProperty.divide(22));
-        unitWidthPixcelsProperty.bind(mainZoneWidthProperty.divide(10));
 
-        this.setWidth(gs.getWidth());
-        this.setHeight(gs.getHeight());
-        // set initial width and padding
+        this.setWidth(gameState.getWidth());
+        this.setHeight(gameState.getHeight());
+        // set initial widthProperty and padding
         this.setPadding(new Insets(
                 topBottomPaddingProperty.doubleValue()
                 , leftRightPaddingProperty.doubleValue()
@@ -58,7 +64,7 @@ public class GameBoard extends HBox {
         ));
 
         // add listenser to keep padding
-        gs.width().addListener(new ChangeListener<Number>() {
+        gameState.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue
                     , Number oldVal, Number newVal) {
@@ -71,7 +77,7 @@ public class GameBoard extends HBox {
         });
 
 
-        gs.height().addListener(new ChangeListener<Number>() {
+        gameState.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue
                     , Number oldVal, Number newVal) {
@@ -83,8 +89,7 @@ public class GameBoard extends HBox {
             }
         });
 
-        final Rectangle mainZone = new Rectangle();
-        mainZone.setFill(Color.GREY);
+        final TetrisGrid mainZone = new TetrisGrid();
         mainZone.widthProperty().bind(mainZoneWidthProperty);
         mainZone.heightProperty().bind(componentHeightProperty);
         this.getChildren().add(mainZone);
@@ -92,31 +97,23 @@ public class GameBoard extends HBox {
 
         final VBox rightPane = new VBox();
         rightPane.spacingProperty().bind(componentHeightProperty
-         .multiply(1 - TetriminoZoneHeightPercentage
+         .multiply(1 - TetrominoZoneHeightPercentage
                  - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
-        final Rectangle tetriminoZone = new Rectangle();
+        final Rectangle tetrominoZone = new Rectangle();
         final Rectangle levelZone = new Rectangle();
         final Rectangle scoreZone = new Rectangle();
-        tetriminoZone.widthProperty().bind(rightPaneWidthProperty);
+        tetrominoZone.widthProperty().bind(rightPaneWidthProperty);
         levelZone.widthProperty().bind(rightPaneWidthProperty);
         scoreZone.widthProperty().bind(rightPaneWidthProperty);
-        tetriminoZone.heightProperty().bind(componentHeightProperty.multiply(TetriminoZoneHeightPercentage));
+        tetrominoZone.heightProperty().bind(componentHeightProperty.multiply(TetrominoZoneHeightPercentage));
         levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
         scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
-        rightPane.getChildren().addAll(tetriminoZone, levelZone, scoreZone);
+        rightPane.getChildren().addAll(tetrominoZone, levelZone, scoreZone);
 
         this.getChildren().add(rightPane);
-
 
         this.spacingProperty().bind(widthProperty()
                 .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
     }
-
-}
-
-
-// run all underlying game logic
-class GameLogic {
-
 
 }

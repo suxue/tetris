@@ -18,9 +18,9 @@ import java.util.ArrayList;
 
 public class EntryPoint extends Application {
 
-    private Tetris tetrisGame = new Tetris();
+    public Tetris tetrisGame = new Tetris();
 
-    private class ParsingSlave {
+    public class ParsingSlave {
 
         // utility functions
         private LongOpt[] longOptBuilder(StringBuffer shortArgs, LongOpt... items) {
@@ -36,15 +36,15 @@ public class EntryPoint extends Application {
         }
 
 
-        private void interpret(String[] args)
+        public void interpret(String[] args)
                 throws IOException { // begin interpret()
 
             StringBuffer optionString = new StringBuffer("");
             LongOpt[] longOptions = longOptBuilder(optionString
                     , new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h')
                     , new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'v')
-                    , new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'x')
-                    , new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null, 'y')
+                    , new LongOpt("widthProperty", LongOpt.REQUIRED_ARGUMENT, null, 'x')
+                    , new LongOpt("heightProperty", LongOpt.REQUIRED_ARGUMENT, null, 'y')
             );
 
             Getopt g = new Getopt(tetrisGame.getTitle(), args
@@ -73,7 +73,7 @@ public class EntryPoint extends Application {
                             tetrisGame.setWidth(width);
                         } catch (NumberFormatException e) {
                             System.err.format(
-                                    "Sorry, [%s] is not a valid width value\n"
+                                    "Sorry, [%s] is not a valid widthProperty value\n"
                                     , arg);
                         }
                         break;
@@ -84,7 +84,7 @@ public class EntryPoint extends Application {
                             tetrisGame.setHeight(height);
                         } catch (NumberFormatException e) {
                             System.err.format(
-                                    "Sorry, but [%s] is not a valid height value\n"
+                                    "Sorry, but [%s] is not a valid heightProperty value\n"
                                     , arg);
                         }
                         break;
@@ -105,6 +105,7 @@ public class EntryPoint extends Application {
         tetrisGame.init(primaryStage);
         tetrisGame.start();
     }
+    
 
     public static void main(String[] args) throws IOException {
         Application.launch(args);

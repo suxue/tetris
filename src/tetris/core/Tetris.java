@@ -14,14 +14,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import tetris.api.GameProperty;
-import tetris.api.GameState;
+import tetris.api.game.Game;
+import tetris.api.game.GameProperty;
+import tetris.api.game.GameState;
 
 class GameRoot extends BorderPane {
 
@@ -54,7 +56,6 @@ class GameRoot extends BorderPane {
                     @Override
                     public void handle(ActionEvent event) {
                         setCenter(new GameBoard(gs));
-                        System.out.println("hello");
                     }
                 });
 
@@ -153,38 +154,66 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 
     @Override
-    public final DoubleProperty width() {
+    public final DoubleProperty widthProperty() {
         return _width;
     }
 
     @Override
     public final double getWidth() {
-        return width().getValue();
+        return widthProperty().getValue();
     }
 
     @Override
     public final void setWidth(double width) {
-        width().setValue(width);
+        widthProperty().setValue(width);
     }
 
     @Override
-    public DoubleProperty height() {
+    public DoubleProperty heightProperty() {
         return _height;
     }
 
     @Override
     public double getHeight() {
-        return height().getValue();
+        return heightProperty().getValue();
     }
 
     @Override
     public final void setHeight(double height) {
-        height().setValue(height);
+        heightProperty().setValue(height);
     }
 }
 
-public class Tetris extends TetrisDynamic {
+public class Tetris extends TetrisDynamic implements  Game  {
     private Stage primaryStage;
+    private boolean primaryStageHasBeenShowed;
+    private BooleanProperty rsProperty;
+
+    public Tetris() {
+        super();
+        rsProperty = new SimpleBooleanProperty(false);
+        primaryStageHasBeenShowed = false;
+
+        rsProperty.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal ) {
+                if (oldVal == newVal) {
+                    // do nothing
+                } else {
+                    if (newVal == true) { // start
+                        if (primaryStageHasBeenShowed == false) {
+                            primaryStage.show();
+                            primaryStageHasBeenShowed = true;
+                        }
+                         // TODO resume game
+                    } else { // stop/pause
+                        // TODO pause game
+                    }
+
+                }
+            }
+        });
+    }
 
     public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -201,17 +230,38 @@ public class Tetris extends TetrisDynamic {
                 .build();
 
         primaryStage.titleProperty().bindBidirectional(title());
-        width().bind(primaryStage.widthProperty());
-        height().bind(primaryStage.heightProperty());
+        widthProperty().bind(primaryStage.widthProperty());
+        heightProperty().bind(primaryStage.heightProperty());
         primaryStage.setScene(primaryScene);
     }
 
-
-    public void start() {
-        primaryStage.show();
+    @Override
+    public ReadOnlyBooleanProperty runningStatusProperty() {
+        return rsProperty;
     }
 
+    @Override
+    public boolean getRunningStatus() {
+        return runningStatusProperty().getValue();
+    }
+
+    @Override
+    public void setRunningStatus(boolean rs) {
+        rsProperty.set(rs);
+    }
+
+    @Override
+    public void start() {
+        setRunningStatus(true);
+    }
+
+    @Override
     public void stop() {
+        setRunningStatus(false);
+    }
+
+    @Override
+    public void quit() {
         Platform.exit();
     }
 }
