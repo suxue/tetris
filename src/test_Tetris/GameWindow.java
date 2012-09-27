@@ -32,7 +32,7 @@ public class GameWindow extends Application {
     int windowOriginX= 50;
     int windowOriginY= 30;
     Rectangle [][] arrayRect = new Rectangle [10] [22];
-    Shapes currentShape;
+    Shapes currentShape,nextShape;
     Group root = new Group();
     Stage _primaryStage;
     Scene _primaryScene;
@@ -40,42 +40,43 @@ public class GameWindow extends Application {
     int [][] initialPosition;
     double gravity = 20;
     double gridMoved;
+    Predictor p;
     
     void generateShape(){
         Random rand = new Random();
         int s = rand.nextInt(7);
         switch(s){
         case 0:
-            currentShape = Shapes.I;
+            nextShape = Shapes.I;
             break;
         case 1:
-            currentShape = Shapes.J;
+            nextShape = Shapes.J;
             break;
         case 2: 
-            currentShape = Shapes.L;
+            nextShape = Shapes.L;
             break;
         case 3:
-            currentShape = Shapes.O;
+            nextShape = Shapes.O;
             break;
         case 4:
-            currentShape = Shapes.S;
+            nextShape = Shapes.S;
             break;
         case 5: 
-            currentShape = Shapes.T;
+            nextShape = Shapes.T;
             break;
         case 6: 
-            currentShape = Shapes.Z;
+            nextShape = Shapes.Z;
             break;
         }
     }
 
 
 
+    void drawCurrentShape(){
 
-    void drawShape(){
         initialPosition = currentShape.getStartPositions();
-        Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
-        root.getChildren().add(r);
+       // Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+        //root.getChildren().add(r);
 
         for(int i = 0; i < initialPosition.length; i ++){
             arrayRect[initialPosition[i][0]][initialPosition[i][1]] = new Rectangle(windowOriginX + cellLength * initialPosition[i][0], windowOriginY + cellLength * initialPosition[i][1], cellLength, cellLength);
@@ -86,15 +87,24 @@ public class GameWindow extends Application {
         }    
 
     }
-    
-    void drawNewShape(){
-        //for(int i = 0; i < 4; i ++)
-            for(int j = 0; j < initialPosition.length; j ++){
-            initialPosition[j][0]=0;
-            initialPosition[j][1]=0;
-        }
-        drawShape();
+
+    void drawNextShape(){
+
+        initialPosition = nextShape.getStartPositions();
+        Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+        root.getChildren().add(r);
+
+        for(int i = 0; i < initialPosition.length; i ++){
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]] = new Rectangle(windowOriginX+300 + cellLength * initialPosition[i][0], windowOriginY + cellLength * initialPosition[i][1], cellLength, cellLength);
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]].setStroke(Color.CRIMSON);
+            arrayRect[initialPosition[i][0]][initialPosition[i][1]].setFill(nextShape.getColor());
+            root.getChildren().add(arrayRect[initialPosition[i][0]][initialPosition[i][1]]);
+
+        }    
+
     }
+
+    
 
 
     void movement(Direction direction){
@@ -102,38 +112,43 @@ public class GameWindow extends Application {
             for(int i = 0; i < initialPosition.length; i ++){
                 initialPosition[i][0]--;                
             }
-            drawShape();
+            drawCurrentShape();
         }
 
         else if (direction==Direction.RIGHT){
-                for(int i = 0; i < initialPosition.length; i ++){
-                    initialPosition[i][0]++;                
-                }    
-               
-                drawShape();
-            }
+            for(int i = 0; i < initialPosition.length; i ++){
+                initialPosition[i][0]++;                
+            }    
+
+            drawCurrentShape();
+        }
         else if (direction==Direction.DOWN){
             moveDown();
         }
-        }
+    }
 
     void moveDown(){
         System.out.println("movedY : "+initialPosition[0][1]*cellLength);
         if(initialPosition[0][1]*cellLength<=600){
 
             for(int i = 0; i < initialPosition.length; i ++){
-                //initialPosition[i][1] += (int) gridMove; 
+
                 initialPosition[i][1]++;
             }
-        
-        drawShape();
+
+            drawCurrentShape();
+        }
+        else if(initialPosition[0][1]*cellLength>=600) {
+            System.out.println("Drawing new shape.......");
+            changeShape();
+
+        }
     }
-    else if(initialPosition[0][1]*cellLength>=600) {
-        System.out.println("Drawing new shape.......");
-        drawNewShape();
+    void changeShape(){
+        drawNextShape();
+        currentShape=nextShape;
     }
-    }
-    
+
 
     /**
      * Update the game state.
@@ -150,9 +165,9 @@ public class GameWindow extends Application {
             frameCount++;
             long nanos = nowNanos - lastFrame;
             updateFPS(nanos);
-           // System.out.println("SECONDS:" + (nanos / 1000000000) );
+           
             gridMoved = (gravity * nanos) / 1000000000;
-           // System.out.println(gridMoved);
+           
           
         }
         lastFrame = nowNanos;
@@ -166,8 +181,7 @@ public class GameWindow extends Application {
     private void updateFPS(long elapsedNanos) {
         double elapsedSec = elapsedNanos / 1000000000.0;
         if (frameCount % 20 == 0) {
-          //  moveDown();
-          //  fps.setText(String.format("%.1f", 1/elapsedSec));
+         
           //  System.out.println("fps:" + 1/elapsedSec);
         }
     }
@@ -196,6 +210,11 @@ public class GameWindow extends Application {
                 movement(Direction.DOWN);
                 System.out.println("Down Key Pressed");
             }
+            else if (keyEvent.getCode() == KeyCode.T) {
+                /* send caterpillar down */
+                changeShape();
+                System.out.println("Down Key Pressed");
+            }
         }
     };
 
@@ -218,30 +237,36 @@ public class GameWindow extends Application {
         _primaryScene = scene;
         _primaryStage = primaryStage;
         r1 = new Rectangle(450, 45, 150, 120 );
+        generateShape();
+       
+        drawNextShape();
+        changeShape();
+        drawCurrentShape();
+        //drawShape();
 
-
-       generateShape();
-       /* handle keyboard input */
-       scene.setOnKeyPressed(inputHandler);
+        //p.generateShape();
+        /* handle keyboard input */
+        scene.setOnKeyPressed(inputHandler);
 
         root.getChildren().add(r);
 
-        drawShape();
-        
+
+
         /* call updateGameState() once each frame */
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-               // System.err.println(now);
+                // System.err.println(now);
                 updateGameState(now);
             }
         }.start();
-        
-        
+
+
         primaryStage.show();
-        Predictor p = new Predictor();
-        p.generateShape();
-        p.drawShape(_primaryScene, _primaryStage, root, r1);
+        //Predictor p = new Predictor();
+        //p.generateShape();
+        // p.drawPredictorShape(_primaryScene, _primaryStage, root, r);
+        // p.drawCurrentShape(_primaryScene, _primaryStage, root, r);
     }
 
 

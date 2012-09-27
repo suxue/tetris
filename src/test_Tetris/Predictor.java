@@ -18,7 +18,7 @@ public class Predictor  {
     int windowOriginY= 60;
     int nextShapeId;
     Rectangle [][] arrayRect = new Rectangle [10] [22];
-    Shapes nextShape;
+    Shapes currentShape,nextShape;
     // generates a random shape
     void generateShape()
     {
@@ -53,18 +53,36 @@ public class Predictor  {
         int s = rand.nextInt(7);
         return s;
     }
+    /*
+    void drawCurrentShape(Scene _scene, Stage stage, Group root, Rectangle rec){
+        generateShape();
+        stage.setScene(_scene);
+        int [][] position = currentShape.getStartPositions();
 
-    void drawShape(Scene _scene, Stage stage, Group root, Rectangle rec){
+        for(int i = 0; i < position.length; i ++){
+            arrayRect[position[i][0]][position[i][1]] = new Rectangle(windowOriginX + cellLength * position[i][0], windowOriginY + cellLength * position[i][1], cellLength, cellLength);
+            arrayRect[position[i][0]][position[i][1]].setStroke(Color.FLORALWHITE);
+            arrayRect[position[i][0]][position[i][1]].setFill(currentShape.getColor());
+            root.getChildren().add(arrayRect[position[i][0]][position[i][1]]);
+        }
+
+        }
+
+    void drawPredictorShape(Scene _scene, Stage stage, Group root, Rectangle rec){
+        generateShape();
         stage.setScene(_scene);
         int [][] position = nextShape.getStartPositions();
 
         for(int i = 0; i < position.length; i ++){
             arrayRect[position[i][0]][position[i][1]] = new Rectangle(windowOriginX + cellLength * position[i][0], windowOriginY + cellLength * position[i][1], cellLength, cellLength);
-            arrayRect[position[i][0]][position[i][1]].setStroke(Color.LIGHTGRAY);
+            arrayRect[position[i][0]][position[i][1]].setStroke(Color.FLORALWHITE);
             arrayRect[position[i][0]][position[i][1]].setFill(nextShape.getColor());
             root.getChildren().add(arrayRect[position[i][0]][position[i][1]]);
 
         }
+        //currentShape=nextShape;
+    
+        
 
         stage.show();
     }
@@ -77,4 +95,5 @@ public class Predictor  {
 
 
     }
+    */
 }
