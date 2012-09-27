@@ -28,7 +28,12 @@ public class GameWindow extends Application {
     Rectangle [][] arrayRect = new Rectangle [10] [22];
     Shapes currentShape;
     Group root = new Group();
+    Stage _primaryStage;
+    Scene _primaryScene;
+    Rectangle r1;
 
+
+    
     void generateShape(){
         Random rand = new Random();
         int s = rand.nextInt(7);
@@ -90,7 +95,6 @@ public class GameWindow extends Application {
             if (keyEvent.getCode() == KeyCode.Q) {
                 /* exit when Q is pressed */
                 System.exit(0);
-
             } else if (keyEvent.getCode() == KeyCode.LEFT) {
                 /* send tetro left */
                 movement(Direction.LEFT);
@@ -118,7 +122,9 @@ public class GameWindow extends Application {
 
         Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
 
-
+        _primaryScene = scene;
+        _primaryStage = primaryStage;
+        r1 = new Rectangle(450, 45, 150, 120 );
 
 
         generateShape();
@@ -128,7 +134,9 @@ public class GameWindow extends Application {
         drawShape();
 
         primaryStage.show();
-
+        Predictor p = new Predictor();
+        p.generateShape();
+        p.drawShape(_primaryScene, _primaryStage, root, r1);
     }
 
 
@@ -149,7 +157,7 @@ public class GameWindow extends Application {
                 assertTrue(testI[i][j]==Shapes.J.rotation[i][j]);
 
     }
-}
+
 
 
 
