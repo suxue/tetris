@@ -2,37 +2,50 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.shape.Rectangle;
 
 public class Cell extends Rectangle {
 
-    DoubleProperty cellXProperty;
-    DoubleProperty cellYProperty;
-    private TetrisGrid grid;
-
-    public Cell(final TetrisGrid grid) {
-        this(grid, 0, 0);
+    public DoubleProperty getCellYProperty() {
+        return cellYProperty;
     }
 
-    public Cell(final TetrisGrid grid, double x, double y) {
+    public DoubleProperty getCellXProperty() {
+        return cellXProperty;
+    }
+
+    private DoubleProperty cellXProperty;
+    private DoubleProperty cellYProperty;
+
+
+    public Cell(double x, double y) {
         super();
-        this.grid = grid;
         cellXProperty = new SimpleDoubleProperty(x);
         cellYProperty = new SimpleDoubleProperty(y);
     }
 
-    void active() {
-        widthProperty().bind(grid.cellWidthProperty());
-        heightProperty().bind(grid.cellHeighthProperty());
-        xProperty().bind(grid.xProperty().add(widthProperty().multiply(cellXProperty)));
-        yProperty().bind(grid.yProperty().add(widthProperty().multiply(cellYProperty)));
+    public Cell() {
+        this(0, 0);
     }
 
-    void deactive() {
+    private TetrisGrid grid = null;
+    public void attach(TetrisGrid grid) {
+        this.grid = grid;
+        grid.show(this);
+        widthProperty().bind(grid.cellWidthProperty());
+        heightProperty().bind(grid.cellHeighthProperty());
+        //TODO bind x/y cooridate
+        xProperty().bind(grid.getParent().layoutXProperty().multiply(-1).add(widthProperty().multiply(cellXProperty)));
+        yProperty().bind(grid.getParent().layoutYProperty().multiply(-1).add(widthProperty().multiply(cellYProperty)));
+    }
+
+    public void detach() {
         widthProperty().unbind();
         heightProperty().unbind();
         xProperty().unbind();
         yProperty().unbind();
+        grid.hide(this);
     }
-
 }

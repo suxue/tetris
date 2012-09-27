@@ -3,10 +3,19 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import tetris.api.game.Game;
+import tetris.core.GameBoard;
+import tetris.tetrominos.shape.IShape;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TetrisGrid extends Rectangle {
@@ -26,32 +35,34 @@ public class TetrisGrid extends Rectangle {
         return cellHeight;
     }
 
-
-    class CellPool extends  ArrayList<Cell> {
-        Cell pop() {
-            assert this.size() != 0;
-            Cell tmp = this.get(this.size() - 1);
-            this.remove(this.size() - 1);
-            return tmp;
-        }
-    }
-
     private CellPool cellPool = new CellPool();
+    private Game game = null;
 
-    public TetrisGrid() {
+
+    public TetrisGrid(Game game) {
         super();
-        setFill(Color.WHITE);
+        this.game = game;
         cellWidth.bind(widthProperty().divide(columnNumber));
         cellHeight.bind(heightProperty().divide(rowNumber));
 
         // initialize cell pool
         for (int i = 0; i < columnNumber * rowNumber * 2; i++) {
-            getCellPool().add(new Cell(this));
+            getCellPool().add(new Cell());
         }
+
+
     }
 
-    CellPool getCellPool() {
+    public CellPool getCellPool() {
         return cellPool;
+    }
+
+    public void show(Node n) {
+        game.addNode(n);
+    }
+
+    public void hide(Node n) {
+        game.addNode(n);
     }
 
 

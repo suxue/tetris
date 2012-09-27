@@ -9,8 +9,10 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import tetris.api.game.Game;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
+import tetris.tetrominos.shape.IShape;
 
 // response for drawing the interface
 public class GameBoard extends HBox {
@@ -89,11 +91,13 @@ public class GameBoard extends HBox {
             }
         });
 
-        final TetrisGrid mainZone = new TetrisGrid();
+        final TetrisGrid mainZone = new TetrisGrid((Game)gameState);
         mainZone.widthProperty().bind(mainZoneWidthProperty);
         mainZone.heightProperty().bind(componentHeightProperty);
         this.getChildren().add(mainZone);
 
+        IShape i = new IShape(mainZone.getCellPool());
+        i.attach(mainZone);
 
         final VBox rightPane = new VBox();
         rightPane.spacingProperty().bind(componentHeightProperty

@@ -12,6 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
@@ -215,14 +217,20 @@ public class Tetris extends TetrisDynamic implements  Game  {
         });
     }
 
+    private Group extraGroup;
+    private GameRoot gameRoot;
     public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
         String csspath = this.getClass()
                 .getResource("/css/stylesheet.css")
                 .toExternalForm();
 
+        gameRoot = new GameRoot((this));
+        extraGroup = new Group();
+        gameRoot.setTop(extraGroup);
+
         Scene primaryScene = SceneBuilder.create()
-                .root(new GameRoot(this))
+                .root(gameRoot)
                 .stylesheets(csspath)
                 .width(getWidth())
                 .height(getHeight())
@@ -248,6 +256,17 @@ public class Tetris extends TetrisDynamic implements  Game  {
     @Override
     public void setRunningStatus(boolean rs) {
         rsProperty.set(rs);
+    }
+
+    @Override
+    public void addNode(Node n) {
+        extraGroup.getChildren().add(n);
+        gameRoot.toBack();
+    }
+
+    @Override
+    public void removeNode(Node n) {
+        extraGroup.getChildren().remove(n);
     }
 
     @Override
