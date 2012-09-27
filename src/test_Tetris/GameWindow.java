@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import org.junit.Test;
@@ -20,6 +22,10 @@ import org.junit.Test;
 
 public class GameWindow extends Application {
 
+    private Text fps = new Text(0, 30, "");
+    private long lastFrame = 0;
+    private long frameCount = 0;
+    
     int windowWidth;
     int windowHeight;
     int cellLength;
@@ -32,7 +38,7 @@ public class GameWindow extends Application {
     Scene _primaryScene;
     Rectangle r1;
     int [][] initialPosition;
-
+    float gravity = 48;
     
     void generateShape(){
         Random rand = new Random();
@@ -83,15 +89,66 @@ public class GameWindow extends Application {
     void movement(Direction direction){
         if (direction==Direction.LEFT){
             for(int i = 0; i < initialPosition.length; i ++){
-                initialPosition[i][0]--;
-                
-            }drawShape();
+                initialPosition[i][0]--;                
+            }Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+            root.getChildren().add(r);
+            drawShape();
         }
-            
-        
 
+        else if (direction==Direction.RIGHT){
+                for(int i = 0; i < initialPosition.length; i ++){
+                    initialPosition[i][0]++;                
+                }    
+                Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+                root.getChildren().add(r);
+                drawShape();
+            }
+        }
+
+    void moveDown(float gridMove){
+        for(int i = 0; i < initialPosition.length; i ++){
+            initialPosition[i][1] += (int) gridMove;                
+        }
+        Rectangle r = new Rectangle(windowOriginX, windowOriginY, cellLength * 10, cellLength * 22 );
+        root.getChildren().add(r);
+        drawShape();
+    }
+    
+    /**
+     * Update the game state.
+     * 
+     * This is called once every JavaFX frame.
+     * 
+     * @param nowNanos The time (in nanoseconds) when the call
+     * is made.
+     */
+    void updateGameState(long nowNanos) {
+        if (lastFrame == 0) {
+            lastFrame = nowNanos;
+        } else {
+            frameCount++;
+            long nanos = nowNanos - lastFrame;
+            updateFPS(nanos);
+            System.out.println("nanos:" + nanos);
+            float gridMoved = (gravity * nanos) / 1000000000;
+            System.out.println(gridMoved);
+            moveDown(gridMoved);
+        }
+        lastFrame = nowNanos;
     }
 
+    /**
+     * Update the FPS display, given the elapsed time for the last frame.
+     * 
+     * @param elapsedNanos  The elapsed time of the last frame, in nanoseconds
+     */
+    private void updateFPS(long elapsedNanos) {
+        double elapsedSec = elapsedNanos / 1000000000.0;
+        if (frameCount % 10 == 0) {
+            fps.setText(String.format("%.1f", 1/elapsedSec));
+            System.out.println("fps:" + 1/elapsedSec);
+        }
+    }
 
     /**
      * Handle input events from the keyboard.
@@ -105,11 +162,12 @@ public class GameWindow extends Application {
             } else if (keyEvent.getCode() == KeyCode.LEFT) {
                 /* send tetro left */
                 movement(Direction.LEFT);
-                System.out.println("Right Key Pressed");
+                System.out.println("Left Key Pressed");
 
             } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                 /* send caterpillar right */
-
+                movement(Direction.RIGHT);
+                System.out.println("Right Key Pressed");
             }
         }
     };
@@ -136,11 +194,22 @@ public class GameWindow extends Application {
 
 
        generateShape();
+       /* handle keyboard input */
+       scene.setOnKeyPressed(inputHandler);
 
         root.getChildren().add(r);
 
         drawShape();
-
+        
+        /* call updateGameState() once each frame */
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                updateGameState(now);
+            }
+        }.start();
+        
+        
         primaryStage.show();
         Predictor p = new Predictor();
         p.generateShape();
