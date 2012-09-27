@@ -2,14 +2,14 @@ package test_Tetris;
 
 import java.util.Random;
 
-import javafx.application.Application;
+ 
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class Predictor extends Application {
+public class Predictor  {
 
     int windowWidth;
     int windowHeight;

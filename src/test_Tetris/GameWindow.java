@@ -83,8 +83,17 @@ public class GameWindow extends Application {
             arrayRect[initialPosition[i][0]][initialPosition[i][1]].setFill(currentShape.getColor());
             root.getChildren().add(arrayRect[initialPosition[i][0]][initialPosition[i][1]]);
 
-        }
+        }    
 
+    }
+    
+    void drawNewShape(){
+        //for(int i = 0; i < 4; i ++)
+            for(int j = 0; j < initialPosition.length; j ++){
+            initialPosition[j][0]=0;
+            initialPosition[j][1]=0;
+        }
+        drawShape();
     }
 
 
@@ -110,7 +119,7 @@ public class GameWindow extends Application {
 
     void moveDown(){
         System.out.println("movedY : "+initialPosition[0][1]*cellLength);
-        if(initialPosition[0][1]*cellLength<=windowHeight){
+        if(initialPosition[0][1]*cellLength<=600){
 
             for(int i = 0; i < initialPosition.length; i ++){
                 //initialPosition[i][1] += (int) gridMove; 
@@ -119,8 +128,9 @@ public class GameWindow extends Application {
         
         drawShape();
     }
-    else if(initialPosition[0][1]*cellLength>=windowHeight) {
-        drawShape();
+    else if(initialPosition[0][1]*cellLength>=600) {
+        System.out.println("Drawing new shape.......");
+        drawNewShape();
     }
     }
     
