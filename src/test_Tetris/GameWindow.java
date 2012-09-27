@@ -141,12 +141,12 @@ public class GameWindow extends Application {
 
 
     @Test
-    public void testRandomGenerator(){
+    public void testRandomShapeGenerator(){
 
         int[][] testI= {{2,1},{1,0},{0,-1},{-1,-2}};
         for (int i=0;i<4;i++)
             for(int j=0;j<2;j++)                    
-                assertTrue(testI[i][j]==Shapes.J.rotation[i][j]);
+                assertTrue(testI[i][j]==Shapes.I.rotation[i][j]);
 
     }
 }
