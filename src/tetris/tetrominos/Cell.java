@@ -4,7 +4,9 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
 
 public class Cell extends Rectangle {
 
@@ -24,6 +26,7 @@ public class Cell extends Rectangle {
         super();
         cellXProperty = new SimpleDoubleProperty(x);
         cellYProperty = new SimpleDoubleProperty(y);
+        setStroke(Color.WHITE);
     }
 
     public Cell() {
@@ -34,7 +37,6 @@ public class Cell extends Rectangle {
     public void attach(TetrisGrid grid) {
         this.grid = grid;
         grid.getChildren().add(this);
-        this.setManaged(false);
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
 

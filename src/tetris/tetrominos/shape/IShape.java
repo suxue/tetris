@@ -29,6 +29,7 @@ public final class IShape extends Tetromino {
     private final List<Cell> allCells;
     private boolean isHorizontal;
 
+
     private void relayoutToHorizontal() {
         Cell tmpCell;
         for (int i = 0; i < 4; i++) {
@@ -80,6 +81,8 @@ public final class IShape extends Tetromino {
         }
         relayoutToHorizontal();
         setColor();
+        xProperty().set(2);
+        yProperty().set(0.5);
     }
 
     @Override
