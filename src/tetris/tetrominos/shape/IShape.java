@@ -61,6 +61,7 @@ public final class IShape extends Tetromino {
         super();
         allCells = new CopyOnWriteArrayList<Cell>(cellPool.retrieveLast(4));
         cellPool.removeLast(4);
+        setColor();
     }
 
     @Override
@@ -80,7 +81,6 @@ public final class IShape extends Tetromino {
             c.attach(grid);
         }
         relayoutToHorizontal();
-        setColor();
         xProperty().set(2);
         yProperty().set(0.5);
     }
