@@ -15,7 +15,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import tetris.api.game.Game;
+import tetris.api.game.GameControl;
 import tetris.core.GameBoard;
 import tetris.tetrominos.shape.IShape;
 
@@ -44,10 +44,10 @@ public class TetrisGrid extends AnchorPane {
 
 
     private CellPool cellPool = null;
-    private Game game = null;
+    private GameControl game = null;
 
 
-    public TetrisGrid(Game game, Paint fill, int rowNo, int columnNo
+    public TetrisGrid(GameControl game, Paint fill, int rowNo, int columnNo
                      ,  ObservableDoubleValue  boundWidthProperty
                     ,   ObservableDoubleValue  boundHeightProperty) {
         super();

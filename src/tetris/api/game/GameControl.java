@@ -1,11 +1,10 @@
 package tetris.api.game;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Node;
 
 
-public interface Game {
+public interface GameControl {
     ReadOnlyBooleanProperty runningStatusProperty();
     boolean getRunningStatus();
     void setRunningStatus(boolean rs);

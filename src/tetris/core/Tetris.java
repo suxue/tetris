@@ -23,7 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import tetris.api.game.Game;
+import tetris.api.game.GameControl;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
 
@@ -58,7 +58,7 @@ class GameRoot extends BorderPane {
                     @Override
                     public void handle(ActionEvent event) {
                         setCenter(new GameBoard(gs));
-                        ((Game)gs).start();
+                        ((GameControl)gs).start();
                     }
                 });
 
@@ -187,7 +187,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 }
 
-public class Tetris extends TetrisDynamic implements  Game  {
+public class Tetris extends TetrisDynamic implements  GameControl  {
     private BooleanProperty rsProperty;
 
     public Tetris() {

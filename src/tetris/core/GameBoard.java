@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import tetris.api.game.Game;
+import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
 import tetris.tetrominos.shape.IShape;
@@ -20,7 +20,7 @@ import tetris.tetrominos.shape.IShape;
 // response for drawing the interface
 public class GameBoard extends HBox {
 
-    private Game game = null;
+    private GameControl gameControl = null;
     private TetrisGrid playField = null;
     private TetrisGrid predicationField = null;
 
@@ -28,7 +28,7 @@ public class GameBoard extends HBox {
     private class GameLogic {
 
         public GameLogic() {
-            game.runningStatusProperty().addListener(new ChangeListener<Boolean>() {
+            gameControl.runningStatusProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observableValue
                         , Boolean oldStatus, Boolean newStatus) {
@@ -73,15 +73,15 @@ public class GameBoard extends HBox {
     }
 
     private TetrisGrid createPlayFieldGrid() {
-        return (playField = new TetrisGrid(game, Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
+        return (playField = new TetrisGrid(gameControl, Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
     }
 
     private TetrisGrid createPredicationField() {
-        return (predicationField = new TetrisGrid(game, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
+        return (predicationField = new TetrisGrid(gameControl, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
     public GameBoard(GameState gameState) {
-        game = (Game)gameState;
+        gameControl = (GameControl)gameState;
 
         componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
         componentHeightProperty.bind(gameState.heightProperty().multiply(ComponentHeightPercentage));
