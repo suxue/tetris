@@ -58,6 +58,7 @@ class GameRoot extends BorderPane {
                     @Override
                     public void handle(ActionEvent event) {
                         setCenter(new GameBoard(gs));
+                        ((Game)gs).start();
                     }
                 });
 
@@ -187,40 +188,16 @@ class TetrisDynamic extends TetrisStatic implements GameState {
 }
 
 public class Tetris extends TetrisDynamic implements  Game  {
-    private Stage primaryStage;
-    private boolean primaryStageHasBeenShowed;
     private BooleanProperty rsProperty;
 
     public Tetris() {
         super();
         rsProperty = new SimpleBooleanProperty(false);
-        primaryStageHasBeenShowed = false;
-
-        rsProperty.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal ) {
-                if (oldVal == newVal) {
-                    // do nothing
-                } else {
-                    if (newVal == true) { // start
-                        if (primaryStageHasBeenShowed == false) {
-                            primaryStage.show();
-                            primaryStageHasBeenShowed = true;
-                        }
-                         // TODO resume game
-                    } else { // stop/pause
-                        // TODO pause game
-                    }
-
-                }
-            }
-        });
     }
 
     private Group extraGroup;
     private GameRoot gameRoot;
     public void init(Stage primaryStage) {
-        this.primaryStage = primaryStage;
         String csspath = this.getClass()
                 .getResource("/css/stylesheet.css")
                 .toExternalForm();

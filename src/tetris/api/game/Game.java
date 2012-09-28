@@ -1,5 +1,6 @@
 package tetris.api.game;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Node;
 

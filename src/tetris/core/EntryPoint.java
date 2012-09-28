@@ -103,7 +103,7 @@ public class EntryPoint extends Application {
         Application.Parameters args = getParameters();
         (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
         tetrisGame.init(primaryStage);
-        tetrisGame.start();
+        primaryStage.show();
     }
 
     public static void main(String[] args) throws IOException {

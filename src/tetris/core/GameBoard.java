@@ -2,6 +2,7 @@ package tetris.core;
 
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,6 +19,32 @@ import tetris.tetrominos.shape.IShape;
 
 // response for drawing the interface
 public class GameBoard extends HBox {
+
+    private Game game = null;
+    private TetrisGrid playField = null;
+    private TetrisGrid predicationField = null;
+
+
+    private class GameLogic {
+
+        public GameLogic() {
+            game.runningStatusProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observableValue
+                        , Boolean oldStatus, Boolean newStatus) {
+                    if (newStatus) { // start
+                        IShape i1 = new IShape(playField.getCellPool());
+                        IShape i2 = new IShape(playField.getCellPool());
+                        i1.attach(playField);
+                        i2.attach(predicationField);
+                    } else {
+
+                    }
+                }
+            });
+        }
+
+    }
 
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
@@ -45,15 +72,16 @@ public class GameBoard extends HBox {
         ScoreZoneHeightPercentage = 0.30;
     }
 
-    private TetrisGrid createPlayFieldGrid(Game game) {
-        return new TetrisGrid(game, Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty);
+    private TetrisGrid createPlayFieldGrid() {
+        return (playField = new TetrisGrid(game, Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
     }
 
-    private TetrisGrid createPredicationField(Game game) {
-        return new TetrisGrid(game, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage));
+    private TetrisGrid createPredicationField() {
+        return (predicationField = new TetrisGrid(game, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
     public GameBoard(GameState gameState) {
+        game = (Game)gameState;
 
         componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
         componentHeightProperty.bind(gameState.heightProperty().multiply(ComponentHeightPercentage));
@@ -99,7 +127,7 @@ public class GameBoard extends HBox {
             }
         });
 
-        TetrisGrid playField = createPlayFieldGrid((Game) gameState);
+        TetrisGrid playField = createPlayFieldGrid();
         this.getChildren().add(playField);
 
         final VBox rightPane = new VBox();
@@ -107,7 +135,7 @@ public class GameBoard extends HBox {
          .multiply(1 - TetrominoZoneHeightPercentage
                  - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
 
-        final TetrisGrid tetrominoZone = createPredicationField((Game)gameState);
+        final TetrisGrid tetrominoZone = createPredicationField();
 
         final Rectangle levelZone = new Rectangle();
         final Rectangle scoreZone = new Rectangle();
@@ -117,15 +145,14 @@ public class GameBoard extends HBox {
         scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
         rightPane.getChildren().addAll(tetrominoZone, levelZone, scoreZone);
 
-        IShape i1 = new IShape(playField.getCellPool());
-        IShape i2 = new IShape(playField.getCellPool());
-        i1.attach(tetrominoZone);
-        i2.attach(playField);
 
         this.getChildren().add(rightPane);
 
         this.spacingProperty().bind(widthProperty()
                 .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
+
+
+        new GameLogic();
     }
 
 }
