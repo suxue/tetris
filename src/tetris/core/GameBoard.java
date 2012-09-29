@@ -2,7 +2,6 @@ package tetris.core;
 
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,11 +9,11 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
+import tetris.api.game.GameControl.Status.*;
 import tetris.tetrominos.shape.IShape;
 
 // response for drawing the interface
@@ -28,22 +27,25 @@ public class GameBoard extends HBox {
     private class GameLogic {
 
         public GameLogic() {
-            gameControl.runningStatusProperty().addListener(new ChangeListener<Boolean>() {
+
+            gameControl.statusProperty().addListener(new ChangeListener<Number>() {
                 @Override
-                public void changed(ObservableValue<? extends Boolean> observableValue
-                        , Boolean oldStatus, Boolean newStatus) {
-                    if (newStatus) { // start
-                        IShape i1 = new IShape(playField.getCellPool());
-                        IShape i2 = new IShape(playField.getCellPool());
-                        i1.attach(playField);
-                        i2.attach(predicationField);
-                    } else {
+                public void changed(ObservableValue<? extends Number> observableValue
+                        , Number oldVal, Number newVal) {
+                        GameControl.Status ns = GameControl.Status.values()[newVal.intValue()];
+                        switch (ns) {
+                        case PLAY_GAME:
+                            IShape i1 = new IShape(playField.getCellPool());
+                            IShape i2 = new IShape(playField.getCellPool());
+                            i1.attach(playField);
+                            i2.attach(predicationField);
+                            break;
+                        } // end switch
 
-                    }
-                }
+                } // end changed()
+
             });
-        }
-
+        } // end GameLogic()
     }
 
     /* java beans properties */

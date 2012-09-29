@@ -12,8 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
@@ -24,8 +22,11 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import tetris.api.game.GameControl;
+import tetris.api.game.GameControl.Status;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
+
+import static tetris.api.game.GameControl.Status.*;
 
 class GameRoot extends BorderPane {
 
@@ -40,27 +41,38 @@ class GameRoot extends BorderPane {
                 .build();
     }
 
-    private class CloseAppHandler implements EventHandler<ActionEvent> {
-        @Override
-        public void handle(ActionEvent event) {
-            Platform.exit();
-        }
-    }
-
-
     GameRoot(final GameState gs) {
         super();
+
         Button exitButton = _createButton("exitButton", "Exit");
         Button newButton = _createButton("newButton", "New Game");
-        exitButton.setOnAction(new CloseAppHandler());
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ((GameControl)gs).quit();
+            }
+        });
+
+        final GameBoard gameBoard = new GameBoard(gs);
+        ((GameControl)gs).statusProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue
+                    , Number oldVal, Number newVal) {
+                Status s = Tetris.toStatus(newVal);
+                if (s == PLAY_GAME) {
+                    GameRoot.this.setCenter(gameBoard);
+                }
+            }
+        });
+
         newButton.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        setCenter(new GameBoard(gs));
-                        ((GameControl)gs).start();
-                    }
-                });
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    ((GameControl)gs).play();
+                }
+            }
+        );
 
         final VBox vbox = VBoxBuilder.create()
                 .alignment(Pos.CENTER)
@@ -188,26 +200,32 @@ class TetrisDynamic extends TetrisStatic implements GameState {
 }
 
 public class Tetris extends TetrisDynamic implements  GameControl  {
-    private BooleanProperty rsProperty;
+    private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
 
     public Tetris() {
         super();
-        rsProperty = new SimpleBooleanProperty(false);
+
+        runningStatus.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
+                Status s = Tetris.toStatus(newVal);
+                switch (s) {
+                    case END_ALL:
+                        Platform.exit();
+                        System.out.println("Tetris ended, bye...");
+                        break;
+                }
+            }
+        });
     }
 
-    private Group extraGroup;
-    private GameRoot gameRoot;
     public void init(Stage primaryStage) {
         String csspath = this.getClass()
                 .getResource("/css/stylesheet.css")
                 .toExternalForm();
 
-        gameRoot = new GameRoot((this));
-        extraGroup = new Group();
-        gameRoot.setTop(extraGroup);
-
         Scene primaryScene = SceneBuilder.create()
-                .root(gameRoot)
+                .root(new GameRoot(this))
                 .stylesheets(csspath)
                 .width(getWidth())
                 .height(getHeight())
@@ -220,44 +238,48 @@ public class Tetris extends TetrisDynamic implements  GameControl  {
         primaryStage.setScene(primaryScene);
     }
 
+
     @Override
-    public ReadOnlyBooleanProperty runningStatusProperty() {
-        return rsProperty;
+    public StatusProperty statusProperty() {
+        return runningStatus;
     }
 
     @Override
-    public boolean getRunningStatus() {
-        return runningStatusProperty().getValue();
+    public Status getStatus() {
+        return toStatus(runningStatus.getValue());
     }
 
     @Override
-    public void setRunningStatus(boolean rs) {
-        rsProperty.set(rs);
+    public void setStatus(Status rs) {
+        runningStatus.setValue(rs);
     }
 
-    @Override
-    public void addNode(Node n) {
-        extraGroup.getChildren().add(n);
-        gameRoot.toBack();
-    }
 
     @Override
-    public void removeNode(Node n) {
-        extraGroup.getChildren().remove(n);
-    }
-
-    @Override
-    public void start() {
-        setRunningStatus(true);
+    public void play() {
+        setStatus(PLAY_GAME);
     }
 
     @Override
     public void stop() {
-        setRunningStatus(false);
+        setStatus(STOP_GAME);
     }
 
     @Override
     public void quit() {
-        Platform.exit();
+        setStatus(END_ALL);
+    }
+
+    @Override
+    public void show_menu() {
+        setStatus(SHOW_MENU);
+    }
+
+    public static Status toStatus(int s) {
+        return  Status.values()[s];
+    }
+
+    public static Status toStatus(Number s) {
+        return  Status.values()[s.intValue()];
     }
 }
