@@ -103,7 +103,7 @@ public class GameBoard extends HBox {
                 , leftRightPaddingProperty.doubleValue()
         ));
 
-        // add listenser to keep padding
+        // add listener to keep padding
         gameState.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue
