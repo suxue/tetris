@@ -15,17 +15,27 @@ public interface GameControl {
             setValue(s.ordinal() - Status.values()[0].ordinal());
         }
 
+        public static Status toStatus(Number s) {
+            return Status.values()[s.intValue()];
+        }
     }
 
 
     enum Status {
-
         PREPARE_ALL,   // initial status
         SHOW_MENU,
         PLAY_GAME,
         STOP_GAME,
         END_ALL,
     }
+
+
+    interface StatusListener {
+        void callback(Status oldStatus, Status newStatus);
+    }
+
+    void addStatusListener(final StatusListener sl);
+
 
     StatusProperty statusProperty();
 

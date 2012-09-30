@@ -26,13 +26,10 @@ public class GameBoard extends HBox {
     private class GameLogic {
 
         public GameLogic() {
-
-            gameControl.statusProperty().addListener(new ChangeListener<Number>() {
+            gameControl.addStatusListener(new GameControl.StatusListener() {
                 @Override
-                public void changed(ObservableValue<? extends Number> observableValue
-                        , Number oldVal, Number newVal) {
-                    GameControl.Status ns = GameControl.Status.values()[newVal.intValue()];
-                    switch (ns) {
+                public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
+                    switch (newStatus) {
                         case PLAY_GAME:
                             IShape i1 = new IShape(playField.getCellPool());
                             IShape i2 = new IShape(playField.getCellPool());
@@ -40,9 +37,7 @@ public class GameBoard extends HBox {
                             i2.attach(predicationField);
                             break;
                     } // end switch
-
-                } // end changed()
-
+                }
             });
         } // end GameLogic()
     }

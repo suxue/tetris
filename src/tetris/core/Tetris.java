@@ -12,19 +12,27 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameControl.Status;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
+import tetris.api.game.GameControl.StatusProperty;
+import tetris.api.game.GameControl.StatusListener;
+
+import java.net.InterfaceAddress;
 
 import static tetris.api.game.GameControl.Status.*;
 
@@ -54,12 +62,10 @@ class GameRoot extends BorderPane {
         });
 
         final GameBoard gameBoard = new GameBoard(gs);
-        ((GameControl) gs).statusProperty().addListener(new ChangeListener<Number>() {
+        ((GameControl)gs).addStatusListener(new StatusListener() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue
-                    , Number oldVal, Number newVal) {
-                Status s = Tetris.toStatus(newVal);
-                if (s == PLAY_GAME) {
+            public void callback(Status oldStatus, Status newStatus) {
+                if (newStatus == PLAY_GAME) {
                     GameRoot.this.setCenter(gameBoard);
                 }
             }
@@ -197,47 +203,11 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     public final void setHeight(double height) {
         heightProperty().setValue(height);
     }
+
 }
 
-public class Tetris extends TetrisDynamic implements GameControl {
+class SimpleGameControl implements  GameControl {
     private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
-
-    public Tetris() {
-        super();
-
-        runningStatus.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
-                Status s = Tetris.toStatus(newVal);
-                switch (s) {
-                    case END_ALL:
-                        Platform.exit();
-                        System.out.println("Tetris ended, bye...");
-                        break;
-                }
-            }
-        });
-    }
-
-    public void init(Stage primaryStage) {
-        String csspath = this.getClass()
-                .getResource("/css/stylesheet.css")
-                .toExternalForm();
-
-        Scene primaryScene = SceneBuilder.create()
-                .root(new GameRoot(this))
-                .stylesheets(csspath)
-                .width(getWidth())
-                .height(getHeight())
-                .fill(Color.LIGHTSEAGREEN)
-                .build();
-
-        primaryStage.titleProperty().bindBidirectional(title());
-        widthProperty().bind(primaryStage.widthProperty());
-        heightProperty().bind(primaryStage.heightProperty());
-        primaryStage.setScene(primaryScene);
-    }
-
 
     @Override
     public StatusProperty statusProperty() {
@@ -246,7 +216,7 @@ public class Tetris extends TetrisDynamic implements GameControl {
 
     @Override
     public Status getStatus() {
-        return toStatus(runningStatus.getValue());
+        return StatusProperty.toStatus(runningStatus.getValue());
     }
 
     @Override
@@ -275,11 +245,116 @@ public class Tetris extends TetrisDynamic implements GameControl {
         setStatus(SHOW_MENU);
     }
 
-    public static Status toStatus(int s) {
-        return Status.values()[s];
+
+
+    @Override
+    public void addStatusListener(final StatusListener sl) {
+        statusProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
+                sl.callback(StatusProperty.toStatus(oldVal), StatusProperty.toStatus(newVal));
+            }
+        });
     }
 
-    public static Status toStatus(Number s) {
-        return Status.values()[s.intValue()];
+}
+
+public class Tetris extends TetrisDynamic implements  GameControl {
+    private GameControl gameCOntrol = new SimpleGameControl();
+    private Stage primaryStage;
+    private boolean isFullScreen = false;
+    private double stageXposition;
+    private double  stageYposition;
+
+    public void toggleFullScreen() {
+        if (isFullScreen) {
+            primaryStage.setFullScreen(false);
+            primaryStage.setX(stageXposition);
+            primaryStage.setY(stageYposition);
+            isFullScreen = false;
+        } else {
+            stageXposition = primaryStage.getX();
+            stageYposition = primaryStage.getY();
+            primaryStage.setFullScreen(true);
+            isFullScreen = true;
+        }
+    }
+
+    public void addStatusListener(StatusListener sl) {
+        gameCOntrol.addStatusListener(sl);
+    }
+
+    public Tetris() {
+        super();
+
+        addStatusListener(new StatusListener() {
+            @Override
+            public void callback(Status oldStatus, Status newStatus) {
+                if (newStatus == END_ALL) {
+                    Platform.exit();
+                    System.out.println("Tetris ended, bye...");
+                }
+            }
+        });
+    }
+
+    public void init(final Stage primaryStage) {
+
+        this.primaryStage = primaryStage;
+
+        String csspath = this.getClass()
+                .getResource("/css/stylesheet.css")
+                .toExternalForm();
+
+        Scene primaryScene = SceneBuilder.create()
+                .root(new GameRoot(this))
+                .stylesheets(csspath)
+                .width(getWidth())
+                .height(getHeight())
+                .fill(Color.LIGHTSEAGREEN)
+                .build();
+
+        primaryStage.titleProperty().bindBidirectional(title());
+        widthProperty().bind(primaryStage.widthProperty());
+        heightProperty().bind(primaryStage.heightProperty());
+        primaryStage.setScene(primaryScene);
+        primaryScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.F) {
+                    toggleFullScreen();
+                }
+            }
+        });
+
+    }
+
+    // mixin GameControl interface
+    public Status getStatus() {
+        return gameCOntrol.getStatus();
+    }
+
+    public void show_menu() {
+        gameCOntrol.show_menu();
+    }
+
+    public void stop() {
+        gameCOntrol.stop();
+    }
+
+    public void quit() {
+        gameCOntrol.quit();
+    }
+
+    public void play() {
+        gameCOntrol.play();
+    }
+
+    public StatusProperty statusProperty() {
+        return gameCOntrol.statusProperty();
+    }
+
+    public void setStatus(Status rs) {
+        gameCOntrol.setStatus(rs);
     }
 }
