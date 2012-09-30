@@ -5,10 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,17 +16,17 @@ import tetris.tetrominos.TetrisGrid;
 import tetris.tetrominos.shape.IShape;
 
 // response for drawing the interface
-public class GameBoard extends HBox {
+public class GameUI extends HBox {
 
     private GameControl gameControl = null;
     private TetrisGrid playField = null;
     private TetrisGrid predicationField = null;
 
 
-    private class GameLogic {
+    private class TetrisGameLogic {
 
 
-        public GameLogic() {
+        public TetrisGameLogic() {
             gameControl.addStatusListener(new GameControl.StatusListener() {
                 @Override
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
@@ -45,7 +42,7 @@ public class GameBoard extends HBox {
             });
 
 
-        } // end GameLogic()
+        } // end TetrisGameLogic()
     }
 
     /* java beans properties */
@@ -83,7 +80,7 @@ public class GameBoard extends HBox {
         return (predicationField = new TetrisGrid(gameControl, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
-    public GameBoard(GameState gameState) {
+    public GameUI(GameState gameState) {
         gameControl = (GameControl) gameState;
 
         componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
@@ -110,10 +107,10 @@ public class GameBoard extends HBox {
             public void changed(ObservableValue<? extends Number> observableValue
                     , Number oldVal, Number newVal) {
                 final double newPadding = leftRightPaddingProperty.doubleValue();
-                final Insets oldInsets = GameBoard.this.getPadding();
+                final Insets oldInsets = GameUI.this.getPadding();
                 final Insets newInsets = new Insets(oldInsets.getTop(), newPadding
                         , oldInsets.getBottom(), newPadding);
-                GameBoard.this.setPadding(newInsets);
+                GameUI.this.setPadding(newInsets);
             }
         });
 
@@ -123,10 +120,10 @@ public class GameBoard extends HBox {
             public void changed(ObservableValue<? extends Number> observableValue
                     , Number oldVal, Number newVal) {
                 final double newPadding = topBottomPaddingProperty.doubleValue();
-                final Insets oldInsets = GameBoard.this.getPadding();
+                final Insets oldInsets = GameUI.this.getPadding();
                 final Insets newInsets = new Insets(newPadding, oldInsets.getRight()
                         , newPadding, oldInsets.getLeft());
-                GameBoard.this.setPadding(newInsets);
+                GameUI.this.setPadding(newInsets);
             }
         });
 
@@ -155,7 +152,7 @@ public class GameBoard extends HBox {
                 .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
 
 
-        new GameLogic();
+        new TetrisGameLogic();
     }
 
 }
