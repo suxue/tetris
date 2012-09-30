@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
@@ -23,16 +22,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameControl.Status;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
-import tetris.api.game.GameControl.StatusProperty;
 import tetris.api.game.GameControl.StatusListener;
-
-import java.net.InterfaceAddress;
 
 import static tetris.api.game.GameControl.Status.*;
 
@@ -52,6 +47,7 @@ class GameRoot extends BorderPane {
     GameRoot(final GameState gs) {
         super();
 
+
         Button exitButton = _createButton("exitButton", "Exit");
         Button newButton = _createButton("newButton", "New Game");
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,8 +61,9 @@ class GameRoot extends BorderPane {
         ((GameControl)gs).addStatusListener(new StatusListener() {
             @Override
             public void callback(Status oldStatus, Status newStatus) {
-                if (newStatus == PLAY_GAME) {
+                if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
                     GameRoot.this.setCenter(gameBoard);
+                    gameBoard.requestFocus();
                 }
             }
         });
@@ -80,23 +77,23 @@ class GameRoot extends BorderPane {
                 }
         );
 
-        final VBox vbox = VBoxBuilder.create()
+        final VBox menuBoard = VBoxBuilder.create()
                 .alignment(Pos.CENTER)
                 .children(newButton
                         , _createButton("saveButton", "Save")
                         , exitButton)
                 .build();
-        vbox.maxWidthProperty().bind(this.widthProperty().multiply(0.77));
+        menuBoard.maxWidthProperty().bind(this.widthProperty().multiply(0.77));
 
         this.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
-                Insets oldInsets = vbox.getPadding();
+                Insets oldInsets = menuBoard.getPadding();
                 Double newPadding = newValue.doubleValue() * scaleFactor;
                 Insets newInsets = new Insets(oldInsets.getTop(), newPadding,
                         oldInsets.getBottom(), newPadding);
-                vbox.setPadding(newInsets);
+                menuBoard.setPadding(newInsets);
             }
         });
 
@@ -104,16 +101,24 @@ class GameRoot extends BorderPane {
             @Override
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
-                Insets oldInsets = vbox.getPadding();
+                Insets oldInsets = menuBoard.getPadding();
                 Double newPadding = newValue.doubleValue() * scaleFactor;
                 Insets newInsets = new Insets(newPadding, oldInsets.getLeft(),
                         newPadding, oldInsets.getRight());
-                vbox.setPadding(newInsets);
-                vbox.setSpacing(newPadding);
+                menuBoard.setPadding(newInsets);
+                menuBoard.setSpacing(newPadding);
             }
         });
 
-        this.setCenter(vbox);
+        ((GameControl)gs).addStatusListener(new StatusListener() {
+            @Override
+            public void callback(Status oldStatus, Status newStatus) {
+                if (newStatus == SHOW_MENU) {
+                    GameRoot.this.setCenter(menuBoard);
+                    menuBoard.requestFocus();
+                }
+            }
+        });
     }
 }
 
@@ -206,61 +211,59 @@ class TetrisDynamic extends TetrisStatic implements GameState {
 
 }
 
-class SimpleGameControl implements  GameControl {
-    private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
-
-    @Override
-    public StatusProperty statusProperty() {
-        return runningStatus;
-    }
-
-    @Override
-    public Status getStatus() {
-        return StatusProperty.toStatus(runningStatus.getValue());
-    }
-
-    @Override
-    public void setStatus(Status rs) {
-        runningStatus.setValue(rs);
-    }
-
-
-    @Override
-    public void play() {
-        setStatus(PLAY_GAME);
-    }
-
-    @Override
-    public void stop() {
-        setStatus(STOP_GAME);
-    }
-
-    @Override
-    public void quit() {
-        setStatus(END_ALL);
-    }
-
-    @Override
-    public void show_menu() {
-        setStatus(SHOW_MENU);
-    }
-
-
-
-    @Override
-    public void addStatusListener(final StatusListener sl) {
-        statusProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
-                sl.callback(StatusProperty.toStatus(oldVal), StatusProperty.toStatus(newVal));
-            }
-        });
-    }
-
-}
 
 public class Tetris extends TetrisDynamic implements  GameControl {
-    private GameControl gameCOntrol = new SimpleGameControl();
+    private GameControl gameControl = new GameControl() {
+        private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
+
+        @Override
+        public StatusProperty statusProperty() {
+            return runningStatus;
+        }
+
+        @Override
+        public Status getStatus() {
+            return StatusProperty.toStatus(runningStatus.getValue());
+        }
+
+        @Override
+        public void setStatus(Status rs) {
+            runningStatus.setValue(rs);
+        }
+
+
+        @Override
+        public void play() {
+            setStatus(PLAY_GAME);
+        }
+
+        @Override
+        public void stop() {
+            setStatus(STOP_GAME);
+        }
+
+        @Override
+        public void quit() {
+            setStatus(END_ALL);
+        }
+
+        @Override
+        public void show_menu() {
+            setStatus(SHOW_MENU);
+        }
+
+        @Override
+        public void addStatusListener(final StatusListener sl) {
+            statusProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
+                    sl.callback(StatusProperty.toStatus(oldVal), StatusProperty.toStatus(newVal));
+                }
+            });
+        }
+
+
+    };
     private Stage primaryStage;
     private boolean isFullScreen = false;
     private double stageXposition;
@@ -281,7 +284,7 @@ public class Tetris extends TetrisDynamic implements  GameControl {
     }
 
     public void addStatusListener(StatusListener sl) {
-        gameCOntrol.addStatusListener(sl);
+        gameControl.addStatusListener(sl);
     }
 
     public Tetris() {
@@ -323,6 +326,12 @@ public class Tetris extends TetrisDynamic implements  GameControl {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.F) {
                     toggleFullScreen();
+                    keyEvent.consume();
+                } else if (keyEvent.getCode() == KeyCode.Q) {
+                    quit();
+                } else if (keyEvent.getCode() == KeyCode.M) {
+                    stop();
+                    show_menu();
                 }
             }
         });
@@ -331,30 +340,30 @@ public class Tetris extends TetrisDynamic implements  GameControl {
 
     // mixin GameControl interface
     public Status getStatus() {
-        return gameCOntrol.getStatus();
+        return gameControl.getStatus();
     }
 
     public void show_menu() {
-        gameCOntrol.show_menu();
+        gameControl.show_menu();
     }
 
     public void stop() {
-        gameCOntrol.stop();
+        gameControl.stop();
     }
 
     public void quit() {
-        gameCOntrol.quit();
+        gameControl.quit();
     }
 
     public void play() {
-        gameCOntrol.play();
+        gameControl.play();
     }
 
     public StatusProperty statusProperty() {
-        return gameCOntrol.statusProperty();
+        return gameControl.statusProperty();
     }
 
     public void setStatus(Status rs) {
-        gameCOntrol.setStatus(rs);
+        gameControl.setStatus(rs);
     }
 }

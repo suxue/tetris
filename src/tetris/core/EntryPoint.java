@@ -104,6 +104,7 @@ public class EntryPoint extends Application {
         (new ParsingSlave()).interpret(args.getRaw().toArray(new String[0]));
         tetrisGame.init(primaryStage);
         primaryStage.show();
+        tetrisGame.show_menu();
     }
 
     public static void main(String[] args) throws IOException {

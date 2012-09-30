@@ -5,7 +5,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,6 +28,7 @@ public class GameBoard extends HBox {
 
     private class GameLogic {
 
+
         public GameLogic() {
             gameControl.addStatusListener(new GameControl.StatusListener() {
                 @Override
@@ -39,6 +43,8 @@ public class GameBoard extends HBox {
                     } // end switch
                 }
             });
+
+
         } // end GameLogic()
     }
 
