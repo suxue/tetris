@@ -37,7 +37,7 @@ public class RootUI extends BorderPane {
 
 
         Button exitButton = _createButton("exitButton", "Exit");
-        Button newButton = _createButton("newButton", "New Game");
+        Button newButton = _createButton("playButton", "Play");
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -46,15 +46,6 @@ public class RootUI extends BorderPane {
         });
 
         final GameUI gameUI = new GameUI(gs);
-        ((GameControl)gs).addStatusListener(new StatusListener() {
-            @Override
-            public void callback(Status oldStatus, Status newStatus) {
-                if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
-                    RootUI.this.setCenter(gameUI);
-                    gameUI.requestFocus();
-                }
-            }
-        });
 
         newButton.setOnAction(
                 new EventHandler<ActionEvent>() {
@@ -98,10 +89,14 @@ public class RootUI extends BorderPane {
             }
         });
 
+
         ((GameControl)gs).addStatusListener(new StatusListener() {
             @Override
             public void callback(Status oldStatus, Status newStatus) {
-                if (newStatus == SHOW_MENU) {
+                if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
+                    RootUI.this.setCenter(gameUI);
+                    gameUI.requestFocus();
+                } else  if (newStatus == SHOW_MENU) {
                     RootUI.this.setCenter(menuBoard);
                     menuBoard.requestFocus();
                 }

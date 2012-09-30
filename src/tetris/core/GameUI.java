@@ -1,19 +1,29 @@
 package tetris.core;
 
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TimelineBuilder;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
 import tetris.tetrominos.shape.IShape;
+import static javafx.scene.input.KeyCode.*;
 
 // response for drawing the interface
 public class GameUI extends HBox {
@@ -25,6 +35,48 @@ public class GameUI extends HBox {
 
     private class TetrisGameLogic {
 
+        private final int frameRate = 60;
+        private final Duration frameInterval =  Duration.millis(1000/frameRate);
+        private boolean hasStarted = false;
+
+        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                }
+            }
+        );
+
+        private Timeline timeline =  TimelineBuilder.create()
+                .cycleCount(Animation.INDEFINITE)
+                .keyFrames(mainFrame)
+                .build();
+
+        private void initBlocks() {
+            IShape i1 = new IShape(playField.getCellPool());
+            IShape i2 = new IShape(playField.getCellPool());
+            i1.attach(playField);
+            i2.attach(predicationField);
+        }
+
+        private void play() {
+            gameControl.play();
+        }
+
+        private  void stop() {
+            gameControl.stop();
+        }
+
+        private void toggle() { //  PLAY/PAUSE
+            if (gameControl.getStatus() == GameControl.Status.PLAY_GAME) {
+                System.out.println("Pause");
+                stop();
+            } else {
+                System.out.println("resume");
+                play();
+            }
+        }
+
 
         public TetrisGameLogic() {
             gameControl.addStatusListener(new GameControl.StatusListener() {
@@ -32,15 +84,34 @@ public class GameUI extends HBox {
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
                     switch (newStatus) {
                         case PLAY_GAME:
-                            IShape i1 = new IShape(playField.getCellPool());
-                            IShape i2 = new IShape(playField.getCellPool());
-                            i1.attach(playField);
-                            i2.attach(predicationField);
+                            // first start
+                            if (!hasStarted) {
+                                initBlocks();
+                                hasStarted = true;
+                            }
+
+                            timeline.play();
+                            break;
+                        case STOP_GAME:
+                            // cannot stop while not playing
+                            if (oldStatus == GameControl.Status.PLAY_GAME) {
+                                timeline.pause();
+                            }
                             break;
                     } // end switch
                 }
             });
 
+            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    switch(keyEvent.getCode()) {
+                    case P:
+                        toggle();
+                        break;
+                    }
+                }
+            });
 
         } // end TetrisGameLogic()
     }
@@ -81,6 +152,7 @@ public class GameUI extends HBox {
     }
 
     public GameUI(GameState gameState) {
+
         gameControl = (GameControl) gameState;
 
         componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));

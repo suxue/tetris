@@ -236,6 +236,7 @@ public class Tetris extends TetrisDynamic implements  GameControl {
             }
         });
 
+        show_menu();
     }
 
     // mixin GameControl interface
