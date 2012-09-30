@@ -1,5 +1,6 @@
 package tetris.tetrominos;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -59,25 +60,22 @@ public final class IShape extends SimpleTetromino {
     }
 
     @Override
-    public boolean rotate(Direction dir) {
-        // TODO check boundary
-        if (isHorizontal) {
-            relayoutToVetical();
-        } else {
-            relayoutToHorizontal();
-        }
-        return true;
-    }
-
-    @Override
     public void attach(TetrisGrid grid) {
         super.attach(grid);
         for (Cell c : allCells) {
             c.attach(grid);
         }
         relayoutToHorizontal();
-        xProperty().set(2);
-        yProperty().set(0.5);
+    }
+
+    @Override
+    protected double getPivotXshift() {
+        return 2;
+    }
+
+    @Override
+    protected double getPivotYshift() {
+        return 0.5;
     }
 
     @Override
@@ -86,4 +84,7 @@ public final class IShape extends SimpleTetromino {
             c.detach();
         }
     }
+
+
+
 }

@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -74,6 +75,7 @@ public class GameUI extends HBox {
 
         private void initTetrominos() {
             generateNextTetromino();
+            staticTetromino.setToCanonicalPosition();
             staticTetromino.attach(predicationField);
         }
 
