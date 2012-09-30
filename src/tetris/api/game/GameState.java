@@ -12,14 +12,20 @@ import javafx.beans.property.StringProperty;
 
 public interface GameState {
     StringProperty title();
+
     String getTitle();
+
     void setTitle(String title);
 
     DoubleProperty widthProperty();
+
     double getWidth();
-    void   setWidth(double width);
+
+    void setWidth(double width);
 
     DoubleProperty heightProperty();
+
     double getHeight();
-    void   setHeight(double height);
+
+    void setHeight(double height);
 }

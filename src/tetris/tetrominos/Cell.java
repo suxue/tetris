@@ -2,8 +2,6 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -34,6 +32,7 @@ public class Cell extends Rectangle {
     }
 
     private TetrisGrid grid = null;
+
     public void attach(TetrisGrid grid) {
         this.grid = grid;
         grid.getChildren().add(this);

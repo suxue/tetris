@@ -1,8 +1,5 @@
 package tetris.tetrominos.shape;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import tetris.tetrominos.Cell;
@@ -10,8 +7,6 @@ import tetris.tetrominos.CellPool;
 import tetris.tetrominos.TetrisGrid;
 import tetris.tetrominos.Tetromino;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -43,7 +38,7 @@ public final class IShape extends Tetromino {
     private void relayoutToVetical() {
         Cell tmpCell;
 
-        for (int i=0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             tmpCell = allCells.get(i);
             tmpCell.getCellXProperty().bind(xProperty().subtract(0.5));
             tmpCell.getCellYProperty().bind(yProperty().subtract(2 - i));
@@ -77,7 +72,7 @@ public final class IShape extends Tetromino {
 
     @Override
     public void attach(TetrisGrid grid) {
-        for (Cell c: allCells) {
+        for (Cell c : allCells) {
             c.attach(grid);
         }
         relayoutToHorizontal();
@@ -87,7 +82,7 @@ public final class IShape extends Tetromino {
 
     @Override
     public void detach() {
-        for (Cell c: allCells) {
+        for (Cell c : allCells) {
             c.detach();
         }
     }

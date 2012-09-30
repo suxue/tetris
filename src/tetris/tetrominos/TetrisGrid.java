@@ -3,24 +3,11 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import tetris.api.game.GameControl;
-import tetris.core.GameBoard;
-import tetris.tetrominos.shape.IShape;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class TetrisGrid extends AnchorPane {
@@ -48,12 +35,12 @@ public class TetrisGrid extends AnchorPane {
 
 
     public TetrisGrid(GameControl game, Paint fill, int rowNo, int columnNo
-                     ,  ObservableDoubleValue  boundWidthProperty
-                    ,   ObservableDoubleValue  boundHeightProperty) {
+            , ObservableDoubleValue boundWidthProperty
+            , ObservableDoubleValue boundHeightProperty) {
         super();
         this.game = game;
         this.columnNumber = columnNo;
-        this.rowNumber    = rowNo;
+        this.rowNumber = rowNo;
         Rectangle background = new Rectangle();
         background.setFill(fill);
         getChildren().add(background);
@@ -64,7 +51,7 @@ public class TetrisGrid extends AnchorPane {
     }
 
     public CellPool getCellPool() {
-        if (cellPool  == null) {
+        if (cellPool == null) {
             cellPool = new CellPool();
             // initialize cell pool
             for (int i = 0; i < columnNumber * rowNumber; i++) {

@@ -8,12 +8,14 @@ import javafx.beans.property.SimpleDoubleProperty;
 abstract public class Tetromino {
 
     public enum Direction {
-       LEFT, RIGHT
+        LEFT, RIGHT
     }
 
     // return whether rotation is successful
     public abstract boolean rotate(Direction dir);
+
     public abstract void attach(TetrisGrid grid);
+
     public abstract void detach();
 
     private DoubleProperty xPropertyImpl;

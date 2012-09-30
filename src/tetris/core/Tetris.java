@@ -49,12 +49,12 @@ class GameRoot extends BorderPane {
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ((GameControl)gs).quit();
+                ((GameControl) gs).quit();
             }
         });
 
         final GameBoard gameBoard = new GameBoard(gs);
-        ((GameControl)gs).statusProperty().addListener(new ChangeListener<Number>() {
+        ((GameControl) gs).statusProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue
                     , Number oldVal, Number newVal) {
@@ -66,12 +66,12 @@ class GameRoot extends BorderPane {
         });
 
         newButton.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    ((GameControl)gs).play();
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        ((GameControl) gs).play();
+                    }
                 }
-            }
         );
 
         final VBox vbox = VBoxBuilder.create()
@@ -199,7 +199,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 }
 
-public class Tetris extends TetrisDynamic implements  GameControl  {
+public class Tetris extends TetrisDynamic implements GameControl {
     private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
 
     public Tetris() {
@@ -276,10 +276,10 @@ public class Tetris extends TetrisDynamic implements  GameControl  {
     }
 
     public static Status toStatus(int s) {
-        return  Status.values()[s];
+        return Status.values()[s];
     }
 
     public static Status toStatus(Number s) {
-        return  Status.values()[s.intValue()];
+        return Status.values()[s.intValue()];
     }
 }

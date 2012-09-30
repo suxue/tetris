@@ -12,6 +12,7 @@ public interface Tetromino {
     }
 
     Orientation getOrientation();
+
     void setOrientation(Orientation pointTo);
 
     Shape getUnitedShape();
@@ -19,6 +20,8 @@ public interface Tetromino {
     // test if intersects with other tetrominos
     // or boundary
     boolean intersectsWith(Tetromino dest);
+
     boolean intersectsWith(Tetromino dest, Orientation destOrientation);
+
     boolean intersectsWith(GameState gs);
 }

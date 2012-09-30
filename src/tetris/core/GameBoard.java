@@ -13,7 +13,6 @@ import javafx.scene.shape.Rectangle;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
-import tetris.api.game.GameControl.Status.*;
 import tetris.tetrominos.shape.IShape;
 
 // response for drawing the interface
@@ -32,15 +31,15 @@ public class GameBoard extends HBox {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue
                         , Number oldVal, Number newVal) {
-                        GameControl.Status ns = GameControl.Status.values()[newVal.intValue()];
-                        switch (ns) {
+                    GameControl.Status ns = GameControl.Status.values()[newVal.intValue()];
+                    switch (ns) {
                         case PLAY_GAME:
                             IShape i1 = new IShape(playField.getCellPool());
                             IShape i2 = new IShape(playField.getCellPool());
                             i1.attach(playField);
                             i2.attach(predicationField);
                             break;
-                        } // end switch
+                    } // end switch
 
                 } // end changed()
 
@@ -64,7 +63,8 @@ public class GameBoard extends HBox {
     static final double TetrominoZoneHeightPercentage;
     static final double LevelZoneHeightPercentage;
     static final double ScoreZoneHeightPercentage;
-    static  {
+
+    static {
         ComponentHeightPercentage = 0.80;
         ComponentWidthPercentage = 0.77;
         MainZoneWidthPercentage = 0.60;
@@ -83,7 +83,7 @@ public class GameBoard extends HBox {
     }
 
     public GameBoard(GameState gameState) {
-        gameControl = (GameControl)gameState;
+        gameControl = (GameControl) gameState;
 
         componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
         componentHeightProperty.bind(gameState.heightProperty().multiply(ComponentHeightPercentage));
@@ -134,8 +134,8 @@ public class GameBoard extends HBox {
 
         final VBox rightPane = new VBox();
         rightPane.spacingProperty().bind(componentHeightProperty
-         .multiply(1 - TetrominoZoneHeightPercentage
-                 - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
+                .multiply(1 - TetrominoZoneHeightPercentage
+                        - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
 
         final TetrisGrid tetrominoZone = createPredicationField();
 
