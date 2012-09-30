@@ -9,8 +9,12 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import tetris.api.game.GameControl;
 
+import java.util.ArrayList;
+
 
 public class TetrisGrid extends AnchorPane {
+
+    ArrayList<SimpleTetromino> simpleTetrominoList = new ArrayList<SimpleTetromino>();
 
     // game is 10x20
 
@@ -32,6 +36,13 @@ public class TetrisGrid extends AnchorPane {
 
     private CellPool cellPool = null;
     private GameControl game = null;
+
+    public void clearTetrominos() {
+        for (SimpleTetromino i : simpleTetrominoList) {
+            i.detach();
+        }
+        simpleTetrominoList = new ArrayList<SimpleTetromino>();
+    }
 
 
     public TetrisGrid(GameControl game, Paint fill, int rowNo, int columnNo

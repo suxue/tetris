@@ -2,6 +2,7 @@ package tetris.api;
 
 import javafx.scene.shape.Shape;
 import tetris.api.game.GameState;
+import tetris.tetrominos.TetrisGrid;
 
 // a shape can mostly has four orientation
 //  see http://tetrisconcept.net/wiki/Orientation
@@ -11,17 +12,7 @@ public interface Tetromino {
         UP, LEFT, RIGHT, DOWN
     }
 
-    Orientation getOrientation();
 
-    void setOrientation(Orientation pointTo);
-
-    Shape getUnitedShape();
-
-    // test if intersects with other tetrominos
-    // or boundary
-    boolean intersectsWith(Tetromino dest);
-
-    boolean intersectsWith(Tetromino dest, Orientation destOrientation);
-
-    boolean intersectsWith(GameState gs);
+    public void attach(TetrisGrid grid);
+    public void detach();
 }

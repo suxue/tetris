@@ -25,6 +25,7 @@ public interface GameControl {
         PREPARE_ALL,   // initial status
         SHOW_MENU,
         PLAY_GAME,
+        RESTART_GAME,
         STOP_GAME,
         END_ALL,
     }
@@ -44,7 +45,7 @@ public interface GameControl {
     void setStatus(Status rs);
 
     void play();
-
+    void restart();
     void stop();
 
     void quit();

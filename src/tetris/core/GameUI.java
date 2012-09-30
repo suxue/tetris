@@ -12,18 +12,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
-import tetris.tetrominos.shape.IShape;
-import static javafx.scene.input.KeyCode.*;
+import tetris.tetrominos.IShape;
+
+import java.util.Random;
 
 // response for drawing the interface
 public class GameUI extends HBox {
@@ -52,28 +53,43 @@ public class GameUI extends HBox {
                 .keyFrames(mainFrame)
                 .build();
 
-        private void initBlocks() {
-            IShape i1 = new IShape(playField.getCellPool());
-            IShape i2 = new IShape(playField.getCellPool());
-            i1.attach(playField);
-            i2.attach(predicationField);
+        private Tetromino dynamicTetromino;
+        private Tetromino staticTetromino;
+        private Random    randGenerator = new Random();
+
+        private void generateNextTetromino() {
+            int tetroClass = randGenerator.nextInt() % 1;
+            switch (tetroClass) {
+            case 0:
+            case 1:
+                staticTetromino = new IShape(playField.getCellPool());
+                break;
+            }
+
         }
 
-        private void play() {
-            gameControl.play();
+        private void swapTetromino() {
+
         }
 
-        private  void stop() {
-            gameControl.stop();
+        private void initTetrominos() {
+            generateNextTetromino();
+            staticTetromino.attach(predicationField);
         }
+
+        private  void clearTetrominos() {
+            playField.clearTetrominos();
+            predicationField.clearTetrominos();
+        }
+
 
         private void toggle() { //  PLAY/PAUSE
             if (gameControl.getStatus() == GameControl.Status.PLAY_GAME) {
                 System.out.println("Pause");
-                stop();
+                gameControl.stop();
             } else {
                 System.out.println("resume");
-                play();
+                gameControl.play();
             }
         }
 
@@ -82,11 +98,12 @@ public class GameUI extends HBox {
             gameControl.addStatusListener(new GameControl.StatusListener() {
                 @Override
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
+                    // TODO: finish game logic
                     switch (newStatus) {
                         case PLAY_GAME:
                             // first start
                             if (!hasStarted) {
-                                initBlocks();
+                                initTetrominos();
                                 hasStarted = true;
                             }
 
@@ -98,6 +115,13 @@ public class GameUI extends HBox {
                                 timeline.pause();
                             }
                             break;
+                        case RESTART_GAME:
+                            gameControl.stop();
+                            // re initialize all blocks
+                            clearTetrominos();
+                            initTetrominos();
+                            gameControl.play();
+                            break;
                     } // end switch
                 }
             });
@@ -108,6 +132,9 @@ public class GameUI extends HBox {
                     switch(keyEvent.getCode()) {
                     case P:
                         toggle();
+                        break;
+                    case R:
+                        gameControl.restart();
                         break;
                     }
                 }

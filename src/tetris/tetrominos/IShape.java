@@ -1,11 +1,10 @@
-package tetris.tetrominos.shape;
+package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import tetris.tetrominos.Cell;
-import tetris.tetrominos.CellPool;
-import tetris.tetrominos.TetrisGrid;
-import tetris.tetrominos.Tetromino;
+import javafx.scene.shape.Shape;
+import tetris.api.Tetromino;
+import tetris.api.game.GameState;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
    | 0 | 1 | 2 | 3 |
    -----------------
  */
-public final class IShape extends Tetromino {
+public final class IShape extends SimpleTetromino {
     private static Paint color = Color.BLUE;
     private final List<Cell> allCells;
     private boolean isHorizontal;
@@ -72,6 +71,7 @@ public final class IShape extends Tetromino {
 
     @Override
     public void attach(TetrisGrid grid) {
+        super.attach(grid);
         for (Cell c : allCells) {
             c.attach(grid);
         }

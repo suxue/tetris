@@ -138,6 +138,11 @@ public class Tetris extends TetrisDynamic implements  GameControl {
         }
 
         @Override
+        public void restart() {
+            setStatus(RESTART_GAME);
+        }
+
+        @Override
         public void stop() {
             setStatus(STOP_GAME);
         }
@@ -161,9 +166,8 @@ public class Tetris extends TetrisDynamic implements  GameControl {
                 }
             });
         }
-
-
     };
+
     private Stage primaryStage;
     private boolean isFullScreen = false;
     private double stageXposition;
@@ -266,5 +270,10 @@ public class Tetris extends TetrisDynamic implements  GameControl {
 
     public void setStatus(Status rs) {
         gameControl.setStatus(rs);
+    }
+
+    @Override
+    public void restart() {
+        gameControl.restart();
     }
 }

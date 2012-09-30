@@ -37,7 +37,8 @@ public class RootUI extends BorderPane {
 
 
         Button exitButton = _createButton("exitButton", "Exit");
-        Button newButton = _createButton("playButton", "Play");
+        Button playButton = _createButton("playButton", "Play");
+        Button replayButton = _createButton("replayButton", "Re-Play");
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -45,9 +46,8 @@ public class RootUI extends BorderPane {
             }
         });
 
-        final GameUI gameUI = new GameUI(gs);
 
-        newButton.setOnAction(
+        playButton.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
@@ -56,11 +56,19 @@ public class RootUI extends BorderPane {
                 }
         );
 
+        replayButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ((GameControl)gs).restart();
+            }
+        });
+
+        final GameUI gameUI = new GameUI(gs);
+
+
         final VBox menuBoard = VBoxBuilder.create()
                 .alignment(Pos.CENTER)
-                .children(newButton
-                        , _createButton("saveButton", "Save")
-                        , exitButton)
+                .children(playButton, replayButton, exitButton)
                 .build();
         menuBoard.maxWidthProperty().bind(this.widthProperty().multiply(0.77));
 
