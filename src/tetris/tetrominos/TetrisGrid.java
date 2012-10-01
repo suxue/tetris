@@ -18,50 +18,12 @@ import java.util.Iterator;
 
 public class TetrisGrid extends AnchorPane {
 
-    private  Rectangle background = new Rectangle();
+    private Rectangle       background  = new Rectangle();
+    private CellPool        cellPool    = null;
+    private ArrayList<Cell> visibleCells   = null;
 
-
-    // game is 10x20
-
-    private DoubleProperty cellWidth = new SimpleDoubleProperty();
-    private DoubleProperty cellHeight = new SimpleDoubleProperty();
-
-    public final int getColumnNumber() {
-        return columnNumber;
-    }
-
-    public final int getRowNumber() {
-        return rowNumber;
-    }
-
-    private int columnNumber;
-    private int rowNumber;
-    Shape sunkCellsBoundShape = null;
-
-
-    // if the tetromino is still valid for existing in this grid, return true
-    // otherwise, return false
-    public boolean validBoundaryToSunkCells(Tetromino t) {
-        if (sunkCellsBoundShape != null && sunkCellsBoundShape.intersects(t.getBounds()))
-                return false;
-        else
-            return true;
-    }
-
-    void recalculateSunkCellBound() {
-        if (visibleCells == null) {
-            sunkCellsBoundShape = null;
-            return;
-        }
-
-        Iterator<Cell> i = visibleCells.iterator();
-        Shape s = i.next();
-        while (i.hasNext()) {
-            s = Shape.union(s, i.next());
-        }
-        sunkCellsBoundShape = s;
-    }
-
+    private DoubleProperty  cellWidth   = new SimpleDoubleProperty();
+    private DoubleProperty  cellHeight  = new SimpleDoubleProperty();
 
     ReadOnlyDoubleProperty cellWidthProperty() {
         return cellWidth;
@@ -71,22 +33,24 @@ public class TetrisGrid extends AnchorPane {
         return cellHeight;
     }
 
-    private CellPool cellPool = null;
+    private int columnNumber;
+    private int rowNumber;
+
+    public final int getColumnNumber() {
+        return columnNumber;
+    }
+
+    public final int getRowNumber() {
+        return rowNumber;
+    }
 
 
-    private ArrayList<Cell>  visibleCells   = null;
 
     public void sink(Cell c) {
         if (visibleCells == null) {
             visibleCells = new ArrayList<Cell>();
         }
         visibleCells.add(c);
-
-        if (sunkCellsBoundShape == null) {
-            recalculateSunkCellBound();
-        } else {
-            sunkCellsBoundShape = Shape.union(sunkCellsBoundShape, c);
-        }
     }
 
     public void clearTetrominos() {
@@ -97,7 +61,6 @@ public class TetrisGrid extends AnchorPane {
             }
         }
         visibleCells = null;
-        recalculateSunkCellBound();
     }
 
 
@@ -113,19 +76,6 @@ public class TetrisGrid extends AnchorPane {
         background.heightProperty().bind(boundHeightProperty);
         cellWidth.bind(background.widthProperty().divide(columnNumber));
         cellHeight.bind(background.heightProperty().divide(rowNumber));
-
-        cellHeight.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number1) {
-                recalculateSunkCellBound();
-            }
-        });
-        cellWidth.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number1) {
-                recalculateSunkCellBound();
-            }
-        });
     }
 
     public CellPool getCellPool() {

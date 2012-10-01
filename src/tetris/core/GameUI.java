@@ -56,23 +56,6 @@ public class GameUI extends HBox {
             return t;
         }
 
-        private void initStaticTetrominos() {
-            staticTetromino = generateNextTetromino();
-            staticTetromino.setToCanonicalPosition();
-            staticTetromino.attach(predicationField);
-        }
-
-        private  void clearTetrominos() {
-            playField.clearTetrominos();
-            if (staticTetromino != null) {
-                staticTetromino.detach();
-                staticTetromino.release(playField.getCellPool());
-            }
-            if (dynamicTetromino != null) {
-                dynamicTetromino.detach();
-                dynamicTetromino.release(playField.getCellPool());
-            }
-        }
 
         private void toggle() { //  PLAY/PAUSE
             if (gameControl.getStatus() == GameControl.Status.PLAY_GAME) {
@@ -105,23 +88,23 @@ public class GameUI extends HBox {
                         assert staticTetromino != null;
                         cycleCount++;
 
-                        if (dynamicTetromino == null) { // initialize playfield
-                            staticTetromino.detach();
-                            dynamicTetromino = staticTetromino;
-                            initStaticTetrominos();
-                            dynamicTetromino.attach(playField);
-                            dynamicTetromino.setToTopMiddle();
-                        } else { // continue playing
-                            dynamicTetromino.moveDown(.07);
-                            if (!playField.validBoundaryToSunkCells(dynamicTetromino)
-                                || dynamicTetromino.getLengthToBottomBoundary() <= 0) {
-                                dynamicTetromino.alignToNearestCanonicalPosition();
-                                dynamicTetromino.sink();
-//                                dynamicTetromino.detach();
-//                                dynamicTetromino.release(playField.getCellPool());
-                                dynamicTetromino = null;
-                            }
-                        }
+//                        if (dynamicTetromino == null) { // initialize playfield
+//                            staticTetromino.detach();
+//                            dynamicTetromino = staticTetromino;
+//                            initStaticTetrominos();
+//                            dynamicTetromino.attach(playField);
+//                            dynamicTetromino.setToTopMiddle();
+//                        } else { // continue playing
+//                            dynamicTetromino.moveDown(.07);
+//                            if (!playField.validBoundaryToSunkCells(dynamicTetromino)
+//                                || dynamicTetromino.getLengthToBottomBoundary() <= 0) {
+//                                dynamicTetromino.alignToNearestCanonicalPosition();
+//                                dynamicTetromino.sink();
+////                                dynamicTetromino.detach();
+////                                dynamicTetromino.release(playField.getCellPool());
+//                                dynamicTetromino = null;
+//                            }
+//                        }
                     }
                 }
         );
@@ -144,14 +127,14 @@ public class GameUI extends HBox {
                         gameControl.restart();
                         break;
                     case LEFT:
-                        if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
+                        //if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
                             dynamicTetromino.moveLeft(1);
-                        }
+                       // }
                         break;
                     case RIGHT:
-                        if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
+                        //if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
                             dynamicTetromino.moveRight(1);
-                        }
+                        //}
                         break;
                     }
                 }
@@ -165,7 +148,6 @@ public class GameUI extends HBox {
                         case PLAY_GAME:
                             // first start
                             if (!hasStarted) {
-                                initStaticTetrominos();
                                 hasStarted = true;
                             }
 
@@ -180,8 +162,6 @@ public class GameUI extends HBox {
                         case RESTART_GAME:
                             gameControl.stop();
                             // re initialize all blocks
-                            clearTetrominos();
-                            initStaticTetrominos();
                             gameControl.play();
                             break;
                     } // end switch

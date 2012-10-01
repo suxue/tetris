@@ -1,6 +1,5 @@
 package tetris.tetrominos;
 
-import com.sun.istack.internal.NotNull;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
@@ -8,23 +7,17 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import tetris.api.Tetromino;
+import tetris.api.Tetromino.*;
 
 // combination of cells
 // maintain my rotation status
 abstract public class SimpleTetromino implements Tetromino{
 
+    protected  TetrisGrid   hostGrid;        // the attached grid, null if not attached
+    protected  Cell[]       tetrominoCells;  // all cells included within me
+
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
     private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
-    protected TetrisGrid     hostGrid = null;
-
-    protected  Cell[] tetrominoCells;
-    protected  Paint  tetrominoColor;
-
-    @NotNull
-    private final Cell[] getTetrominoCells() {
-        return tetrominoCells;
-    }
-
     @Override
     public final DoubleProperty xProperty() {
         return xPropertyImpl;
@@ -35,26 +28,32 @@ abstract public class SimpleTetromino implements Tetromino{
         return yPropertyImpl;
     }
 
+
     @Override
-    public final void sink() {
-        assert hostGrid != null;
-        for (Cell c: getTetrominoCells()) {
+    public final void sink() throws UnAttachedTetrominoException {
+        if (hostGrid == null)
+            throw new UnAttachedTetrominoException();
+
+        for (Cell c: tetrominoCells)
             hostGrid.sink(c);
-        }
-
     }
 
+
     @Override
-    public final void release(CellPool cp) {
-        for (Cell c: tetrominoCells) {
+    public final void release(CellPool cp) throws  AttachedTetrominoException {
+        if (hostGrid != null)
+            throw  new AttachedTetrominoException();
+
+        for (Cell c: tetrominoCells)
             cp.add(c);
-        }
     }
 
     @Override
-    public final void attach(TetrisGrid grid) {
-        for (Cell c: getTetrominoCells()) {
-            c.setFill(tetrominoColor);
+    public final void attach(TetrisGrid grid) throws AttachedTetrominoException {
+        if (hostGrid != null)
+            throw new AttachedTetrominoException();
+
+        for (Cell c: tetrominoCells) {
             c.attach(grid);
         }
         hostGrid  = grid;
@@ -62,49 +61,14 @@ abstract public class SimpleTetromino implements Tetromino{
 
 
     @Override
-    public final void detach() {
-        if (hostGrid != null) {
-            for (Cell c : getTetrominoCells()) {
-                c.detach(hostGrid);
-            }
-            hostGrid = null;
+    public final void detach() throws  UnAttachedTetrominoException {
+        if (hostGrid == null) {
+            throw new UnAttachedTetrominoException();
         }
-    }
-
-
-    public SimpleTetromino(Paint color) {
-        tetrominoColor = color;
-    }
-
-
-    // shift between the outside bound (4x2) and the pivot
-    // mainly used for algined in the middle of the grid
-    protected abstract double getPivotXshift();
-    protected abstract double getPivotYshift();
-
-
-    @Override
-    public final void setToCanonicalPosition() {
-        setToCanonicalPosition(new Point2D(0, 0));
-    }
-
-    @Override
-    public final void setToCanonicalPosition(Point2D upLeftCorner) {
-        xProperty().set(getPivotXshift() + upLeftCorner.getX());
-        yProperty().set(getPivotYshift() + upLeftCorner.getY());
-    }
-
-    @Override
-    public final void setToTopMiddle() {
-        assert hostGrid != null;
-        setToCanonicalPosition(new Point2D(hostGrid.getColumnNumber() / 2 - getPivotXshift(), 0));
-    }
-
-    @Override
-    public void alignToNearestCanonicalPosition() {
-        double yCordinate =  yProperty().get() - getPivotYshift();
-        yCordinate = Math.floor(yCordinate);
-        setToCanonicalPosition(new Point2D(xProperty().get() - getPivotXshift(), yCordinate));
+        for (Cell c : tetrominoCells) {
+            c.detach(hostGrid);
+        }
+        hostGrid = null;
     }
 
 
@@ -125,13 +89,8 @@ abstract public class SimpleTetromino implements Tetromino{
         xProperty().set(xProperty().get() + l);
     }
 
-
-    @Override
-    public final Bounds getBounds() {
-        Shape s = tetrominoCells[0];
-        for (int i = 1; i < tetrominoCells.length; i++) {
-            s = Shape.union(s, tetrominoCells[i]);
-        }
-        return s.getBoundsInLocal();
+    protected void setColor(Paint color) {
+        for (Cell c: tetrominoCells)
+            c.setFill(color);
     }
 }
