@@ -1,14 +1,8 @@
 package tetris.tetrominos;
 
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Shape;
-import tetris.api.Tetromino;
-import tetris.api.game.GameState;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /*
@@ -20,15 +14,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
    -----------------
  */
 public final class IShape extends SimpleTetromino {
-    private static Paint color = Color.BLUE;
-    private final List<Cell> allCells;
     private boolean isHorizontal;
 
 
     private void relayoutToHorizontal() {
         Cell tmpCell;
         for (int i = 0; i < 4; i++) {
-            tmpCell = allCells.get(i);
+            tmpCell = tetrominoCells[i];
             tmpCell.getCellXProperty().bind(xProperty().subtract(2 - i));
             tmpCell.getCellYProperty().bind(yProperty().subtract(0.5));
         }
@@ -39,52 +31,30 @@ public final class IShape extends SimpleTetromino {
         Cell tmpCell;
 
         for (int i = 0; i < 4; i++) {
-            tmpCell = allCells.get(i);
+            tmpCell = tetrominoCells[i];
             tmpCell.getCellXProperty().bind(xProperty().subtract(0.5));
             tmpCell.getCellYProperty().bind(yProperty().subtract(2 - i));
         }
         isHorizontal = false;
     }
 
-    private void setColor() {
-        for (Cell c : allCells) {
-            c.setFill(color);
-        }
-    }
 
     public IShape(CellPool cellPool) {
-        super();
-        allCells = new CopyOnWriteArrayList<Cell>(cellPool.retrieveLast(4));
+        super(Color.BLUE);
+        tetrominoCells = new Cell[4];
+        List<Cell> tmpList = cellPool.retrieveLast(4);
+        tmpList.toArray(tetrominoCells);
         cellPool.removeLast(4);
-        setColor();
-    }
-
-    @Override
-    public void attach(TetrisGrid grid) {
-        super.attach(grid);
-        for (Cell c : allCells) {
-            c.attach(grid);
-        }
         relayoutToHorizontal();
     }
 
     @Override
-    protected double getPivotXshift() {
+    public final double getPivotXshift() {
         return 2;
     }
 
     @Override
-    protected double getPivotYshift() {
+    public final double getPivotYshift() {
         return 0.5;
     }
-
-    @Override
-    public void detach() {
-        for (Cell c : allCells) {
-            c.detach();
-        }
-    }
-
-
-
 }

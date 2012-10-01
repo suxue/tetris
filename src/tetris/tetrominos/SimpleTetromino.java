@@ -1,40 +1,68 @@
 package tetris.tetrominos;
 
+import com.sun.istack.internal.NotNull;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Paint;
 import tetris.api.Tetromino;
 
 // combination of cells
 // maintain my rotation status
 abstract public class SimpleTetromino implements Tetromino{
 
-    private DoubleProperty xPropertyImpl;
-    private DoubleProperty yPropertyImpl;
+    private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
+    private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
+    private TetrisGrid     hostGrid = null;
+
+    protected  Cell[] tetrominoCells;
+    protected  Paint  tetrominoColor;
+
+    @NotNull
+    private final Cell[] getTetrominoCells() {
+        return tetrominoCells;
+    }
 
     @Override
-    public DoubleProperty xProperty() {
+    public final DoubleProperty xProperty() {
         return xPropertyImpl;
     }
 
     @Override
-    public DoubleProperty yProperty() {
+    public final DoubleProperty yProperty() {
         return yPropertyImpl;
     }
 
     @Override
-    public void attach(TetrisGrid grid) {
-        grid.simpleTetrominoList.add(this);
+    public final void sink() {
+        assert hostGrid != null;
+        for (Cell c: getTetrominoCells()) {
+            hostGrid.sink(c);
+        }
+    }
+
+    @Override
+    public final void attach(TetrisGrid grid) {
+        for (Cell c: getTetrominoCells()) {
+            c.setFill(tetrominoColor);
+            c.attach(grid);
+        }
+        hostGrid  = grid;
     }
 
 
-    public SimpleTetromino(double x, double y) {
-        xPropertyImpl = new SimpleDoubleProperty(x);
-        yPropertyImpl = new SimpleDoubleProperty(y);
+    @Override
+    public final void detach() {
+        for (Cell c : getTetrominoCells()) {
+            c.detach(hostGrid);
+        }
+        hostGrid = null;
     }
 
-    public SimpleTetromino() {
-        this(0, 0);
+
+    public SimpleTetromino(Paint color) {
+        tetrominoColor = color;
+        setToCanonicalPosition();
     }
 
 
@@ -43,12 +71,12 @@ abstract public class SimpleTetromino implements Tetromino{
     protected abstract double getPivotYshift();
 
     @Override
-    public void setToCanonicalPosition() {
+    public final void setToCanonicalPosition() {
         setToCanonicalPosition(new Point2D(0, 0));
     }
 
     @Override
-    public void setToCanonicalPosition(Point2D upLeftCorner) {
+    public final void setToCanonicalPosition(Point2D upLeftCorner) {
         xProperty().set(getPivotXshift() + upLeftCorner.getX());
         yProperty().set(getPivotYshift() + upLeftCorner.getY());
     }

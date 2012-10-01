@@ -7,14 +7,12 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import tetris.api.game.GameControl;
 
 import java.util.ArrayList;
 
 
 public class TetrisGrid extends AnchorPane {
 
-    ArrayList<SimpleTetromino> simpleTetrominoList = new ArrayList<SimpleTetromino>();
 
     // game is 10x20
 
@@ -33,23 +31,31 @@ public class TetrisGrid extends AnchorPane {
         return cellHeight;
     }
 
-
     private CellPool cellPool = null;
-    private GameControl game = null;
+
+
+    private ArrayList<Cell>  visibleCells   = null;
+
+    public void sink(Cell c) {
+        if (visibleCells == null) {
+            visibleCells = new ArrayList<Cell>();
+        }
+        visibleCells.add(c);
+    }
 
     public void clearTetrominos() {
-        for (SimpleTetromino i : simpleTetrominoList) {
-            i.detach();
+        for (Cell c: visibleCells) {
+            c.detach(this);
+            getCellPool().add(c);
         }
-        simpleTetrominoList = new ArrayList<SimpleTetromino>();
+        visibleCells = null;
     }
 
 
-    public TetrisGrid(GameControl game, Paint fill, int rowNo, int columnNo
+    public TetrisGrid(Paint fill, int rowNo, int columnNo
             , ObservableDoubleValue boundWidthProperty
             , ObservableDoubleValue boundHeightProperty) {
         super();
-        this.game = game;
         this.columnNumber = columnNo;
         this.rowNumber = rowNo;
         Rectangle background = new Rectangle();

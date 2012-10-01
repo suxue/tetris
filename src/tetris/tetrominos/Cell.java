@@ -31,10 +31,8 @@ public class Cell extends Rectangle {
         this(0, 0);
     }
 
-    private TetrisGrid grid = null;
 
     public void attach(TetrisGrid grid) {
-        this.grid = grid;
         grid.getChildren().add(this);
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
@@ -43,7 +41,7 @@ public class Cell extends Rectangle {
         yProperty().bind((widthProperty().multiply(cellYProperty)));
     }
 
-    public void detach() {
+    public void detach(TetrisGrid grid) {
         widthProperty().unbind();
         heightProperty().unbind();
         xProperty().unbind();

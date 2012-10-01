@@ -2,8 +2,6 @@ package tetris.api;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Shape;
-import tetris.api.game.GameState;
 import tetris.tetrominos.TetrisGrid;
 
 // a shape can mostly has four orientation
@@ -16,6 +14,13 @@ public interface Tetromino {
 
     public void attach(TetrisGrid grid);
     public void detach();
+
+
+    // all cells will be sunk into the attached grid
+    // after sinking, the Tetromino itself can be safely garbage-collected
+    public void sink();
+
+
     public void setToCanonicalPosition();
     public void setToCanonicalPosition(Point2D upLeftCorner);
 }

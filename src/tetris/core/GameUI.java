@@ -12,7 +12,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,8 +21,8 @@ import javafx.util.Duration;
 import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
-import tetris.tetrominos.TetrisGrid;
 import tetris.tetrominos.IShape;
+import tetris.tetrominos.TetrisGrid;
 
 import java.util.Random;
 
@@ -37,26 +36,6 @@ public class GameUI extends HBox {
 
     private class TetrisGameLogic {
 
-        private final int frameRate = 60;
-        private final Duration frameInterval =  Duration.millis(1000/frameRate);
-        private boolean hasStarted = false;
-
-        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                }
-            }
-        );
-
-        private Timeline timeline =  TimelineBuilder.create()
-                .cycleCount(Animation.INDEFINITE)
-                .keyFrames(mainFrame)
-                .build();
-
-        private Tetromino dynamicTetromino;
-        private Tetromino staticTetromino;
-        private Random    randGenerator = new Random();
 
         private void generateNextTetromino() {
             int tetroClass = randGenerator.nextInt() % 1;
@@ -66,10 +45,6 @@ public class GameUI extends HBox {
                 staticTetromino = new IShape(playField.getCellPool());
                 break;
             }
-
-        }
-
-        private void swapTetromino() {
 
         }
 
@@ -84,7 +59,6 @@ public class GameUI extends HBox {
             predicationField.clearTetrominos();
         }
 
-
         private void toggle() { //  PLAY/PAUSE
             if (gameControl.getStatus() == GameControl.Status.PLAY_GAME) {
                 System.out.println("Pause");
@@ -94,6 +68,32 @@ public class GameUI extends HBox {
                 gameControl.play();
             }
         }
+
+        /////////////////////////////////////////////////////////////////////
+        //             MAIN LOOP                                           //
+        /////////////////////////////////////////////////////////////////////
+
+        private final int frameRate = 60;
+        private final Duration frameInterval =  Duration.millis(1000/frameRate);
+        private boolean hasStarted = false;
+        private Random randGenerator = new Random();
+
+        private Tetromino dynamicTetromino;
+        private Tetromino staticTetromino;
+
+        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        //TODO: main loop
+                    }
+                }
+        );
+
+        private final Timeline timeline =  TimelineBuilder.create()
+                .cycleCount(Animation.INDEFINITE)
+                .keyFrames(mainFrame)
+                .build();
 
 
         public TetrisGameLogic() {
@@ -173,11 +173,11 @@ public class GameUI extends HBox {
     }
 
     private TetrisGrid createPlayFieldGrid() {
-        return (playField = new TetrisGrid(gameControl, Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
+        return (playField = new TetrisGrid(Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
     }
 
     private TetrisGrid createPredicationField() {
-        return (predicationField = new TetrisGrid(gameControl, Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
+        return (predicationField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
     public GameUI(GameState gameState) {
