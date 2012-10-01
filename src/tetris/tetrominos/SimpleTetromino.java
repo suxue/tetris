@@ -13,7 +13,7 @@ abstract public class SimpleTetromino implements Tetromino{
 
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
     private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
-    private TetrisGrid     hostGrid = null;
+    protected TetrisGrid     hostGrid = null;
 
     protected  Cell[] tetrominoCells;
     protected  Paint  tetrominoColor;
@@ -42,6 +42,13 @@ abstract public class SimpleTetromino implements Tetromino{
     }
 
     @Override
+    public final void release(CellPool cp) {
+        for (Cell c: tetrominoCells) {
+            cp.add(c);
+        }
+    }
+
+    @Override
     public final void attach(TetrisGrid grid) {
         for (Cell c: getTetrominoCells()) {
             c.setFill(tetrominoColor);
@@ -53,16 +60,17 @@ abstract public class SimpleTetromino implements Tetromino{
 
     @Override
     public final void detach() {
-        for (Cell c : getTetrominoCells()) {
-            c.detach(hostGrid);
+        if (hostGrid != null) {
+            for (Cell c : getTetrominoCells()) {
+                c.detach(hostGrid);
+            }
+            hostGrid = null;
         }
-        hostGrid = null;
     }
 
 
     public SimpleTetromino(Paint color) {
         tetrominoColor = color;
-        setToCanonicalPosition();
     }
 
 
@@ -80,4 +88,53 @@ abstract public class SimpleTetromino implements Tetromino{
         xProperty().set(getPivotXshift() + upLeftCorner.getX());
         yProperty().set(getPivotYshift() + upLeftCorner.getY());
     }
+
+    @Override
+    public final void setToTopMiddle() {
+        assert hostGrid != null;
+        setToCanonicalPosition(new Point2D(hostGrid.getColumnNumber() / 2 - getPivotXshift(), 0));
+    }
+
+    @Override
+    public final void moveUp(double l) {
+        yProperty().set(yProperty().get() - l);
+    }
+
+
+    @Override
+    public final void moveDown(double l) {
+        yProperty().set(yProperty().get() + l);
+    }
+
+
+    @Override
+    public final void moveLeft(double l) {
+        xProperty().set(xProperty().get() - l);
+    }
+
+
+    @Override
+    public final void moveRight(double l) {
+        xProperty().set(xProperty().get() + l);
+    }
+
+
+    @Override
+    public final double getLengthToRightBoundary() {
+        assert hostGrid != null;
+        return hostGrid.getColumnNumber() - xProperty().get() - getPivotXshift();
+    }
+
+    @Override
+    public final double getLengthToLeftBoundary() {
+        return xProperty().get() - getPivotXshift();
+    }
+
+    @Override
+    public double getLengthToBottomBoundary() {
+        assert  hostGrid != null;
+        return hostGrid.getRowNumber() - yProperty().get() - getPivotYshift();
+    }
+
+
 }

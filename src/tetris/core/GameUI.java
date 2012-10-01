@@ -22,6 +22,7 @@ import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.IShape;
+import tetris.tetrominos.OShape;
 import tetris.tetrominos.TetrisGrid;
 
 import java.util.Random;
@@ -36,27 +37,42 @@ public class GameUI extends HBox {
 
     private class TetrisGameLogic {
 
+        private Tetromino generateNextTetromino() {
+            Tetromino t;
+            int tetroClass = randGenerator.nextInt() % 2;
+            System.out.println(tetroClass % 2);
 
-        private void generateNextTetromino() {
-            int tetroClass = randGenerator.nextInt() % 1;
             switch (tetroClass) {
             case 0:
+                t = new IShape(playField.getCellPool());
+                break;
             case 1:
-                staticTetromino = new IShape(playField.getCellPool());
+                t = new OShape(playField.getCellPool());
+                break;
+            default:
+                assert false;  // should not reach here
+                t = new IShape(playField.getCellPool());
                 break;
             }
-
+            return t;
         }
 
-        private void initTetrominos() {
-            generateNextTetromino();
+        private void initStaticTetrominos() {
+            staticTetromino = generateNextTetromino();
             staticTetromino.setToCanonicalPosition();
             staticTetromino.attach(predicationField);
         }
 
         private  void clearTetrominos() {
             playField.clearTetrominos();
-            predicationField.clearTetrominos();
+            if (staticTetromino != null) {
+                staticTetromino.detach();
+                staticTetromino.release(playField.getCellPool());
+            }
+            if (dynamicTetromino != null) {
+                dynamicTetromino.detach();
+                dynamicTetromino.release(playField.getCellPool());
+            }
         }
 
         private void toggle() { //  PLAY/PAUSE
@@ -73,7 +89,7 @@ public class GameUI extends HBox {
         //             MAIN LOOP                                           //
         /////////////////////////////////////////////////////////////////////
 
-        private final int frameRate = 60;
+        private final int frameRate = 50;
         private final Duration frameInterval =  Duration.millis(1000/frameRate);
         private boolean hasStarted = false;
         private Random randGenerator = new Random();
@@ -81,11 +97,29 @@ public class GameUI extends HBox {
         private Tetromino dynamicTetromino;
         private Tetromino staticTetromino;
 
+        private int cycleCount = 0;
+
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        //TODO: main loop
+                        assert staticTetromino != null;
+                        cycleCount++;
+
+                        if (dynamicTetromino == null) { // initialize playfield
+                            staticTetromino.detach();
+                            dynamicTetromino = staticTetromino;
+                            initStaticTetrominos();
+                            dynamicTetromino.attach(playField);
+                            dynamicTetromino.setToTopMiddle();
+                        } else { // continue playing
+                            dynamicTetromino.moveDown(.07);
+                            if (dynamicTetromino.getLengthToBottomBoundary() <= 0) {
+                                dynamicTetromino.detach();
+                                dynamicTetromino.release(playField.getCellPool());
+                                dynamicTetromino = null;
+                            }
+                        }
                     }
                 }
         );
@@ -95,8 +129,32 @@ public class GameUI extends HBox {
                 .keyFrames(mainFrame)
                 .build();
 
-
         public TetrisGameLogic() {
+
+            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    switch(keyEvent.getCode()) {
+                    case P:
+                        toggle();
+                        break;
+                    case R:
+                        gameControl.restart();
+                        break;
+                    case LEFT:
+                        if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
+                            dynamicTetromino.moveLeft(1);
+                        }
+                        break;
+                    case RIGHT:
+                        if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
+                            dynamicTetromino.moveRight(1);
+                        }
+                        break;
+                    }
+                }
+            });
+
             gameControl.addStatusListener(new GameControl.StatusListener() {
                 @Override
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
@@ -105,7 +163,7 @@ public class GameUI extends HBox {
                         case PLAY_GAME:
                             // first start
                             if (!hasStarted) {
-                                initTetrominos();
+                                initStaticTetrominos();
                                 hasStarted = true;
                             }
 
@@ -121,24 +179,10 @@ public class GameUI extends HBox {
                             gameControl.stop();
                             // re initialize all blocks
                             clearTetrominos();
-                            initTetrominos();
+                            initStaticTetrominos();
                             gameControl.play();
                             break;
                     } // end switch
-                }
-            });
-
-            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    switch(keyEvent.getCode()) {
-                    case P:
-                        toggle();
-                        break;
-                    case R:
-                        gameControl.restart();
-                        break;
-                    }
                 }
             });
 
@@ -173,7 +217,8 @@ public class GameUI extends HBox {
     }
 
     private TetrisGrid createPlayFieldGrid() {
-        return (playField = new TetrisGrid(Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty));
+        playField = new TetrisGrid(Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty);
+        return playField;
     }
 
     private TetrisGrid createPredicationField() {

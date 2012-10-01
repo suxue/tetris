@@ -24,11 +24,12 @@ public class Cell extends Rectangle {
         super();
         cellXProperty = new SimpleDoubleProperty(x);
         cellYProperty = new SimpleDoubleProperty(y);
-        setStroke(Color.WHITE);
+        //setStroke(Color.WHITE);
     }
 
     public Cell() {
         this(0, 0);
+        setManaged(false);
     }
 
 
@@ -38,7 +39,7 @@ public class Cell extends Rectangle {
         heightProperty().bind(grid.cellHeighthProperty());
 
         xProperty().bind((widthProperty().multiply(cellXProperty)));
-        yProperty().bind((widthProperty().multiply(cellYProperty)));
+        yProperty().bind((heightProperty().multiply(cellYProperty)));
     }
 
     public void detach(TetrisGrid grid) {

@@ -19,8 +19,17 @@ public class TetrisGrid extends AnchorPane {
     private DoubleProperty cellWidth = new SimpleDoubleProperty();
     private DoubleProperty cellHeight = new SimpleDoubleProperty();
 
+    public final int getColumnNumber() {
+        return columnNumber;
+    }
+
+    public final int getRowNumber() {
+        return rowNumber;
+    }
+
     private int columnNumber;
     private int rowNumber;
+
 
 
     ReadOnlyDoubleProperty cellWidthProperty() {

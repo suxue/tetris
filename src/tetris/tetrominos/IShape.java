@@ -1,5 +1,6 @@
 package tetris.tetrominos;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -57,4 +58,5 @@ public final class IShape extends SimpleTetromino {
     public final double getPivotYshift() {
         return 0.5;
     }
+
 }
