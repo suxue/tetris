@@ -2,8 +2,11 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 
 public class Cell extends Rectangle {
@@ -24,7 +27,8 @@ public class Cell extends Rectangle {
         super();
         cellXProperty = new SimpleDoubleProperty(x);
         cellYProperty = new SimpleDoubleProperty(y);
-        //setStroke(Color.WHITE);
+        setStroke(Color.WHITE);
+        setStrokeType(StrokeType.INSIDE);
     }
 
     public Cell() {

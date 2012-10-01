@@ -59,4 +59,26 @@ public final class IShape extends SimpleTetromino {
         return 0.5;
     }
 
+
+    @Override
+    public double getLengthToRightBoundary() {
+        return hostGrid.getColumnNumber() - xProperty().get() - 2;
+    }
+
+    @Override
+    public double getLengthToLeftBoundary() {
+        return xProperty().get() - 2;
+    }
+
+
+    @Override
+    public double getLengthToBottomBoundary() {
+        return hostGrid.getRowNumber() - yProperty().get() - 0.5;
+    }
+
+    @Override
+    public double getLengthToTopBoundary() {
+        return yProperty().get() - 0.5;
+    }
+
 }

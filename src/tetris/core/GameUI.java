@@ -40,7 +40,6 @@ public class GameUI extends HBox {
         private Tetromino generateNextTetromino() {
             Tetromino t;
             int tetroClass = randGenerator.nextInt() % 2;
-            System.out.println(tetroClass % 2);
 
             switch (tetroClass) {
             case 0:
@@ -89,7 +88,7 @@ public class GameUI extends HBox {
         //             MAIN LOOP                                           //
         /////////////////////////////////////////////////////////////////////
 
-        private final int frameRate = 50;
+        private final int frameRate = 30;
         private final Duration frameInterval =  Duration.millis(1000/frameRate);
         private boolean hasStarted = false;
         private Random randGenerator = new Random();
@@ -114,9 +113,12 @@ public class GameUI extends HBox {
                             dynamicTetromino.setToTopMiddle();
                         } else { // continue playing
                             dynamicTetromino.moveDown(.07);
-                            if (dynamicTetromino.getLengthToBottomBoundary() <= 0) {
-                                dynamicTetromino.detach();
-                                dynamicTetromino.release(playField.getCellPool());
+                            if (!playField.validBoundaryToSunkCells(dynamicTetromino)
+                                || dynamicTetromino.getLengthToBottomBoundary() <= 0) {
+                                dynamicTetromino.alignToNearestCanonicalPosition();
+                                dynamicTetromino.sink();
+//                                dynamicTetromino.detach();
+//                                dynamicTetromino.release(playField.getCellPool());
                                 dynamicTetromino = null;
                             }
                         }

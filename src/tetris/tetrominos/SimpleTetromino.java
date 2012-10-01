@@ -3,8 +3,10 @@ package tetris.tetrominos;
 import com.sun.istack.internal.NotNull;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 import tetris.api.Tetromino;
 
 // combination of cells
@@ -39,6 +41,7 @@ abstract public class SimpleTetromino implements Tetromino{
         for (Cell c: getTetrominoCells()) {
             hostGrid.sink(c);
         }
+
     }
 
     @Override
@@ -74,9 +77,11 @@ abstract public class SimpleTetromino implements Tetromino{
     }
 
 
+    // shift between the outside bound (4x2) and the pivot
+    // mainly used for algined in the middle of the grid
     protected abstract double getPivotXshift();
-
     protected abstract double getPivotYshift();
+
 
     @Override
     public final void setToCanonicalPosition() {
@@ -96,8 +101,10 @@ abstract public class SimpleTetromino implements Tetromino{
     }
 
     @Override
-    public final void moveUp(double l) {
-        yProperty().set(yProperty().get() - l);
+    public void alignToNearestCanonicalPosition() {
+        double yCordinate =  yProperty().get() - getPivotYshift();
+        yCordinate = Math.floor(yCordinate);
+        setToCanonicalPosition(new Point2D(xProperty().get() - getPivotXshift(), yCordinate));
     }
 
 
@@ -120,21 +127,11 @@ abstract public class SimpleTetromino implements Tetromino{
 
 
     @Override
-    public final double getLengthToRightBoundary() {
-        assert hostGrid != null;
-        return hostGrid.getColumnNumber() - xProperty().get() - getPivotXshift();
+    public final Bounds getBounds() {
+        Shape s = tetrominoCells[0];
+        for (int i = 1; i < tetrominoCells.length; i++) {
+            s = Shape.union(s, tetrominoCells[i]);
+        }
+        return s.getBoundsInLocal();
     }
-
-    @Override
-    public final double getLengthToLeftBoundary() {
-        return xProperty().get() - getPivotXshift();
-    }
-
-    @Override
-    public double getLengthToBottomBoundary() {
-        assert  hostGrid != null;
-        return hostGrid.getRowNumber() - yProperty().get() - getPivotYshift();
-    }
-
-
 }
