@@ -90,7 +90,7 @@ public class TetrisGrid extends AnchorPane {
                     for (int j = 0; j < getColumnNumber(); j++) {
                         // move geometrically
                         if (mirror[j][i] != null) {
-                            mirror[j][i].getCellYProperty().set(mirror[j][i].getCellYProperty().get() + 1);
+                            mirror[j][i].getCellYProperty().set(mirror[j][i].getCellYProperty().get() + emptyLines);
                         }
 
                         // move line within mirror

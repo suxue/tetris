@@ -5,6 +5,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -111,10 +112,6 @@ public class GameUI extends HBox {
 
                     if (dynamicTetromino == null) {
                         startFromBeginning();
-                        if (!dynamicTetromino.moveDown(0.07)) {
-                            gameControl.restart();
-                            gameControl.stop();
-                        }
                     } else {
                         if (!dynamicTetromino.moveDown(0.07)) {
                             // reach boundary
@@ -123,7 +120,13 @@ public class GameUI extends HBox {
                             // swap tetromino
                             staticTetromino.detach();
                             dynamicTetromino = staticTetromino;
-                            prepareNewTetromino();
+                            dynamicTetromino.attach(playField);
+                            if (!dynamicTetromino.moveDown(0.001)) { // reach top
+                                gameControl.restart();
+                            }
+
+                            staticTetromino = generateNextTetromino();
+                            staticTetromino.attach(predicationField);
                         }
                     }
 
