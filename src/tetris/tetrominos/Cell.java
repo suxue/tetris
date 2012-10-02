@@ -51,6 +51,7 @@ public class Cell extends Rectangle {
         hostGrid = null;
     }
 
+
     public boolean  isAttached() {
         return (hostGrid != null);
     }
