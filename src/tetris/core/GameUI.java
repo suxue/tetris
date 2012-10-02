@@ -112,6 +112,7 @@ public class GameUI extends HBox {
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        cycleCount++;
 
                         if (dynamicTetromino == null) {
                             startFromBeginning();
@@ -124,16 +125,16 @@ public class GameUI extends HBox {
                                 staticTetromino.detach();
                                 dynamicTetromino = staticTetromino;
                                 dynamicTetromino.attach(playField);
-                                if (!dynamicTetromino.moveDown(0.001)) { // reach top
+                                if (dynamicTetromino.moveDown(0.0001)) { // continue swap static and dynamic tetromino
+                                    staticTetromino = generateNextTetromino();
+                                    staticTetromino.attach(predicationField);
+                                } else {
                                     gameControl.restart();
+                                    return;  // ensure restart take effect directly
                                 }
-
-                                staticTetromino = generateNextTetromino();
-                                staticTetromino.attach(predicationField);
                             }
                         }
 
-                        cycleCount++;
                     }
                 }
         );
