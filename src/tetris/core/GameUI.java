@@ -37,6 +37,7 @@ public class GameUI extends HBox {
 
     private class TetrisGameLogic {
 
+
         private Tetromino generateNextTetromino() {
             Tetromino t;
             int tetroClass = randGenerator.nextInt() % 2;
@@ -82,11 +83,9 @@ public class GameUI extends HBox {
 
         private int cycleCount;
 
-
-        private void prepareBeforeBeginning() {
+        private void prepareNewTetromino() {
             staticTetromino = generateNextTetromino();
             dynamicTetromino = null;
-            staticTetromino.setToTopMiddle(predicationField);
             staticTetromino.attach(predicationField);
         }
 
@@ -94,10 +93,8 @@ public class GameUI extends HBox {
             cycleCount = 0;
             staticTetromino.detach();
             dynamicTetromino = staticTetromino;
-            dynamicTetromino.setToTopMiddle(playField);
             dynamicTetromino.attach(playField);
             staticTetromino = generateNextTetromino();
-            staticTetromino.setToTopMiddle(predicationField);
             staticTetromino.attach(predicationField);
         }
 
@@ -132,7 +129,7 @@ public class GameUI extends HBox {
                 .build();
 
         public TetrisGameLogic() {
-            prepareBeforeBeginning();
+            prepareNewTetromino();
 
             GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
@@ -175,7 +172,7 @@ public class GameUI extends HBox {
                         case RESTART_GAME:
                             gameControl.stop();
                             cleanAfterEnd();
-                            prepareBeforeBeginning();
+                            prepareNewTetromino();
                             gameControl.play();
                             break;
                     } // end switch

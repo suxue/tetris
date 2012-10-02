@@ -3,17 +3,13 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import tetris.api.Tetromino;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -25,6 +21,8 @@ public class TetrisGrid extends AnchorPane {
 
     private DoubleProperty  cellWidth   = new SimpleDoubleProperty();
     private DoubleProperty  cellHeight  = new SimpleDoubleProperty();
+
+    private boolean[][] mirror;
 
     ReadOnlyDoubleProperty cellWidthProperty() {
         return cellWidth;
@@ -45,11 +43,28 @@ public class TetrisGrid extends AnchorPane {
         return rowNumber;
     }
 
+    private void resetMirror() {
+        for (boolean[] i  : mirror) {
+            Arrays.fill(i, false);
+        }
+    }
+
+    public final boolean mirrorGet(int x, int y) {
+        return mirror[x][y];
+    }
+
+    public final void    mirrorSet(int x, int y) {
+        mirror[x][y] = true;
+    }
+
 
     public TetrisGrid(Paint fill, int rowNo, int columnNo
             , ObservableDoubleValue boundWidthProperty
             , ObservableDoubleValue boundHeightProperty) {
         super();
+        mirror = new boolean[columnNo][rowNo];
+        resetMirror();
+
         this.columnNumber = columnNo;
         this.rowNumber = rowNo;
         background.setFill(fill);
@@ -81,6 +96,9 @@ public class TetrisGrid extends AnchorPane {
                 else
                     set(i, allCells[i]);
             }
+
+            // clean all sunk cells
+            resetMirror();
         }
 
         public List<Cell> retrieveLast(int number) {

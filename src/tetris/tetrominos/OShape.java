@@ -1,6 +1,5 @@
 package tetris.tetrominos;
 
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import tetris.tetrominos.TetrisGrid.CellPool;
 
@@ -37,8 +36,13 @@ public class OShape extends  SimpleTetromino {
     }
 
     @Override
-    public void setToTopMiddle(TetrisGrid grid) {
-        xProperty().set(grid.getColumnNumber() / 2);
-        yProperty().set(1);
+    public final double getPivotXShift() {
+        return 1;
     }
+
+    @Override
+    public final double getPivotYShift() {
+        return 1;
+    }
+
 }

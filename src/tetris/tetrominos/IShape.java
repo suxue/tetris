@@ -1,12 +1,10 @@
 package tetris.tetrominos;
 
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-
-import java.util.List;
-
 import tetris.api.Tetromino;
 import tetris.tetrominos.TetrisGrid.CellPool;
+
+import java.util.List;
 
 
 /*
@@ -17,7 +15,7 @@ import tetris.tetrominos.TetrisGrid.CellPool;
    | 0 | 1 | 2 | 3 |
    -----------------
  */
-public final class IShape extends SimpleTetromino implements Tetromino {
+public final class IShape extends SimpleTetromino {
 
 
     private void relayoutToHorizontal() {
@@ -40,9 +38,12 @@ public final class IShape extends SimpleTetromino implements Tetromino {
     }
 
     @Override
-    public void setToTopMiddle(TetrisGrid g) {
-        xProperty().set(g.getColumnNumber() / 2);
-        yProperty().set(0.5);
+    public final double getPivotXShift() {
+        return 2;
     }
 
+    @Override
+    public final double getPivotYShift() {
+        return 0.5;
+    }
 }

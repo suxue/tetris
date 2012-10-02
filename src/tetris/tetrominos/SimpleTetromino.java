@@ -2,12 +2,8 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Shape;
 import tetris.api.Tetromino;
-import tetris.api.Tetromino.*;
 
 // combination of cells
 // maintain my rotation status
@@ -33,6 +29,7 @@ abstract public class SimpleTetromino implements Tetromino{
         for (Cell c: tetrominoCells) {
             c.attach(grid);
         }
+        setToTopMiddle(grid);
     }
 
 
@@ -42,6 +39,7 @@ abstract public class SimpleTetromino implements Tetromino{
             c.detach();
         }
     }
+
 
 
     @Override
@@ -65,4 +63,19 @@ abstract public class SimpleTetromino implements Tetromino{
         for (Cell c: tetrominoCells)
             c.setFill(color);
     }
+
+
+    @Override
+    public void pin() {
+        double x = Math.floor(xProperty().get() - getPivotXShift());
+        double y = Math.floor(yProperty().get() - getPivotYShift());
+        xProperty().set(x + getPivotXShift());
+        yProperty().set(y + getPivotYShift());
+    }
+
+    protected final void setToTopMiddle(TetrisGrid grid) {
+        xProperty().set(grid.getColumnNumber() / 2);
+        yProperty().set(getPivotYShift());
+    }
+
 }

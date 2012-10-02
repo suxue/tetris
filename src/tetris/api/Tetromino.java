@@ -1,9 +1,6 @@
 package tetris.api;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import tetris.tetrominos.TetrisGrid.CellPool;
 import tetris.tetrominos.TetrisGrid;
 
 // a shape can mostly has four orientation
@@ -19,11 +16,13 @@ public interface Tetromino {
     public DoubleProperty xProperty();
     public DoubleProperty yProperty();
 
+    public double getPivotXShift();
+    public double getPivotYShift();
+
     // after attaching, I'll be showed in that grid
     public void attach(TetrisGrid grid);
     public void detach();
-
-    public void setToTopMiddle(TetrisGrid grid);
+    public void pin();
 
     // movement function family
     public void moveDown(double len);
