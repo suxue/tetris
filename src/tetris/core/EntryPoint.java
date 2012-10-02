@@ -6,13 +6,6 @@
    Acknowledgement: This class utilize the GNU getopt library to parse command line arguments.
  */
 
-/*
- *  Brief:
- *  It will do:
- *     1. parsing and interpreting  command line options.
- *     2. initialize the entry point class(extends the javafx.application.Application class).
- *     3. initialize  
- */
 package tetris.core;
 
 import gnu.getopt.Getopt;

@@ -1,6 +1,8 @@
 /* interface for storing game state, subclass will only contains data and its accessors
- * Copyright (C) 2012, thu10e team
- ** This file is part of the implementaion of Tetris Game ** made by thu10e team for the assessment of COMP1110/67 ** 10 assignment.
+   Copyright (C) 2012, thu10e team
+
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67  10 assignment.
  */
 package tetris.api.game;
 
