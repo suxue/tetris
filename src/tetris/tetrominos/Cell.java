@@ -54,4 +54,67 @@ public class Cell extends Rectangle {
     public boolean  isAttached() {
         return (hostGrid != null);
     }
+
+    public boolean canMoveLeft(double len) {
+        int    targetX = (int)(getCellXProperty().get() - len);
+        double targetY = getCellYProperty().get();
+        int    y1      = (int)(Math.floor(targetY));
+        int    y2      = (int)(Math.ceil(targetY));
+
+        if (targetX < 0)
+            return false;
+        else {
+            // check y1
+            if (hostGrid.mirrorGet(targetX, y1)) {
+                return false;
+            } else if (y2 != y1) {
+                if (hostGrid.mirrorGet(targetX, y2)) {
+                    return false;
+                }
+            }
+            // can move
+            return  true;
+        }
+    }
+
+
+    public boolean canMoveRight(double len) {
+        int    targetX = (int)(getCellXProperty().get() + len);
+        double targetY = getCellYProperty().get();
+        int    y1      = (int)(Math.floor(targetY));
+        int    y2      = (int)(Math.ceil(targetY));
+
+        if (targetX > (hostGrid.getColumnNumber() - 1))
+            return false;
+        else {
+            // check y1
+            if (hostGrid.mirrorGet(targetX, y1)) {
+                return false;
+            } else if (y2 != y1) {
+                if (hostGrid.mirrorGet(targetX, y2)) {
+                    return false;
+                }
+            }
+            // can move
+            return  true;
+        }
+    }
+
+
+    public boolean canMoveDown(double len) {
+        int    targetX = (int)getCellXProperty().get();
+        double targetY = getCellYProperty().get() + 1 + len;
+        int    y      = (int)(Math.floor(targetY));
+
+        // check y1
+        if (targetY >= hostGrid.getRowNumber()) {
+            return false;
+        }
+
+        if (hostGrid.mirrorGet(targetX, y)) {
+            return false;
+        } else { // can move
+            return  true;
+        }
+    }
 }

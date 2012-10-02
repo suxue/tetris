@@ -46,4 +46,33 @@ public final class IShape extends SimpleTetromino {
     public final double getPivotYShift() {
         return 0.5;
     }
+
+    @Override
+    public boolean moveDown(double len) {
+        for (Cell c: tetrominoCells) {
+            if (!c.canMoveDown(len))
+                return false;
+        }
+
+        yProperty().set(yProperty().get() + len);
+        return true;
+    }
+
+    @Override
+    public boolean moveLeft() {
+        if (tetrominoCells[0].canMoveLeft(1)) {
+            xProperty().set(xProperty().get() - 1);
+            return true;
+        } else
+            return  false;
+    }
+
+    @Override
+    public boolean moveRight() {
+        if (tetrominoCells[3].canMoveRight(1)) {
+            xProperty().set(xProperty().get() + 1);
+            return true;
+        } else
+            return  false;
+    }
 }

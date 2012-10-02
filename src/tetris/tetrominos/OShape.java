@@ -45,4 +45,30 @@ public class OShape extends  SimpleTetromino {
         return 1;
     }
 
+    @Override
+    public boolean moveDown(double len) {
+        if (tetrominoCells[2].canMoveDown(len) && tetrominoCells[3].canMoveDown(len)) {
+            yProperty().set(yProperty().get() + len);
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    public boolean moveLeft() {
+        if (tetrominoCells[0].canMoveLeft(1) && tetrominoCells[2].canMoveLeft(1)) {
+            xProperty().set(xProperty().get() - 1);
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    public boolean moveRight() {
+        if (tetrominoCells[1].canMoveRight(1) && tetrominoCells[3].canMoveRight(1)) {
+            xProperty().set(xProperty().get() + 1);
+            return true;
+        } else
+            return false;
+    }
 }

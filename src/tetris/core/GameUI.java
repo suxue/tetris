@@ -102,10 +102,7 @@ public class GameUI extends HBox {
             playField.getCellPool().reInitialize();
         }
 
-        private void continueToNextFrame() {
-            dynamicTetromino.moveDown(0.03);
 
-        }
 
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
             new EventHandler<ActionEvent>() {
@@ -114,8 +111,19 @@ public class GameUI extends HBox {
 
                     if (dynamicTetromino == null) {
                         startFromBeginning();
+                        if (!dynamicTetromino.moveDown(0.07)) {
+                            gameControl.restart();
+                            gameControl.stop();
+                        }
                     } else {
-                        continueToNextFrame();
+                        if (!dynamicTetromino.moveDown(0.07)) {
+                            // reach boundary
+                            dynamicTetromino.pin();
+                            // swap tetromino
+                            staticTetromino.detach();
+                            dynamicTetromino = staticTetromino;
+                            prepareNewTetromino();
+                        }
                     }
 
                     cycleCount++;
@@ -143,12 +151,12 @@ public class GameUI extends HBox {
                         break;
                     case LEFT:
                         //if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
-                            dynamicTetromino.moveLeft(1);
+                            dynamicTetromino.moveLeft();
                        // }
                         break;
                     case RIGHT:
                         //if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
-                            dynamicTetromino.moveRight(1);
+                            dynamicTetromino.moveRight();
                         //}
                         break;
                     }

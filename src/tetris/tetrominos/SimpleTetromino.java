@@ -10,6 +10,7 @@ import tetris.api.Tetromino;
 abstract public class SimpleTetromino implements Tetromino{
 
     protected  Cell[]       tetrominoCells;  // all cells included within me
+    protected TetrisGrid    hostGrid = null;
 
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
     private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
@@ -30,6 +31,7 @@ abstract public class SimpleTetromino implements Tetromino{
             c.attach(grid);
         }
         setToTopMiddle(grid);
+        hostGrid = grid;
     }
 
 
@@ -38,25 +40,7 @@ abstract public class SimpleTetromino implements Tetromino{
         for (Cell c : tetrominoCells) {
             c.detach();
         }
-    }
-
-
-
-    @Override
-    public final void moveDown(double l) {
-        yProperty().set(yProperty().get() + l);
-    }
-
-
-    @Override
-    public final void moveLeft(double l) {
-        xProperty().set(xProperty().get() - l);
-    }
-
-
-    @Override
-    public final void moveRight(double l) {
-        xProperty().set(xProperty().get() + l);
+        hostGrid = null;
     }
 
     protected void setColor(Paint color) {
@@ -67,10 +51,12 @@ abstract public class SimpleTetromino implements Tetromino{
 
     @Override
     public void pin() {
-        double x = Math.floor(xProperty().get() - getPivotXShift());
-        double y = Math.floor(yProperty().get() - getPivotYShift());
-        xProperty().set(x + getPivotXShift());
+        double y = Math.ceil(yProperty().get() - getPivotYShift());
         yProperty().set(y + getPivotYShift());
+        for (Cell c: tetrominoCells) {
+            hostGrid.mirrorSet( (int)c.getCellXProperty().get()
+                    , (int)c.getCellYProperty().get());
+        }
     }
 
     protected final void setToTopMiddle(TetrisGrid grid) {
