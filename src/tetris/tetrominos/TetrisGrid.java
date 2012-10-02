@@ -1,3 +1,8 @@
+/* The playyard and container for tetrominos
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+ */
 package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
@@ -8,17 +13,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class TetrisGrid extends AnchorPane {
 
-    private Rectangle       background  = new Rectangle();
-    private CellPool        cellPool    = null;
-    private ArrayList<Cell> visibleCells   = null;
+    private Rectangle background = new Rectangle();
+    private CellPool cellPool = null;
+    private ArrayList<Cell> visibleCells = null;
 
-    private DoubleProperty  cellWidth   = new SimpleDoubleProperty();
-    private DoubleProperty  cellHeight  = new SimpleDoubleProperty();
+    private DoubleProperty cellWidth = new SimpleDoubleProperty();
+    private DoubleProperty cellHeight = new SimpleDoubleProperty();
 
     private Cell[][] mirror;
 
@@ -42,7 +49,7 @@ public class TetrisGrid extends AnchorPane {
     }
 
     private void resetMirror() {
-        for (Cell[] i  : mirror) {
+        for (Cell[] i : mirror) {
             Arrays.fill(i, null);
         }
     }
@@ -51,7 +58,7 @@ public class TetrisGrid extends AnchorPane {
         return !(mirror[x][y] == null);
     }
 
-    public final void    mirrorSet(int x, int y, Cell c) {
+    public final void mirrorSet(int x, int y, Cell c) {
         mirror[x][y] = c;
     }
 
@@ -128,7 +135,7 @@ public class TetrisGrid extends AnchorPane {
         private Cell[] allCells;
 
         public CellPool() {
-            super(columnNumber*rowNumber);
+            super(columnNumber * rowNumber);
             for (int i = 0; i < columnNumber * rowNumber; i++)
                 add(new Cell());
 
