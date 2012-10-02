@@ -21,6 +21,9 @@ import tetris.api.game.GameControl;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import static tetris.api.game.GameControl.Status.*;
 
 
@@ -211,17 +214,19 @@ public class Tetris extends TetrisDynamic implements GameControl {
 
         this.primaryStage = primaryStage;
 
-        String csspath = this.getClass()
-                .getResource("/css/stylesheet.css")
-                .toExternalForm();
+        URL cssurl = Tetris.class.getResource("/css/stylesheet.bss");
+        if (cssurl == null) {
+            cssurl = Tetris.class.getResource("/css/stylesheet.css");
+        }
 
         Scene primaryScene = SceneBuilder.create()
                 .root(new RootUI(this))
-                .stylesheets(csspath)
+                .stylesheets(cssurl.toExternalForm() )
                 .width(getWidth())
                 .height(getHeight())
                 .fill(Color.LIGHTSEAGREEN)
                 .build();
+
 
         primaryStage.titleProperty().bindBidirectional(title());
         widthProperty().bind(primaryStage.widthProperty());

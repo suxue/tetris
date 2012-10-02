@@ -7,24 +7,28 @@
 package tetris.util;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class File {
-    public static String readResourceFile(String filename) throws IOException {
-        BufferedReader in = null;
-        StringBuilder sb = new StringBuilder();
+public class IO {
+    public static String readResource(String resourceName) {
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                IO.class.getResourceAsStream(resourceName)));
         String line;
-        String fn = File.class.getResource(filename).getFile();
+        StringBuilder sb = new StringBuilder();
         try {
-            in = new BufferedReader(new FileReader(fn));
             while ((line = in.readLine()) != null) {
                 sb.append(line);
                 sb.append("\n");
             }
-        } finally {
-            if (in != null)
-                in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return sb.toString();
     }

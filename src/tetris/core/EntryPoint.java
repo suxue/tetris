@@ -12,7 +12,7 @@ import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import tetris.util.File;
+import tetris.util.IO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,12 +57,11 @@ public class EntryPoint extends Application {
 
                 switch (result) {
                     case 'h':
-                        System.out.format(File.readResourceFile("/txt/help.txt")
-                                , tetrisGame.getTitle());
+                        System.out.format(IO.readResource("/txt/help.txt") , tetrisGame.getTitle());
                         System.exit(0);
                         break;
                     case 'v':
-                        System.out.format(File.readResourceFile("/txt/version.txt")
+                        System.out.format(IO.readResource("/txt/version.txt")
                                 , tetrisGame.getTitle()
                                 , tetrisGame.getVersion());
                         System.exit(0);
