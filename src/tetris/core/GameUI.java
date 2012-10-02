@@ -1,3 +1,8 @@
+/* all UI components(not includng tetrominos) will be initialized within me
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+ */
 package tetris.core;
 
 
@@ -5,7 +10,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
-import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -44,16 +48,16 @@ public class GameUI extends HBox {
             int tetroClass = randGenerator.nextInt() % 2;
 
             switch (tetroClass) {
-            case 0:
-                t = new IShape(playField.getCellPool());
-                break;
-            case 1:
-                t = new OShape(playField.getCellPool());
-                break;
-            default:
-                assert false;  // should not reach here
-                t = new IShape(playField.getCellPool());
-                break;
+                case 0:
+                    t = new IShape(playField.getCellPool());
+                    break;
+                case 1:
+                    t = new OShape(playField.getCellPool());
+                    break;
+                default:
+                    assert false;  // should not reach here
+                    t = new IShape(playField.getCellPool());
+                    break;
             }
             return t;
         }
@@ -75,7 +79,7 @@ public class GameUI extends HBox {
         /////////////////////////////////////////////////////////////////////
 
         private final int frameRate = 60;
-        private final Duration frameInterval =  Duration.millis(1000/frameRate);
+        private final Duration frameInterval = Duration.millis(1000 / frameRate);
         private Random randGenerator = new Random();
 
         // initial status
@@ -104,38 +108,37 @@ public class GameUI extends HBox {
         }
 
 
-
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
 
-                    if (dynamicTetromino == null) {
-                        startFromBeginning();
-                    } else {
-                        if (!dynamicTetromino.moveDown(0.07)) {
-                            // reach boundary
-                            dynamicTetromino.pin();
-                            playField.squeeze();
-                            // swap tetromino
-                            staticTetromino.detach();
-                            dynamicTetromino = staticTetromino;
-                            dynamicTetromino.attach(playField);
-                            if (!dynamicTetromino.moveDown(0.001)) { // reach top
-                                gameControl.restart();
+                        if (dynamicTetromino == null) {
+                            startFromBeginning();
+                        } else {
+                            if (!dynamicTetromino.moveDown(0.07)) {
+                                // reach boundary
+                                dynamicTetromino.pin();
+                                playField.squeeze();
+                                // swap tetromino
+                                staticTetromino.detach();
+                                dynamicTetromino = staticTetromino;
+                                dynamicTetromino.attach(playField);
+                                if (!dynamicTetromino.moveDown(0.001)) { // reach top
+                                    gameControl.restart();
+                                }
+
+                                staticTetromino = generateNextTetromino();
+                                staticTetromino.attach(predicationField);
                             }
-
-                            staticTetromino = generateNextTetromino();
-                            staticTetromino.attach(predicationField);
                         }
-                    }
 
-                    cycleCount++;
+                        cycleCount++;
+                    }
                 }
-            }
         );
 
-        private final Timeline timeline =  TimelineBuilder.create()
+        private final Timeline timeline = TimelineBuilder.create()
                 .cycleCount(Animation.INDEFINITE)
                 .keyFrames(mainFrame)
                 .build();
@@ -146,23 +149,23 @@ public class GameUI extends HBox {
             GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
-                    switch(keyEvent.getCode()) {
-                    case P:
-                        toggle();
-                        break;
-                    case R:
-                        gameControl.restart();
-                        break;
-                    case LEFT:
-                        //if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
+                    switch (keyEvent.getCode()) {
+                        case P:
+                            toggle();
+                            break;
+                        case R:
+                            gameControl.restart();
+                            break;
+                        case LEFT:
+                            //if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
                             dynamicTetromino.moveLeft();
-                       // }
-                        break;
-                    case RIGHT:
-                        //if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
+                            // }
+                            break;
+                        case RIGHT:
+                            //if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
                             dynamicTetromino.moveRight();
-                        //}
-                        break;
+                            //}
+                            break;
                     }
                 }
             });

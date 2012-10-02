@@ -1,7 +1,6 @@
 package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
-import tetris.api.Tetromino;
 import tetris.tetrominos.TetrisGrid.CellPool;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public boolean moveDown(double len) {
-        for (Cell c: tetrominoCells) {
+        for (Cell c : tetrominoCells) {
             if (!c.canMoveDown(len))
                 return false;
         }
@@ -64,7 +63,7 @@ public final class IShape extends SimpleTetromino {
             xProperty().set(xProperty().get() - 1);
             return true;
         } else
-            return  false;
+            return false;
     }
 
     @Override
@@ -73,6 +72,6 @@ public final class IShape extends SimpleTetromino {
             xProperty().set(xProperty().get() + 1);
             return true;
         } else
-            return  false;
+            return false;
     }
 }

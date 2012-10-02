@@ -1,3 +1,8 @@
+/* One of seven possible tetromino shapes
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+ */
 package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
@@ -13,7 +18,7 @@ import java.util.List;
  *    ---------
  *    color:Yellow
 */
-public class OShape extends  SimpleTetromino {
+public class OShape extends SimpleTetromino {
     public OShape(CellPool cellPool) {
         super();
         tetrominoCells = new Cell[4];

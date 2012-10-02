@@ -1,6 +1,8 @@
-/* centering game class
- */
-
+/* the core class of whole project, connects EntryPoint to the UI and logic part
+  Copyright (C) 2012, thu10e team.
+  This file is part of the implementaion of Tetris Game  made by thu10e team
+  for the assessment of COMP1110/67 ** 10 assignment.
+*/
 
 package tetris.core;
 
@@ -112,7 +114,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
 }
 
 
-public class Tetris extends TetrisDynamic implements  GameControl {
+public class Tetris extends TetrisDynamic implements GameControl {
     private GameControl gameControl = new GameControl() {
         private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
 
@@ -171,7 +173,7 @@ public class Tetris extends TetrisDynamic implements  GameControl {
     private Stage primaryStage;
     private boolean isFullScreen = false;
     private double stageXposition;
-    private double  stageYposition;
+    private double stageYposition;
 
     public void toggleFullScreen() {
         if (isFullScreen) {

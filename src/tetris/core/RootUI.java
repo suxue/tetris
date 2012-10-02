@@ -1,3 +1,9 @@
+/* The out most UI container for the whole game
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+ */
+
 package tetris.core;
 
 import javafx.beans.value.ChangeListener;
@@ -59,7 +65,7 @@ public class RootUI extends BorderPane {
         replayButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ((GameControl)gs).restart();
+                ((GameControl) gs).restart();
             }
         });
 
@@ -98,13 +104,13 @@ public class RootUI extends BorderPane {
         });
 
 
-        ((GameControl)gs).addStatusListener(new StatusListener() {
+        ((GameControl) gs).addStatusListener(new StatusListener() {
             @Override
             public void callback(Status oldStatus, Status newStatus) {
                 if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
                     RootUI.this.setCenter(gameUI);
                     gameUI.requestFocus();
-                } else  if (newStatus == SHOW_MENU) {
+                } else if (newStatus == SHOW_MENU) {
                     RootUI.this.setCenter(menuBoard);
                     menuBoard.requestFocus();
                 }

@@ -1,3 +1,9 @@
+/* Cell is the basic construction unit for tetrominos
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+ */
+
 package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
@@ -52,15 +58,15 @@ public class Cell extends Rectangle {
     }
 
 
-    public boolean  isAttached() {
+    public boolean isAttached() {
         return (hostGrid != null);
     }
 
     public boolean canMoveLeft(double len) {
-        int    targetX = (int)(getCellXProperty().get() - len);
+        int targetX = (int) (getCellXProperty().get() - len);
         double targetY = getCellYProperty().get();
-        int    y1      = (int)(Math.floor(targetY));
-        int    y2      = (int)(Math.ceil(targetY));
+        int y1 = (int) (Math.floor(targetY));
+        int y2 = (int) (Math.ceil(targetY));
 
         if (targetX < 0)
             return false;
@@ -74,16 +80,16 @@ public class Cell extends Rectangle {
                 }
             }
             // can move
-            return  true;
+            return true;
         }
     }
 
 
     public boolean canMoveRight(double len) {
-        int    targetX = (int)(getCellXProperty().get() + len);
+        int targetX = (int) (getCellXProperty().get() + len);
         double targetY = getCellYProperty().get();
-        int    y1      = (int)(Math.floor(targetY));
-        int    y2      = (int)(Math.ceil(targetY));
+        int y1 = (int) (Math.floor(targetY));
+        int y2 = (int) (Math.ceil(targetY));
 
         if (targetX > (hostGrid.getColumnNumber() - 1))
             return false;
@@ -97,15 +103,15 @@ public class Cell extends Rectangle {
                 }
             }
             // can move
-            return  true;
+            return true;
         }
     }
 
 
     public boolean canMoveDown(double len) {
-        int    targetX = (int)getCellXProperty().get();
+        int targetX = (int) getCellXProperty().get();
         double targetY = getCellYProperty().get() + 1 + len;
-        int    y      = (int)(Math.floor(targetY));
+        int y = (int) (Math.floor(targetY));
 
         // check y1
         if (targetY >= hostGrid.getRowNumber()) {
@@ -115,7 +121,7 @@ public class Cell extends Rectangle {
         if (hostGrid.mirrorGet(targetX, y)) {
             return false;
         } else { // can move
-            return  true;
+            return true;
         }
     }
 }

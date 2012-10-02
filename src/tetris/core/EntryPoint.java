@@ -1,10 +1,11 @@
-/*
- *  Brief: Game entry point class, everything begins from here
- *  It will do:
- *     1. parsing and interpreting  command line options.
- *     2. initialize the entry point class(extends the javafx.application.Application class).
- *     3. initialize  
+/* Game entry point class, everything begins from here
+   Copyright (C) 2012, thu10e team.
+   This file is part of the implementaion of Tetris Game  made by thu10e team
+   for the assessment of COMP1110/67 ** 10 assignment.
+
+   Acknowledgement: This class utilize the GNU getopt library to parse command line arguments.
  */
+
 package tetris.core;
 
 import gnu.getopt.Getopt;
