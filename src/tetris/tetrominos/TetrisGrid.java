@@ -8,9 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 public class TetrisGrid extends AnchorPane {
@@ -22,7 +20,7 @@ public class TetrisGrid extends AnchorPane {
     private DoubleProperty  cellWidth   = new SimpleDoubleProperty();
     private DoubleProperty  cellHeight  = new SimpleDoubleProperty();
 
-    private boolean[][] mirror;
+    private Cell[][] mirror;
 
     ReadOnlyDoubleProperty cellWidthProperty() {
         return cellWidth;
@@ -44,17 +42,67 @@ public class TetrisGrid extends AnchorPane {
     }
 
     private void resetMirror() {
-        for (boolean[] i  : mirror) {
-            Arrays.fill(i, false);
+        for (Cell[] i  : mirror) {
+            Arrays.fill(i, null);
         }
     }
 
     public final boolean mirrorGet(int x, int y) {
-        return mirror[x][y];
+        return !(mirror[x][y] == null);
     }
 
-    public final void    mirrorSet(int x, int y) {
-        mirror[x][y] = true;
+    public final void    mirrorSet(int x, int y, Cell c) {
+        mirror[x][y] = c;
+    }
+
+
+    // test whole lines and erase them
+    // return the answer to 'how many lines have been erased?'
+    public final int squeeze() {
+        boolean[] wholeFlags = new boolean[getRowNumber()];
+        Arrays.fill(wholeFlags, false);
+
+
+        int cellCountInALine;
+        for (int i = 0; i < getRowNumber(); i++) {
+            cellCountInALine = 0;
+            for (int j = 0; j < getColumnNumber(); j++) {
+                if (mirrorGet(j, i))
+                    cellCountInALine++;
+            }
+
+            if (cellCountInALine == getColumnNumber())
+                wholeFlags[i] = true;
+        }
+
+
+        int emptyLines = 0;
+        for (int i = getRowNumber() - 1; i >= 0; i--) {
+            if (wholeFlags[i]) { // clear this line
+                for (int j = 0; j < getColumnNumber(); j++) {
+                    mirror[j][i].detach();
+                    getCellPool().add(mirror[j][i]);
+                    mirror[j][i] = null;
+                }
+                emptyLines++;
+            } else { // move down this line emptyLines
+                if (emptyLines > 0) {
+                    for (int j = 0; j < getColumnNumber(); j++) {
+                        // move geometrically
+                        if (mirror[j][i] != null) {
+                            mirror[j][i].getCellYProperty().set(mirror[j][i].getCellYProperty().get() + 1);
+                        }
+
+                        // move line within mirror
+                        // int destLine = i + emptyLines;
+                        mirror[j][i + emptyLines] = mirror[j][i];
+                        mirror[j][i] = null;
+                    }
+                }
+            }
+        }
+
+        return emptyLines;
     }
 
 
@@ -62,7 +110,7 @@ public class TetrisGrid extends AnchorPane {
             , ObservableDoubleValue boundWidthProperty
             , ObservableDoubleValue boundHeightProperty) {
         super();
-        mirror = new boolean[columnNo][rowNo];
+        mirror = new Cell[columnNo][rowNo];
         resetMirror();
 
         this.columnNumber = columnNo;

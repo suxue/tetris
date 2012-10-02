@@ -55,9 +55,12 @@ abstract public class SimpleTetromino implements Tetromino{
         yProperty().set(y + getPivotYShift());
         for (Cell c: tetrominoCells) {
             hostGrid.mirrorSet( (int)c.getCellXProperty().get()
-                    , (int)c.getCellYProperty().get());
+                    , (int)c.getCellYProperty().get(), c);
+            c.getCellYProperty().unbind();
+            c.getCellXProperty().unbind();
         }
     }
+
 
     protected final void setToTopMiddle(TetrisGrid grid) {
         xProperty().set(grid.getColumnNumber() / 2);

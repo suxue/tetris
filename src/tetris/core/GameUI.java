@@ -119,6 +119,7 @@ public class GameUI extends HBox {
                         if (!dynamicTetromino.moveDown(0.07)) {
                             // reach boundary
                             dynamicTetromino.pin();
+                            playField.squeeze();
                             // swap tetromino
                             staticTetromino.detach();
                             dynamicTetromino = staticTetromino;
