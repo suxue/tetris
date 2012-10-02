@@ -13,7 +13,6 @@ import tetris.api.Tetromino.*;
 // maintain my rotation status
 abstract public class SimpleTetromino implements Tetromino{
 
-    protected  TetrisGrid   hostGrid;        // the attached grid, null if not attached
     protected  Cell[]       tetrominoCells;  // all cells included within me
 
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
@@ -30,45 +29,18 @@ abstract public class SimpleTetromino implements Tetromino{
 
 
     @Override
-    public final void sink() throws UnAttachedTetrominoException {
-        if (hostGrid == null)
-            throw new UnAttachedTetrominoException();
-
-        for (Cell c: tetrominoCells)
-            hostGrid.sink(c);
-    }
-
-
-    @Override
-    public final void release(CellPool cp) throws  AttachedTetrominoException {
-        if (hostGrid != null)
-            throw  new AttachedTetrominoException();
-
-        for (Cell c: tetrominoCells)
-            cp.add(c);
-    }
-
-    @Override
-    public final void attach(TetrisGrid grid) throws AttachedTetrominoException {
-        if (hostGrid != null)
-            throw new AttachedTetrominoException();
-
+    public final void attach(TetrisGrid grid)  {
         for (Cell c: tetrominoCells) {
             c.attach(grid);
         }
-        hostGrid  = grid;
     }
 
 
     @Override
-    public final void detach() throws  UnAttachedTetrominoException {
-        if (hostGrid == null) {
-            throw new UnAttachedTetrominoException();
-        }
+    public final void detach() {
         for (Cell c : tetrominoCells) {
-            c.detach(hostGrid);
+            c.detach();
         }
-        hostGrid = null;
     }
 
 

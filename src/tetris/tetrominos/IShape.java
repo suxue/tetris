@@ -5,6 +5,9 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
+import tetris.api.Tetromino;
+import tetris.tetrominos.TetrisGrid.CellPool;
+
 
 /*
 
@@ -14,7 +17,7 @@ import java.util.List;
    | 0 | 1 | 2 | 3 |
    -----------------
  */
-public final class IShape extends SimpleTetromino {
+public final class IShape extends SimpleTetromino implements Tetromino {
 
 
     private void relayoutToHorizontal() {
@@ -34,6 +37,12 @@ public final class IShape extends SimpleTetromino {
         cellPool.removeLast(4);
         setColor(Color.BLUE);
         relayoutToHorizontal();
+    }
+
+    @Override
+    public void setToTopMiddle(TetrisGrid g) {
+        xProperty().set(g.getColumnNumber() / 2);
+        yProperty().set(0.5);
     }
 
 }

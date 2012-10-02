@@ -3,7 +3,7 @@ package tetris.api;
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import tetris.tetrominos.CellPool;
+import tetris.tetrominos.TetrisGrid.CellPool;
 import tetris.tetrominos.TetrisGrid;
 
 // a shape can mostly has four orientation
@@ -11,8 +11,6 @@ import tetris.tetrominos.TetrisGrid;
 //  they are: Point UP|RIGHT|DOWN|LEFT
 public interface Tetromino {
 
-    public class UnAttachedTetrominoException extends  Exception {}
-    public class AttachedTetrominoException extends  Exception {};
 
     /*
      *   @xProperty: x-coordinate of my pivot
@@ -22,21 +20,10 @@ public interface Tetromino {
     public DoubleProperty yProperty();
 
     // after attaching, I'll be showed in that grid
-    public void attach(TetrisGrid grid)
-            throws AttachedTetrominoException;
+    public void attach(TetrisGrid grid);
+    public void detach();
 
-    // simply release all cells contained within me
-    // detach first if needed
-    public void release(CellPool cp)
-            throws AttachedTetrominoException;
-
-    public void detach()
-            throws UnAttachedTetrominoException;
-
-    // attach me to a grid before sinking
-    // after sinking, all cells inside me will continue to be showed on that grid
-    //   however, myself can be safely dropped
-    public void sink() throws UnAttachedTetrominoException;
+    public void setToTopMiddle(TetrisGrid grid);
 
     // movement function family
     public void moveDown(double len);

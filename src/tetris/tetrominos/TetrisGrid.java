@@ -14,6 +14,7 @@ import tetris.api.Tetromino;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class TetrisGrid extends AnchorPane {
@@ -45,25 +46,6 @@ public class TetrisGrid extends AnchorPane {
     }
 
 
-
-    public void sink(Cell c) {
-        if (visibleCells == null) {
-            visibleCells = new ArrayList<Cell>();
-        }
-        visibleCells.add(c);
-    }
-
-    public void clearTetrominos() {
-        if (visibleCells != null) {
-            for (Cell c: visibleCells) {
-                c.detach(this);
-                getCellPool().add(c);
-            }
-        }
-        visibleCells = null;
-    }
-
-
     public TetrisGrid(Paint fill, int rowNo, int columnNo
             , ObservableDoubleValue boundWidthProperty
             , ObservableDoubleValue boundHeightProperty) {
@@ -78,15 +60,51 @@ public class TetrisGrid extends AnchorPane {
         cellHeight.bind(background.heightProperty().divide(rowNumber));
     }
 
-    public CellPool getCellPool() {
-        if (cellPool == null) {
-            cellPool = new CellPool();
-            // initialize cell pool
-            for (int i = 0; i < columnNumber * rowNumber; i++) {
-                getCellPool().add(new Cell());
+
+    public class CellPool extends ArrayList<Cell> {
+        private Cell[] allCells;
+
+        public CellPool() {
+            super(columnNumber*rowNumber);
+            for (int i = 0; i < columnNumber * rowNumber; i++)
+                add(new Cell());
+
+            allCells = toArray(new Cell[size()]);
+        }
+
+        public void reInitialize() {
+            for (int i = 0; i < allCells.length; i++) {
+                if (allCells[i].isAttached())
+                    allCells[i].detach();
+                if (i < size())
+                    add(i, allCells[i]);
+                else
+                    set(i, allCells[i]);
             }
         }
+
+        public List<Cell> retrieveLast(int number) {
+            assert number >= 1;
+            assert this.size() >= number;
+
+            int end = size();
+            int start = end - number;
+            return subList(start, end);
+        }
+
+        public void removeLast(int number) {
+            assert size() >= number;
+            for (int i = 0; i < number; i++)
+                remove(size() - 1);
+        }
+    }
+
+    public CellPool getCellPool() {
+        if (cellPool == null)
+            cellPool = new CellPool();
+
         return cellPool;
     }
 
 }
+

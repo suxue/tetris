@@ -67,46 +67,63 @@ public class GameUI extends HBox {
             }
         }
 
+
         /////////////////////////////////////////////////////////////////////
         //             MAIN LOOP                                           //
         /////////////////////////////////////////////////////////////////////
 
-        private final int frameRate = 30;
+        private final int frameRate = 60;
         private final Duration frameInterval =  Duration.millis(1000/frameRate);
-        private boolean hasStarted = false;
         private Random randGenerator = new Random();
 
+        // initial status
         private Tetromino dynamicTetromino;
         private Tetromino staticTetromino;
 
-        private int cycleCount = 0;
+        private int cycleCount;
+
+
+        private void prepareBeforeBeginning() {
+            staticTetromino = generateNextTetromino();
+            dynamicTetromino = null;
+            staticTetromino.setToTopMiddle(predicationField);
+            staticTetromino.attach(predicationField);
+        }
+
+        private void startFromBeginning() {
+            cycleCount = 0;
+            staticTetromino.detach();
+            dynamicTetromino = staticTetromino;
+            dynamicTetromino.setToTopMiddle(playField);
+            dynamicTetromino.attach(playField);
+            staticTetromino = generateNextTetromino();
+            staticTetromino.setToTopMiddle(predicationField);
+            staticTetromino.attach(predicationField);
+        }
+
+        private void cleanAfterEnd() {
+            playField.getCellPool().reInitialize();
+        }
+
+        private void continueToNextFrame() {
+            dynamicTetromino.moveDown(0.03);
+
+        }
 
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        assert staticTetromino != null;
-                        cycleCount++;
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
 
-//                        if (dynamicTetromino == null) { // initialize playfield
-//                            staticTetromino.detach();
-//                            dynamicTetromino = staticTetromino;
-//                            initStaticTetrominos();
-//                            dynamicTetromino.attach(playField);
-//                            dynamicTetromino.setToTopMiddle();
-//                        } else { // continue playing
-//                            dynamicTetromino.moveDown(.07);
-//                            if (!playField.validBoundaryToSunkCells(dynamicTetromino)
-//                                || dynamicTetromino.getLengthToBottomBoundary() <= 0) {
-//                                dynamicTetromino.alignToNearestCanonicalPosition();
-//                                dynamicTetromino.sink();
-////                                dynamicTetromino.detach();
-////                                dynamicTetromino.release(playField.getCellPool());
-//                                dynamicTetromino = null;
-//                            }
-//                        }
+                    if (dynamicTetromino == null) {
+                        startFromBeginning();
+                    } else {
+                        continueToNextFrame();
                     }
+
+                    cycleCount++;
                 }
+            }
         );
 
         private final Timeline timeline =  TimelineBuilder.create()
@@ -115,6 +132,7 @@ public class GameUI extends HBox {
                 .build();
 
         public TetrisGameLogic() {
+            prepareBeforeBeginning();
 
             GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
@@ -145,23 +163,19 @@ public class GameUI extends HBox {
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
                     // TODO: finish game logic
                     switch (newStatus) {
-                        case PLAY_GAME:
-                            // first start
-                            if (!hasStarted) {
-                                hasStarted = true;
-                            }
-
-                            timeline.play();
-                            break;
                         case STOP_GAME:
                             // cannot stop while not playing
                             if (oldStatus == GameControl.Status.PLAY_GAME) {
                                 timeline.pause();
                             }
                             break;
+                        case PLAY_GAME:
+                            timeline.play();
+                            break;
                         case RESTART_GAME:
                             gameControl.stop();
-                            // re initialize all blocks
+                            cleanAfterEnd();
+                            prepareBeforeBeginning();
                             gameControl.play();
                             break;
                     } // end switch

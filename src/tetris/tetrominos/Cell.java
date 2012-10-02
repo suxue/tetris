@@ -2,14 +2,12 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 
 public class Cell extends Rectangle {
+
+    private TetrisGrid hostGrid = null;
 
     public DoubleProperty getCellYProperty() {
         return cellYProperty;
@@ -27,30 +25,33 @@ public class Cell extends Rectangle {
         super();
         cellXProperty = new SimpleDoubleProperty(x);
         cellYProperty = new SimpleDoubleProperty(y);
-        setStroke(Color.WHITE);
-        setStrokeType(StrokeType.INSIDE);
+        setManaged(false);
     }
 
     public Cell() {
         this(0, 0);
-        setManaged(false);
     }
 
 
     public void attach(TetrisGrid grid) {
-        grid.getChildren().add(this);
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
-
         xProperty().bind((widthProperty().multiply(cellXProperty)));
         yProperty().bind((heightProperty().multiply(cellYProperty)));
+        grid.getChildren().add(this);
+        hostGrid = grid;
     }
 
-    public void detach(TetrisGrid grid) {
+    public void detach() {
+        hostGrid.getChildren().remove(this);
         widthProperty().unbind();
         heightProperty().unbind();
         xProperty().unbind();
         yProperty().unbind();
-        grid.getChildren().remove(this);
+        hostGrid = null;
+    }
+
+    public boolean  isAttached() {
+        return (hostGrid != null);
     }
 }
