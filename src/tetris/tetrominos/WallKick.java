@@ -31,25 +31,25 @@ public class WallKick extends Cell {
     
     
     public boolean canRotateLeftI(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftJ(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftL(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftO(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftZ(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftT(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
     public boolean canRotateLeftS(double width) {
-        return canMoveRight(width);
+        return canMoveLeft(width);
         }
 }
 //http://tetrisconcept.net/wiki/SRS#Wall_Kicks
