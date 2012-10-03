@@ -14,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import tetris.api.Grid;
-import tetris.util.Toolkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,8 +84,8 @@ public class TetrisGrid extends AnchorPane implements Grid{
             if (x >= getColumnNo() || y >= getRowNo()) {
                 return false;
             } else {
-                int X = Toolkit.max(x + width, getColumnNo());
-                int Y = Toolkit.max(y + height, getRowNo());
+                int X = Math.max(x + width, getColumnNo());
+                int Y = Math.max(y + height, getRowNo());
                 boolean isAccessibleFlag = true;
 
                 for (int i=0; i < X; i++) {
