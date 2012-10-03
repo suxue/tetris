@@ -73,10 +73,10 @@ public class Cell extends Rectangle {
             return false;
         else {
             // check y1
-            if (!hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y1)) {
+            if (!hostGrid.isAccessiblePlain(targetX, y1)) {
                 return false;
             } else if (y2 != y1
-                 && ! hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y2)) {
+                 && ! hostGrid.isAccessiblePlain(targetX, y2)) {
                 return false;
             } else
                 return true;
@@ -94,10 +94,10 @@ public class Cell extends Rectangle {
             return false;
         else {
             // check y1
-            if (!hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y1)) {
+            if (!hostGrid.isAccessiblePlain(targetX, y1)) {
                 return false;
             } else if (y2 != y1
-                   && !hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y2)) {
+                   && !hostGrid.isAccessiblePlain(targetX, y2)) {
                     return false;
             } else { // can move
                 return true;
@@ -116,6 +116,6 @@ public class Cell extends Rectangle {
             return false;
         }
 
-        return hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y);
+        return hostGrid.isAccessiblePlain(targetX, y);
     }
 }

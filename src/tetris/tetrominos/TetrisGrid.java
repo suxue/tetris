@@ -24,13 +24,13 @@ public class TetrisGrid extends AnchorPane implements Grid{
 
 
     private CellPool cellPool = null;
-    private CollisionChecker collisionChecker = null;
-    private CollisionChecker getCollisionChecker() {
-        if (collisionChecker == null) {
-            collisionChecker = new CollisionChecker();
-            collisionChecker.unsetAll();
+    private OccupationMonitor occupationMonitor = null;
+    private OccupationMonitor getOccupationMonitor() {
+        if (occupationMonitor == null) {
+            occupationMonitor = new OccupationMonitor();
+            occupationMonitor.unsetAll();
         }
-        return collisionChecker;
+        return occupationMonitor;
     }
 
 
@@ -42,15 +42,17 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public boolean cooridinateIsAccessibleWithoutBoundaryCheck(int x, int y) {
-        return getCollisionChecker().isAccessibleWithoutBoundaryCheck(x, y);
+    public boolean isAccessiblePlain(int x, int y) {
+        return getOccupationMonitor().isAccessibleWithoutBoundaryCheck(x, y);
     }
 
 
-    private class CollisionChecker {
+    private class OccupationMonitor {
         private Cell[][] chessBoard;
 
-        void set(int x, int y, Cell c) {}
+        void set(int x, int y, Cell c) {
+            chessBoard[x][y] = c;
+        }
         void unset(int x, int y) {
             chessBoard[x][y] = null;
         }
@@ -147,7 +149,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
             return emptyLines;
         }
 
-        CollisionChecker() {
+        OccupationMonitor() {
             chessBoard = new Cell[getColumnNo()][getRowNo()];
         }
     }
@@ -196,22 +198,22 @@ public class TetrisGrid extends AnchorPane implements Grid{
 
     @Override
     public int squeeze() {
-        return getCollisionChecker().squeeze();
+        return getOccupationMonitor().squeeze();
     }
 
     @Override
     public void unsetAllCooridinate() {
-        getCollisionChecker().unsetAll();
+        getOccupationMonitor().unsetAll();
     }
 
     @Override
-    public Cell getCooridinate(int x, int y) {
-        return getCollisionChecker().get(x, y);
+    public Cell get(int x, int y) {
+        return getOccupationMonitor().get(x, y);
     }
 
     @Override
-    public boolean cooridinateIsAccessible(int x, int y) {
-        return getCollisionChecker().isAccessible(x, y);
+    public boolean isAccessible(int x, int y) {
+        return getOccupationMonitor().isAccessible(x, y);
     }
 
     @Override
@@ -220,23 +222,23 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public void recoverAllAllocatedCells() {
+    public void recoverAllocatedCells() {
         getCellPool().recoverAllAllocatedCells();
     }
 
     @Override
     public boolean isAccessible(int x, int y, int width, int height) {
-        return getCollisionChecker().isAccessible(x, y, width, height);
+        return getOccupationMonitor().isAccessible(x, y, width, height);
     }
 
     @Override
-    public void setCooridinate(int x, int y, Cell c) {
-        getCollisionChecker().set(x, y, c);
+    public void set(int x, int y, Cell c) {
+        getOccupationMonitor().set(x, y, c);
     }
 
     @Override
-    public void unsetCooridinate(int x, int y) {
-        getCollisionChecker().unset(x, y);
+    public void unset(int x, int y) {
+        getOccupationMonitor().unset(x, y);
     }
 
     private DoubleProperty cellWidth = new SimpleDoubleProperty();

@@ -63,7 +63,8 @@ abstract public class SimpleTetromino implements Tetromino {
         double y = Math.ceil(yProperty().get() - getPivotYShift());
         yProperty().set(y + getPivotYShift());
         for (Cell c : tetrominoCells) {
-            hostGrid.setCooridinate((int) c.getCellXProperty().get()
+
+            hostGrid.set((int) c.getCellXProperty().get()
                     , (int) c.getCellYProperty().get(), c);
             c.getCellYProperty().unbind();
             c.getCellXProperty().unbind();

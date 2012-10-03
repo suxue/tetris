@@ -21,7 +21,6 @@ import tetris.api.game.GameControl;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import static tetris.api.game.GameControl.Status.*;

@@ -7,7 +7,6 @@
 package tetris.api;
 
 import javafx.beans.property.DoubleProperty;
-import tetris.tetrominos.TetrisGrid;
 
 // a shape can mostly has four orientation
 //  see http://tetrisconcept.net/wiki/Orientation

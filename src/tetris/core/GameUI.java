@@ -105,7 +105,7 @@ public class GameUI extends HBox {
         }
 
         private void cleanAfterEnd() {
-            playField.recoverAllAllocatedCells();
+            playField.recoverAllocatedCells();
         }
 
 
@@ -249,7 +249,7 @@ public class GameUI extends HBox {
 
         this.setWidth(gameState.getWidth());
         this.setHeight(gameState.getHeight());
-        // setCooridinate initial widthProperty and padding
+        // set initial widthProperty and padding
         this.setPadding(new Insets(
                 topBottomPaddingProperty.doubleValue()
                 , leftRightPaddingProperty.doubleValue()

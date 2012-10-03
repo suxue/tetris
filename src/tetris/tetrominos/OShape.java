@@ -8,8 +8,6 @@ package tetris.tetrominos;
 import javafx.scene.paint.Color;
 import tetris.api.Grid;
 
-import java.util.List;
-
 /*
  *    ---------
  *    | 0 | 1 |
