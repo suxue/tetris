@@ -20,6 +20,11 @@ import java.util.List;
 
 public class TetrisGrid extends AnchorPane {
 
+    private class CollisionChecker {
+        private Cell[][] chessBoard;
+
+    }
+
     private Rectangle background = new Rectangle();
     private CellPool cellPool = null;
     private ArrayList<Cell> visibleCells = null;
