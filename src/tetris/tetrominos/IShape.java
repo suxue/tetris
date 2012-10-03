@@ -32,7 +32,7 @@ public final class IShape extends SimpleTetromino {
         List<Cell> tmpList = cellPool.retrieveLast(4);
         tmpList.toArray(tetrominoCells);
         cellPool.removeLast(4);
-        setColor(Color.BLUE);
+        setColor(Color.CYAN);
         relayoutToHorizontal();
     }
 
