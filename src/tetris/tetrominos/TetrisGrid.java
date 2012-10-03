@@ -54,8 +54,20 @@ public class TetrisGrid extends AnchorPane {
         }
     }
 
+    // return true if there is a cell already occupied this position
     public final boolean mirrorGet(int x, int y) {
         return !(mirror[x][y] == null);
+    }
+    
+    // return true if there is already at least one cell exists within this rectangle 
+    public final boolean mirrorGetRectangle(int x, int y, int width, int height) {
+        boolean a = true;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++)
+                if (((x+i) < getColumnNumber()) && ((y+j) < getRowNumber()) &&  mirrorGet(x + i, y + j))
+                    a = false;
+        }
+        return !a;               
     }
 
     public final void mirrorSet(int x, int y, Cell c) {
