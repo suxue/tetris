@@ -9,11 +9,12 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Rectangle;
+import tetris.api.Grid;
 
 
 public class Cell extends Rectangle {
 
-    private TetrisGrid hostGrid = null;
+    private Grid hostGrid = null;
 
     public DoubleProperty getCellYProperty() {
         return cellYProperty;
@@ -39,17 +40,17 @@ public class Cell extends Rectangle {
     }
 
 
-    public void attach(TetrisGrid grid) {
+    public void attach(Grid grid) {
         widthProperty().bind(grid.cellWidthProperty());
         heightProperty().bind(grid.cellHeighthProperty());
         xProperty().bind((widthProperty().multiply(cellXProperty)));
         yProperty().bind((heightProperty().multiply(cellYProperty)));
-        grid.getChildren().add(this);
+        grid.addCell(this);
         hostGrid = grid;
     }
 
     public void detach() {
-        hostGrid.getChildren().remove(this);
+        hostGrid.removeCell(this);
         widthProperty().unbind();
         heightProperty().unbind();
         xProperty().unbind();
@@ -72,15 +73,13 @@ public class Cell extends Rectangle {
             return false;
         else {
             // check y1
-            if (hostGrid.mirrorGet(targetX, y1)) {
+            if (!hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y1)) {
                 return false;
-            } else if (y2 != y1) {
-                if (hostGrid.mirrorGet(targetX, y2)) {
-                    return false;
-                }
-            }
-            // can move
-            return true;
+            } else if (y2 != y1
+                 && ! hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y2)) {
+                return false;
+            } else
+                return true;
         }
     }
 
@@ -91,19 +90,18 @@ public class Cell extends Rectangle {
         int y1 = (int) (Math.floor(targetY));
         int y2 = (int) (Math.ceil(targetY));
 
-        if (targetX > (hostGrid.getColumnNumber() - 1))
+        if (targetX > (hostGrid.getColumnNo() - 1))
             return false;
         else {
             // check y1
-            if (hostGrid.mirrorGet(targetX, y1)) {
+            if (!hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y1)) {
                 return false;
-            } else if (y2 != y1) {
-                if (hostGrid.mirrorGet(targetX, y2)) {
+            } else if (y2 != y1
+                   && !hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y2)) {
                     return false;
-                }
+            } else { // can move
+                return true;
             }
-            // can move
-            return true;
         }
     }
 
@@ -114,14 +112,10 @@ public class Cell extends Rectangle {
         int y = (int) (Math.floor(targetY));
 
         // check y1
-        if (targetY >= hostGrid.getRowNumber()) {
+        if (targetY >= hostGrid.getRowNo()) {
             return false;
         }
 
-        if (hostGrid.mirrorGet(targetX, y)) {
-            return false;
-        } else { // can move
-            return true;
-        }
+        return hostGrid.cooridinateIsAccessibleWithoutBoundaryCheck(targetX, y);
     }
 }

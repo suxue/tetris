@@ -1,7 +1,7 @@
 package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
-import tetris.tetrominos.TetrisGrid.CellPool;
+import tetris.api.Grid;
 
 import java.util.List;
 
@@ -27,11 +27,8 @@ public final class IShape extends SimpleTetromino {
         }
     }
 
-    public IShape(CellPool cellPool) {
-        tetrominoCells = new Cell[4];
-        List<Cell> tmpList = cellPool.retrieveLast(4);
-        tmpList.toArray(tetrominoCells);
-        cellPool.removeLast(4);
+    public IShape(Grid grid) {
+        tetrominoCells = grid.allocateCells(4);
         setColor(Color.BLUE);
         relayoutToHorizontal();
     }

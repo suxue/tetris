@@ -10,6 +10,7 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Paint;
+import tetris.api.Grid;
 import tetris.api.Tetromino;
 
 // combination of cells
@@ -17,7 +18,7 @@ import tetris.api.Tetromino;
 abstract public class SimpleTetromino implements Tetromino {
 
     protected Cell[] tetrominoCells;  // all cells included within me
-    protected TetrisGrid hostGrid = null;
+    protected Grid hostGrid = null;
 
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
     private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
@@ -34,7 +35,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     @Override
-    public final void attach(TetrisGrid grid) {
+    public final void attach(Grid grid) {
         for (Cell c : tetrominoCells) {
             c.attach(grid);
         }
@@ -62,7 +63,7 @@ abstract public class SimpleTetromino implements Tetromino {
         double y = Math.ceil(yProperty().get() - getPivotYShift());
         yProperty().set(y + getPivotYShift());
         for (Cell c : tetrominoCells) {
-            hostGrid.mirrorSet((int) c.getCellXProperty().get()
+            hostGrid.setCooridinate((int) c.getCellXProperty().get()
                     , (int) c.getCellYProperty().get(), c);
             c.getCellYProperty().unbind();
             c.getCellXProperty().unbind();
@@ -70,8 +71,8 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
 
-    protected final void setToTopMiddle(TetrisGrid grid) {
-        xProperty().set(grid.getColumnNumber() / 2);
+    protected final void setToTopMiddle(Grid grid) {
+        xProperty().set(grid.getColumnNo() / 2);
         yProperty().set(getPivotYShift());
     }
 

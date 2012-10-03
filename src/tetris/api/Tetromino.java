@@ -26,7 +26,7 @@ public interface Tetromino {
     public double getPivotYShift();
 
     // after attaching, I'll be showed in that grid
-    public void attach(TetrisGrid grid);
+    public void attach(Grid grid);
     public void detach();
     public void pin();
 

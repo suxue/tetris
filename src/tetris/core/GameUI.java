@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import tetris.api.Grid;
 import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
@@ -36,8 +37,8 @@ import java.util.Random;
 public class GameUI extends HBox {
 
     private GameControl gameControl = null;
-    private TetrisGrid playField = null;
-    private TetrisGrid predicationField = null;
+    private Grid playField = null;
+    private Grid predicationField = null;
 
 
     private class TetrisGameLogic {
@@ -49,14 +50,14 @@ public class GameUI extends HBox {
 
             switch (tetroClass) {
                 case 0:
-                    t = new IShape(playField.getCellPool());
+                    t = new IShape(playField);
                     break;
                 case 1:
-                    t = new OShape(playField.getCellPool());
+                    t = new OShape(playField);
                     break;
                 default:
                     assert false;  // should not reach here
-                    t = new IShape(playField.getCellPool());
+                    t = new IShape(playField);
                     break;
             }
             return t;
@@ -104,7 +105,7 @@ public class GameUI extends HBox {
         }
 
         private void cleanAfterEnd() {
-            playField.getCellPool().reInitialize();
+            playField.recoverAllAllocatedCells();
         }
 
 
@@ -225,12 +226,12 @@ public class GameUI extends HBox {
         ScoreZoneHeightPercentage = 0.30;
     }
 
-    private TetrisGrid createPlayFieldGrid() {
+    private Grid createPlayFieldGrid() {
         playField = new TetrisGrid(Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty);
         return playField;
     }
 
-    private TetrisGrid createPredicationField() {
+    private Grid createPredicationField() {
         return (predicationField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
@@ -248,7 +249,7 @@ public class GameUI extends HBox {
 
         this.setWidth(gameState.getWidth());
         this.setHeight(gameState.getHeight());
-        // set initial widthProperty and padding
+        // setCooridinate initial widthProperty and padding
         this.setPadding(new Insets(
                 topBottomPaddingProperty.doubleValue()
                 , leftRightPaddingProperty.doubleValue()
@@ -256,7 +257,7 @@ public class GameUI extends HBox {
                 , leftRightPaddingProperty.doubleValue()
         ));
 
-        // add listener to keep padding
+        // addCell listener to keep padding
         gameState.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue
@@ -282,15 +283,15 @@ public class GameUI extends HBox {
             }
         });
 
-        TetrisGrid playField = createPlayFieldGrid();
-        this.getChildren().add(playField);
+        Grid playField = createPlayFieldGrid();
+        this.getChildren().add(playField.toJavaFXNode());
 
         final VBox rightPane = new VBox();
         rightPane.spacingProperty().bind(componentHeightProperty
                 .multiply(1 - TetrominoZoneHeightPercentage
                         - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
 
-        final TetrisGrid tetrominoZone = createPredicationField();
+        final Grid tetrominoZone = createPredicationField();
 
         final Rectangle levelZone = new Rectangle();
         final Rectangle scoreZone = new Rectangle();
@@ -298,7 +299,7 @@ public class GameUI extends HBox {
         scoreZone.widthProperty().bind(rightPaneWidthProperty);
         levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
         scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
-        rightPane.getChildren().addAll(tetrominoZone, levelZone, scoreZone);
+        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), levelZone, scoreZone);
 
 
         this.getChildren().add(rightPane);

@@ -6,7 +6,7 @@
 package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
-import tetris.tetrominos.TetrisGrid.CellPool;
+import tetris.api.Grid;
 
 import java.util.List;
 
@@ -19,12 +19,9 @@ import java.util.List;
  *    color:Yellow
 */
 public class OShape extends SimpleTetromino {
-    public OShape(CellPool cellPool) {
+    public OShape(Grid grid) {
         super();
-        tetrominoCells = new Cell[4];
-        List<Cell> tmpList = cellPool.retrieveLast(4);
-        tmpList.toArray(tetrominoCells);
-        cellPool.removeLast(4);
+        tetrominoCells =  grid.allocateCells(4);
         setColor(Color.YELLOW);
 
         tetrominoCells[0].getCellXProperty().bind(xProperty().subtract(1));
