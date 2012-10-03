@@ -5,11 +5,12 @@ package tetris.tetrominos;
 public class WallKick extends Cell {
     
     
-    public boolean canRotateRight() {
-        return false;
+    public boolean canRotateRight(double width) {
+        return canMoveRight(width);
 
         }
-    public boolean canRotateLeft (){
-        return false;
+    public boolean canRotateLeft (double width){
+        return canMoveLeft (width);
     }
 }
+//http://tetrisconcept.net/wiki/SRS#Wall_Kicks
