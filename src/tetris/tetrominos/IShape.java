@@ -23,7 +23,7 @@ public final class IShape extends SimpleTetromino {
         for (int i = 0; i < 4; i++) {
             tmpCell = tetrominoCells[i];
             tmpCell.getCellXProperty().bind(xProperty().subtract(2 - i));
-            tmpCell.getCellYProperty().bind(yProperty().subtract(0.5));
+            tmpCell.getCellYProperty().bind(yProperty());
         }
     }
 
@@ -43,7 +43,7 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public final double getPivotYShift() {
-        return 0.5;
+        return 1;
     }
 
     @Override
@@ -74,4 +74,55 @@ public final class IShape extends SimpleTetromino {
         } else
             return false;
     }
-}
+
+    @Override
+    public boolean rotate() {
+        if(canRotate()){
+        tetrominoCells[0].getCellXProperty().unbind();
+        tetrominoCells[0].getCellYProperty().unbind();
+        tetrominoCells[0].getCellXProperty().bind(xProperty());
+        tetrominoCells[0].getCellYProperty().bind(yProperty().subtract(2));
+
+        tetrominoCells[0].getCellXProperty().unbind();
+        tetrominoCells[0].getCellYProperty().unbind();
+        tetrominoCells[1].getCellXProperty().bind(xProperty());
+        tetrominoCells[1].getCellYProperty().bind(yProperty());
+
+      //  tetrominoCells[2].getCellXProperty().bind(xProperty().subtract(1));
+      //  tetrominoCells[2].getCellYProperty().bind(yProperty());
+
+        tetrominoCells[0].getCellXProperty().unbind();
+        tetrominoCells[0].getCellYProperty().unbind();
+        tetrominoCells[3].getCellXProperty().bind(xProperty());
+        tetrominoCells[3].getCellYProperty().bind(yProperty().subtract(1));
+
+        return true;
+        }
+        else return false;
+    }
+
+    private int status=0;
+    @Override
+    public boolean canRotate() {
+        
+        //switch(status){
+        //case 0:
+            return !hostGrid.mirrorGetRectangle(-2, -2, 2, 2)  && !hostGrid.mirrorGetRectangle(0, 0, 2, 2);
+            //break;
+        }
+     //   case 1:
+        //    return !hostGrid.mirrorGetRectangle(0, -2, 2, 2)  && !hostGrid.mirrorGetRectangle(-2, 0, 2, 2);
+        //    break;
+     //   case 2:
+        //    return !hostGrid.mirrorGetRectangle(-2, -1, 2, 2)  && !hostGrid.mirrorGetRectangle(2, 3, 2, 2);
+        //    break;
+    //    case 3:
+        //    return !hostGrid.mirrorGetRectangle(-2, -2, 2, 2)  && !hostGrid.mirrorGetRectangle(0, 0, 2, 2);
+       //     break;
+        
+        
+        
+    }
+    
+    
+
