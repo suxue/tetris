@@ -76,4 +76,16 @@ public class OShape extends SimpleTetromino {
         } else
             return false;
     }
+
+    @Override
+    public boolean rotate() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean canRotate() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
