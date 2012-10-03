@@ -27,8 +27,13 @@ import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.IShape;
+import tetris.tetrominos.JShape;
+import tetris.tetrominos.LShape;
 import tetris.tetrominos.OShape;
+import tetris.tetrominos.SShape;
+import tetris.tetrominos.TShape;
 import tetris.tetrominos.TetrisGrid;
+import tetris.tetrominos.ZShape;
 
 import java.util.Random;
 
@@ -45,7 +50,8 @@ public class GameUI extends HBox {
 
         private Tetromino generateNextTetromino() {
             Tetromino t;
-            int tetroClass = randGenerator.nextInt() % 2;
+            int tetroClass = randGenerator.nextInt(7) ;
+           // int tetroClass =6;
 
             switch (tetroClass) {
                 case 0:
@@ -53,6 +59,21 @@ public class GameUI extends HBox {
                     break;
                 case 1:
                     t = new OShape(playField.getCellPool());
+                    break;
+                case 2:
+                    t = new JShape(playField.getCellPool());
+                    break;
+                case 3:
+                    t = new LShape(playField.getCellPool());
+                    break;
+                case 4:
+                    t = new SShape(playField.getCellPool());
+                    break;
+                case 5:
+                    t = new TShape(playField.getCellPool());
+                    break;
+                case 6:
+                    t = new ZShape(playField.getCellPool());
                     break;
                 default:
                     assert false;  // should not reach here
@@ -167,6 +188,11 @@ public class GameUI extends HBox {
                             dynamicTetromino.moveRight();
                             //}
                             break;
+                        case UP:
+                            //rotate {
+                            dynamicTetromino.rotate();
+                            //}
+                            break;
                     }
                 }
             });
@@ -217,7 +243,7 @@ public class GameUI extends HBox {
 
     static {
         ComponentHeightPercentage = 0.80;
-        ComponentWidthPercentage = 0.77;
+        ComponentWidthPercentage = 0.60;
         MainZoneWidthPercentage = 0.60;
         RightPaneWidthPercentage = 0.30;
         TetrominoZoneHeightPercentage = 0.15;

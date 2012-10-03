@@ -34,4 +34,6 @@ public interface Tetromino {
     public boolean moveDown(double len);
     public boolean moveLeft();
     public boolean moveRight();
+    public boolean rotate();
+    public boolean canRotate();
 }
