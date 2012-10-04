@@ -18,7 +18,7 @@ import java.util.List;
 *    ----------------
 *           | 2 | 3 |
 *           ---------
-*    color:Yellow
+*    color:Red
 */
 public class ZShape extends SimpleTetromino {
  public ZShape(CellPool cellPool) {
@@ -27,7 +27,7 @@ public class ZShape extends SimpleTetromino {
      List<Cell> tmpList = cellPool.retrieveLast(4);
      tmpList.toArray(tetrominoCells);
      cellPool.removeLast(4);
-     setColor(Color.YELLOW);
+     setColor(Color.RED);
 
      tetrominoCells[0].getCellXProperty().bind(xProperty().subtract(2));
      tetrominoCells[0].getCellYProperty().bind(yProperty().subtract(1));
