@@ -220,7 +220,7 @@ public class Tetris extends TetrisDynamic implements GameControl {
 
         Scene primaryScene = SceneBuilder.create()
                 .root(new RootUI(this))
-                .stylesheets(cssurl.toExternalForm() )
+                .stylesheets(cssurl.toExternalForm())
                 .width(getWidth())
                 .height(getHeight())
                 .fill(Color.LIGHTSEAGREEN)
