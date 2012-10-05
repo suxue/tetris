@@ -105,7 +105,7 @@ public class GameUI extends HBox {
         }
 
         private void cleanAfterEnd() {
-            playField.recoverAllocatedCells();
+            playField.recoverAllocatedMinos();
         }
 
 
@@ -257,7 +257,7 @@ public class GameUI extends HBox {
                 , leftRightPaddingProperty.doubleValue()
         ));
 
-        // addCell listener to keep padding
+        // addMino listener to keep padding
         gameState.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue

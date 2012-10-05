@@ -16,17 +16,17 @@ public final class IShape extends SimpleTetromino {
 
 
     private void relayoutToHorizontal() {
-        Cell tmpCell;
+        Mino tmpMino;
 
         for (int i = 0; i < 4; i++) {
-            tmpCell = tetrominoCells[i];
-            tmpCell.getCellXProperty().bind(xProperty().subtract(2 - i));
-            tmpCell.getCellYProperty().bind(yProperty().subtract(0.5));
+            tmpMino = tetrominoMinos[i];
+            tmpMino.getMinoXProperty().bind(xProperty().subtract(2 - i));
+            tmpMino.getMinoYProperty().bind(yProperty().subtract(0.5));
         }
     }
 
     public IShape(Grid grid) {
-        tetrominoCells = grid.allocateCells(4);
+        tetrominoMinos = grid.allocateMinos(4);
         setColor(Color.BLUE);
         relayoutToHorizontal();
     }
@@ -43,7 +43,7 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public boolean moveDown(double len) {
-        for (Cell c : tetrominoCells) {
+        for (Mino c : tetrominoMinos) {
             if (!c.canMoveDown(len))
                 return false;
         }
@@ -54,7 +54,7 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public boolean moveLeft() {
-        if (tetrominoCells[0].canMoveLeft(1)) {
+        if (tetrominoMinos[0].canMoveLeft(1)) {
             xProperty().set(xProperty().get() - 1);
             return true;
         } else
@@ -63,7 +63,7 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public boolean moveRight() {
-        if (tetrominoCells[3].canMoveRight(1)) {
+        if (tetrominoMinos[3].canMoveRight(1)) {
             xProperty().set(xProperty().get() + 1);
             return true;
         } else

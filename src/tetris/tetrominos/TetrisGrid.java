@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class TetrisGrid extends AnchorPane implements Grid{
 
 
-    private CellPool cellPool = null;
+    private MinoPool minoPool = null;
     private OccupationMonitor occupationMonitor = null;
     private OccupationMonitor getOccupationMonitor() {
         if (occupationMonitor == null) {
@@ -33,11 +33,11 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
 
-    private CellPool getCellPool() {
-        if (cellPool == null) {
-            cellPool = new CellPool();
+    private MinoPool getMinoPool() {
+        if (minoPool == null) {
+            minoPool = new MinoPool();
         }
-        return cellPool;
+        return minoPool;
     }
 
     @Override
@@ -47,26 +47,26 @@ public class TetrisGrid extends AnchorPane implements Grid{
 
 
     private class OccupationMonitor {
-        private Cell[][] chessBoard;
+        private Mino[][] chessBoard;
 
-        void set(int x, int y, Cell c) {
+        void set(int x, int y, Mino c) {
             chessBoard[x][y] = c;
         }
         void unset(int x, int y) {
             chessBoard[x][y] = null;
         }
 
-        Cell get(int x, int y) {
+        Mino get(int x, int y) {
             return chessBoard[x][y];
         }
 
         void unsetAll() {
-            for (Cell[] i : chessBoard) {
+            for (Mino[] i : chessBoard) {
                 Arrays.fill(i, null);
             }
         }
 
-        // a Cell can reach/access/occupy this gridblock of (x, y)
+        // a Mino can reach/access/occupy this gridblock of (x, y)
         boolean isAccessible(int x, int y) {
             // do boundary check
             if (x >= getColumnNo() || y >= getRowNo()) {
@@ -124,7 +124,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
                 if (wholeFlags[i]) { // clear this line
                     for (int j = 0; j < getColumnNo(); j++) {
                         chessBoard[j][i].detach();
-                        getCellPool().add(chessBoard[j][i]);
+                        getMinoPool().add(chessBoard[j][i]);
                         chessBoard[j][i] = null;
                     }
                     emptyLines++;
@@ -133,7 +133,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
                         for (int j = 0; j < getColumnNo(); j++) {
                             // move geometrically
                             if (chessBoard[j][i] != null) {
-                                chessBoard[j][i].getCellYProperty().set(chessBoard[j][i].getCellYProperty().get() + emptyLines);
+                                chessBoard[j][i].getMinoYProperty().set(chessBoard[j][i].getMinoYProperty().get() + emptyLines);
                             }
 
                             // move line within mirror
@@ -149,42 +149,42 @@ public class TetrisGrid extends AnchorPane implements Grid{
         }
 
         OccupationMonitor() {
-            chessBoard = new Cell[getColumnNo()][getRowNo()];
+            chessBoard = new Mino[getColumnNo()][getRowNo()];
         }
     }
-    private class CellPool extends ArrayList<Cell> {
-        private Cell[] allCells;
+    private class MinoPool extends ArrayList<Mino> {
+        private Mino[] allMinos;
 
-        CellPool() {
+        MinoPool() {
             super(getColumnNo() * getRowNo());
             for (int i = 0; i < getColumnNo() * getRowNo(); i++)
-                add(new Cell());
+                add(new Mino());
 
-            allCells = toArray(new Cell[size()]);
+            allMinos = toArray(new Mino[size()]);
         }
 
-        void recoverAllAllocatedCells() {
-            for (int i = 0; i < allCells.length; i++) {
-                if (allCells[i].isAttached())
-                    allCells[i].detach();
+        void recoverAllAllocatedMinos() {
+            for (int i = 0; i < allMinos.length; i++) {
+                if (allMinos[i].isAttached())
+                    allMinos[i].detach();
                 if (i < size())
-                    add(i, allCells[i]);
+                    add(i, allMinos[i]);
                 else
-                    set(i, allCells[i]);
+                    set(i, allMinos[i]);
             }
 
             unsetAllCooridinate();
         }
 
-        Cell[] allocateCells(int number) {
-            Cell[] allocCells = new Cell[number];
+        Mino[] allocateMinos(int number) {
+            Mino[] allocMinos = new Mino[number];
 
             int end = size();
             int start = end - number;
 
-            allocCells = subList(start, end).toArray(allocCells);
+            allocMinos = subList(start, end).toArray(allocMinos);
             removeLast(number);
-            return allocCells;
+            return allocMinos;
         }
 
         private void removeLast(int number) {
@@ -206,7 +206,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public Cell get(int x, int y) {
+    public Mino get(int x, int y) {
         return getOccupationMonitor().get(x, y);
     }
 
@@ -216,13 +216,13 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public Cell[] allocateCells(int number) {
-        return getCellPool().allocateCells(number);
+    public Mino[] allocateMinos(int number) {
+        return getMinoPool().allocateMinos(number);
     }
 
     @Override
-    public void recoverAllocatedCells() {
-        getCellPool().recoverAllAllocatedCells();
+    public void recoverAllocatedMinos() {
+        getMinoPool().recoverAllAllocatedMinos();
     }
 
     @Override
@@ -231,7 +231,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public void set(int x, int y, Cell c) {
+    public void set(int x, int y, Mino c) {
         getOccupationMonitor().set(x, y, c);
     }
 
@@ -240,28 +240,28 @@ public class TetrisGrid extends AnchorPane implements Grid{
         getOccupationMonitor().unset(x, y);
     }
 
-    private DoubleProperty cellWidth = new SimpleDoubleProperty();
-    private DoubleProperty cellHeight = new SimpleDoubleProperty();
+    private DoubleProperty minoWidth = new SimpleDoubleProperty();
+    private DoubleProperty minoHeight = new SimpleDoubleProperty();
 
     @Override
-    public ReadOnlyDoubleProperty cellWidthProperty() {
-        return cellWidth;
+    public ReadOnlyDoubleProperty minoWidthProperty() {
+        return minoWidth;
     }
 
     @Override
-    public void removeCell(Cell c) {
+    public void removeMino(Mino c) {
         getChildren().remove(c);
     }
 
 
     @Override
-    public void addCell(Cell c) {
+    public void addMino(Mino c) {
         getChildren().add(c);
     }
 
     @Override
-    public ReadOnlyDoubleProperty cellHeighthProperty() {
-        return cellHeight;
+    public ReadOnlyDoubleProperty minoHeighthProperty() {
+        return minoHeight;
     }
 
     @Override
@@ -296,8 +296,8 @@ public class TetrisGrid extends AnchorPane implements Grid{
         getChildren().add(background);
         background.widthProperty().bind(boundWidthProperty);
         background.heightProperty().bind(boundHeightProperty);
-        cellWidth.bind(background.widthProperty().divide(getColumnNo()));
-        cellHeight.bind(background.heightProperty().divide(getRowNo()));
+        minoWidth.bind(background.widthProperty().divide(getColumnNo()));
+        minoHeight.bind(background.heightProperty().divide(getRowNo()));
     }
 }
 

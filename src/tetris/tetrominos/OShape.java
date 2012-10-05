@@ -19,20 +19,20 @@ import tetris.api.Grid;
 public class OShape extends SimpleTetromino {
     public OShape(Grid grid) {
         super();
-        tetrominoCells =  grid.allocateCells(4);
+        tetrominoMinos =  grid.allocateMinos(4);
         setColor(Color.YELLOW);
 
-        tetrominoCells[0].getCellXProperty().bind(xProperty().subtract(1));
-        tetrominoCells[0].getCellYProperty().bind(yProperty().subtract(1));
+        tetrominoMinos[0].getMinoXProperty().bind(xProperty().subtract(1));
+        tetrominoMinos[0].getMinoYProperty().bind(yProperty().subtract(1));
 
-        tetrominoCells[1].getCellXProperty().bind(xProperty());
-        tetrominoCells[1].getCellYProperty().bind(yProperty().subtract(1));
+        tetrominoMinos[1].getMinoXProperty().bind(xProperty());
+        tetrominoMinos[1].getMinoYProperty().bind(yProperty().subtract(1));
 
-        tetrominoCells[2].getCellXProperty().bind(xProperty().subtract(1));
-        tetrominoCells[2].getCellYProperty().bind(yProperty());
+        tetrominoMinos[2].getMinoXProperty().bind(xProperty().subtract(1));
+        tetrominoMinos[2].getMinoYProperty().bind(yProperty());
 
-        tetrominoCells[3].getCellXProperty().bind(xProperty());
-        tetrominoCells[3].getCellYProperty().bind(yProperty());
+        tetrominoMinos[3].getMinoXProperty().bind(xProperty());
+        tetrominoMinos[3].getMinoYProperty().bind(yProperty());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean moveDown(double len) {
-        if (tetrominoCells[2].canMoveDown(len) && tetrominoCells[3].canMoveDown(len)) {
+        if (tetrominoMinos[2].canMoveDown(len) && tetrominoMinos[3].canMoveDown(len)) {
             yProperty().set(yProperty().get() + len);
             return true;
         } else
@@ -56,7 +56,7 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean moveLeft() {
-        if (tetrominoCells[0].canMoveLeft(1) && tetrominoCells[2].canMoveLeft(1)) {
+        if (tetrominoMinos[0].canMoveLeft(1) && tetrominoMinos[2].canMoveLeft(1)) {
             xProperty().set(xProperty().get() - 1);
             return true;
         } else
@@ -65,7 +65,7 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean moveRight() {
-        if (tetrominoCells[1].canMoveRight(1) && tetrominoCells[3].canMoveRight(1)) {
+        if (tetrominoMinos[1].canMoveRight(1) && tetrominoMinos[3].canMoveRight(1)) {
             xProperty().set(xProperty().get() + 1);
             return true;
         } else

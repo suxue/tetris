@@ -1,4 +1,4 @@
-/* Cell is the basic construction unit for tetrominos
+/* Mino is the basic construction unit for tetrominos
    Copyright (C) 2012, thu10e team.
    This file is part of the implementaion of Tetris Game  made by thu10e team
    for the assessment of COMP1110/67 ** 10 assignment.
@@ -12,45 +12,45 @@ import javafx.scene.shape.Rectangle;
 import tetris.api.Grid;
 
 
-public class Cell extends Rectangle {
+public class Mino extends Rectangle {
 
     private Grid hostGrid = null;
 
-    public DoubleProperty getCellYProperty() {
-        return cellYProperty;
+    public DoubleProperty getMinoYProperty() {
+        return minoYProperty;
     }
 
-    public DoubleProperty getCellXProperty() {
-        return cellXProperty;
+    public DoubleProperty getMinoXProperty() {
+        return minoXProperty;
     }
 
-    private DoubleProperty cellXProperty;
-    private DoubleProperty cellYProperty;
+    private DoubleProperty minoXProperty;
+    private DoubleProperty minoYProperty;
 
 
-    public Cell(double x, double y) {
+    public Mino(double x, double y) {
         super();
-        cellXProperty = new SimpleDoubleProperty(x);
-        cellYProperty = new SimpleDoubleProperty(y);
+        minoXProperty = new SimpleDoubleProperty(x);
+        minoYProperty = new SimpleDoubleProperty(y);
         setManaged(false);
     }
 
-    public Cell() {
+    public Mino() {
         this(0, 0);
     }
 
 
     public void attach(Grid grid) {
-        widthProperty().bind(grid.cellWidthProperty());
-        heightProperty().bind(grid.cellHeighthProperty());
-        xProperty().bind((widthProperty().multiply(cellXProperty)));
-        yProperty().bind((heightProperty().multiply(cellYProperty)));
-        grid.addCell(this);
+        widthProperty().bind(grid.minoWidthProperty());
+        heightProperty().bind(grid.minoHeighthProperty());
+        xProperty().bind((widthProperty().multiply(minoXProperty)));
+        yProperty().bind((heightProperty().multiply(minoYProperty)));
+        grid.addMino(this);
         hostGrid = grid;
     }
 
     public void detach() {
-        hostGrid.removeCell(this);
+        hostGrid.removeMino(this);
         widthProperty().unbind();
         heightProperty().unbind();
         xProperty().unbind();
@@ -64,8 +64,8 @@ public class Cell extends Rectangle {
     }
 
     public boolean canMoveLeft(double len) {
-        int targetX = (int) (getCellXProperty().get() - len);
-        double targetY = getCellYProperty().get();
+        int targetX = (int) (getMinoXProperty().get() - len);
+        double targetY = getMinoYProperty().get();
         int y1 = (int) (Math.floor(targetY));
         int y2 = (int) (Math.ceil(targetY));
 
@@ -85,8 +85,8 @@ public class Cell extends Rectangle {
 
 
     public boolean canMoveRight(double len) {
-        int targetX = (int) (getCellXProperty().get() + len);
-        double targetY = getCellYProperty().get();
+        int targetX = (int) (getMinoXProperty().get() + len);
+        double targetY = getMinoYProperty().get();
         int y1 = (int) (Math.floor(targetY));
         int y2 = (int) (Math.ceil(targetY));
 
@@ -107,8 +107,8 @@ public class Cell extends Rectangle {
 
 
     public boolean canMoveDown(double len) {
-        int targetX = (int) getCellXProperty().get();
-        double targetY = getCellYProperty().get() + 1 + len;
+        int targetX = (int) getMinoXProperty().get();
+        double targetY = getMinoYProperty().get() + 1 + len;
         int y = (int) (Math.floor(targetY));
 
         // check y1

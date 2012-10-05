@@ -17,7 +17,7 @@ import tetris.api.Tetromino;
 // maintain my rotation status
 abstract public class SimpleTetromino implements Tetromino {
 
-    protected Cell[] tetrominoCells;  // all cells included within me
+    protected Mino[] tetrominoMinos;  // all cells included within me
     protected Grid hostGrid = null;
 
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
@@ -36,7 +36,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
     @Override
     public final void attach(Grid grid) {
-        for (Cell c : tetrominoCells) {
+        for (Mino c : tetrominoMinos) {
             c.attach(grid);
         }
         setToTopMiddle(grid);
@@ -46,14 +46,14 @@ abstract public class SimpleTetromino implements Tetromino {
 
     @Override
     public final void detach() {
-        for (Cell c : tetrominoCells) {
+        for (Mino c : tetrominoMinos) {
             c.detach();
         }
         hostGrid = null;
     }
 
     protected void setColor(Paint color) {
-        for (Cell c : tetrominoCells)
+        for (Mino c : tetrominoMinos)
             c.setFill(color);
     }
 
@@ -62,12 +62,12 @@ abstract public class SimpleTetromino implements Tetromino {
     public void pin() {
         double y = Math.ceil(yProperty().get() - getPivotYShift());
         yProperty().set(y + getPivotYShift());
-        for (Cell c : tetrominoCells) {
+        for (Mino c : tetrominoMinos) {
 
-            hostGrid.set((int) c.getCellXProperty().get()
-                    , (int) c.getCellYProperty().get(), c);
-            c.getCellYProperty().unbind();
-            c.getCellXProperty().unbind();
+            hostGrid.set((int) c.getMinoXProperty().get()
+                    , (int) c.getMinoYProperty().get(), c);
+            c.getMinoYProperty().unbind();
+            c.getMinoXProperty().unbind();
         }
     }
 
