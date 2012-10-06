@@ -30,7 +30,11 @@ public interface Tetromino {
     public void pin();
 
     // movement function family
-    public boolean moveDown(double len);
-    public boolean moveLeft();
-    public boolean moveRight();
+    public void moveDown(double len);
+    public void moveLeft();
+    public void moveRight();
+
+    public boolean canMoveDown(double len);
+    public boolean canMoveLeft();
+    public boolean canMoveRight();
 }

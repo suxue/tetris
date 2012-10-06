@@ -23,6 +23,7 @@ import tetris.api.game.GameControl.StatusListener;
 import tetris.api.game.GameState;
 
 import static tetris.api.game.GameControl.Status.PLAY_GAME;
+import static tetris.api.game.GameControl.Status.RESTART_GAME;
 import static tetris.api.game.GameControl.Status.SHOW_MENU;
 
 public class RootUI extends BorderPane {
@@ -107,7 +108,8 @@ public class RootUI extends BorderPane {
         ((GameControl) gs).addStatusListener(new StatusListener() {
             @Override
             public void callback(Status oldStatus, Status newStatus) {
-                if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
+                if ((newStatus == PLAY_GAME || newStatus == RESTART_GAME)
+                        && oldStatus == SHOW_MENU) {
                     RootUI.this.setCenter(gameUI);
                     gameUI.requestFocus();
                 } else if (newStatus == SHOW_MENU) {

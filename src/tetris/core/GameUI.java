@@ -30,174 +30,34 @@ import tetris.api.game.GameState;
 import tetris.tetrominos.IShape;
 import tetris.tetrominos.OShape;
 import tetris.tetrominos.TetrisGrid;
+import static  tetris.core.State.*;
+import static tetris.core.State.ST_DROPPING;
 
+import java.io.IOException;
 import java.util.Random;
+
+
+enum State {
+    ST_STARTED,
+    ST_SPAWNING,  // auto awake
+    ST_DROPPING,
+    ST_MOVING_LEFT,
+    ST_MOVING_RIGHT,
+    ST_ROTATING,
+    ST_LOCKED,
+}
 
 // response for drawing the interface
 public class GameUI extends HBox {
 
+    /////////////////////////////////////////////////////////////////////
+    //             Data Section                                        //
+    /////////////////////////////////////////////////////////////////////
     private GameControl gameControl = null;
     private Grid playField = null;
-    private Grid predicationField = null;
+    private Grid previewField = null;
 
 
-    private class TetrisGameLogic {
-
-
-        private Tetromino generateNextTetromino() {
-            Tetromino t;
-            int tetroClass = randGenerator.nextInt() % 2;
-
-            switch (tetroClass) {
-                case 0:
-                    t = new IShape(playField);
-                    break;
-                case 1:
-                    t = new OShape(playField);
-                    break;
-                default:
-                    assert false;  // should not reach here
-                    t = new IShape(playField);
-                    break;
-            }
-            return t;
-        }
-
-
-        private void toggle() { //  PLAY/PAUSE
-            if (gameControl.getStatus() == GameControl.Status.PLAY_GAME) {
-                System.out.println("Pause");
-                gameControl.stop();
-            } else {
-                System.out.println("resume");
-                gameControl.play();
-            }
-        }
-
-
-        /////////////////////////////////////////////////////////////////////
-        //             MAIN LOOP                                           //
-        /////////////////////////////////////////////////////////////////////
-
-        private final int frameRate = 60;
-        private final Duration frameInterval = Duration.millis(1000 / frameRate);
-        private Random randGenerator = new Random();
-
-        // initial status
-        private Tetromino dynamicTetromino;
-        private Tetromino staticTetromino;
-
-        private int cycleCount;
-
-        private void prepareNewTetromino() {
-            staticTetromino = generateNextTetromino();
-            dynamicTetromino = null;
-            staticTetromino.attach(predicationField);
-        }
-
-        private void startFromBeginning() {
-            cycleCount = 0;
-            staticTetromino.detach();
-            dynamicTetromino = staticTetromino;
-            dynamicTetromino.attach(playField);
-            staticTetromino = generateNextTetromino();
-            staticTetromino.attach(predicationField);
-        }
-
-        private void cleanAfterEnd() {
-            playField.recoverAllocatedMinos();
-        }
-
-
-        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        cycleCount++;
-
-                        if (dynamicTetromino == null) {
-                            startFromBeginning();
-                        } else {
-                            if (!dynamicTetromino.moveDown(0.07)) {
-                                // reach boundary
-                                dynamicTetromino.pin();
-                                playField.squeeze();
-                                // swap tetromino
-                                staticTetromino.detach();
-                                dynamicTetromino = staticTetromino;
-                                dynamicTetromino.attach(playField);
-                                if (dynamicTetromino.moveDown(0.0001)) { // continue swap static and dynamic tetromino
-                                    staticTetromino = generateNextTetromino();
-                                    staticTetromino.attach(predicationField);
-                                } else {
-                                    gameControl.restart();
-                                    return;  // ensure restart take effect directly
-                                }
-                            }
-                        }
-
-                    }
-                }
-        );
-
-        private final Timeline timeline = TimelineBuilder.create()
-                .cycleCount(Animation.INDEFINITE)
-                .keyFrames(mainFrame)
-                .build();
-
-        public TetrisGameLogic() {
-            prepareNewTetromino();
-
-            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    switch (keyEvent.getCode()) {
-                        case P:
-                            toggle();
-                            break;
-                        case R:
-                            gameControl.restart();
-                            break;
-                        case LEFT:
-                            //if (dynamicTetromino != null && dynamicTetromino.getLengthToLeftBoundary() >= 1) {
-                            dynamicTetromino.moveLeft();
-                            // }
-                            break;
-                        case RIGHT:
-                            //if (dynamicTetromino != null && dynamicTetromino.getLengthToRightBoundary() >= 1) {
-                            dynamicTetromino.moveRight();
-                            //}
-                            break;
-                    }
-                }
-            });
-
-            gameControl.addStatusListener(new GameControl.StatusListener() {
-                @Override
-                public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
-                    // TODO: finish game logic
-                    switch (newStatus) {
-                        case STOP_GAME:
-                            // cannot stop while not playing
-                            if (oldStatus == GameControl.Status.PLAY_GAME) {
-                                timeline.pause();
-                            }
-                            break;
-                        case PLAY_GAME:
-                            timeline.play();
-                            break;
-                        case RESTART_GAME:
-                            gameControl.stop();
-                            cleanAfterEnd();
-                            prepareNewTetromino();
-                            gameControl.play();
-                            break;
-                    } // end switch
-                }
-            });
-
-        } // end TetrisGameLogic()
-    }
 
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
@@ -232,7 +92,7 @@ public class GameUI extends HBox {
     }
 
     private Grid createPredicationField() {
-        return (predicationField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
+        return (previewField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
 
     public GameUI(GameState gameState) {
@@ -308,7 +168,282 @@ public class GameUI extends HBox {
                 .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
 
 
-        new TetrisGameLogic();
+        new GameLogic();
     }
+
+
+    private class GameLogic {
+        /////////////////////////////////////////////////////////////////////
+        //             Data Section                                        //
+        /////////////////////////////////////////////////////////////////////
+        private final int frameRate = 60;
+        private Random randGenerator = new Random();
+        private final double frameIntervalInMileSecond = 1000 / frameRate;
+        private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
+
+        private State state;
+        private State oldState;
+        private Tetromino dynamicTetromino;
+        private Tetromino staticTetromino;
+        private int cycleCount;
+        private int sleepCycles;
+        private int stopCycles;
+        private int movingBeingCycle;
+
+        private int lockDelay = 30; //  frames
+        private int movingDelay = 5; // frames
+        private int startDelay = 60; // frames
+
+        private boolean isRunning = false;
+
+        private boolean isPaused;
+
+        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        cycleCount++;
+
+                        //
+                        // timer related code below
+                        //
+                        if (sleepCycles != 0) {
+                            sleepCycles--; // skip left code
+                            return;
+                        }
+
+
+                        // run into state machine
+                        runStateMachine();
+                    }
+                }
+        );
+        private final Timeline timeline = TimelineBuilder.create() .cycleCount(Animation.INDEFINITE)
+                .keyFrames(mainFrame).build();
+
+
+        /////////////////////////////////////////////////////////////////////
+        //             Auxiliary Functions                                 //
+        /////////////////////////////////////////////////////////////////////
+
+
+        private void toggle() {
+            if (isPaused) {
+                System.out.println("resumed");
+                isPaused = false;
+                timeline.play();
+            } else {
+                System.out.println("paused");
+                isPaused = true;
+                timeline.pause();
+            }
+        }
+
+        private void sleep(int frames) {
+            sleepCycles = frames;
+        }
+
+        private void goTo(State newState) {
+//            System.out.println("from " + oldState + " to " + newState);
+            oldState = getState();
+            state = newState;
+        }
+
+        private State getState() {
+            return state;
+        }
+
+        private State getOldState() {
+            return oldState;
+        }
+
+        private Tetromino getNewTetromino() {
+            Tetromino t;
+            int tetroClass = randGenerator.nextInt() % 2;
+
+            switch (tetroClass) {
+                case 0:
+                    t = new IShape(playField);
+                    break;
+                case 1:
+                    t = new OShape(playField);
+                    break;
+                default:
+                    assert false;  // should not reach here
+                    t = new IShape(playField);
+                    break;
+            }
+            return t;
+        }
+
+        private void drop() {
+            if (dynamicTetromino.canMoveDown(0.05)) {
+                dynamicTetromino.moveDown(0.05);
+                stopCycles = 0;
+            } else {
+                if (++stopCycles == lockDelay) {
+                    goTo(ST_LOCKED);
+                }
+            }
+        }
+
+        private void moveLeft() {
+            if ((cycleCount - movingBeingCycle) % movingDelay == 0) {
+                if (dynamicTetromino.canMoveLeft()) {
+                    dynamicTetromino.moveLeft();
+                }
+            }
+        }
+
+        private void moveRight() {
+            if ((cycleCount - movingBeingCycle) % movingDelay == 0) {
+                if (dynamicTetromino.canMoveRight()) {
+                    dynamicTetromino.moveRight();
+                }
+            }
+        }
+
+
+        private void runStateMachine() {
+            switch (getState()) {
+                case ST_STARTED:
+                    //
+                    // reset all counters
+                    //
+                    cycleCount = 0;
+                    sleepCycles = 0;
+
+                    // memory recovery
+                    playField.recoverAllocatedMinos();
+
+                    // spawn and display a new tetromino in the preview zone
+                    staticTetromino = getNewTetromino();
+                    dynamicTetromino = null;
+                    staticTetromino.attach(previewField);
+
+                    // then sleep for some seconds
+                    goTo(ST_SPAWNING);
+                    sleep(startDelay);
+
+                    break;
+                case ST_SPAWNING:
+
+                    staticTetromino.detach();
+                    dynamicTetromino = staticTetromino;
+                    staticTetromino = getNewTetromino();
+                    staticTetromino.attach(previewField);
+                    dynamicTetromino.attach(playField);
+
+                    // IF reach boundary
+                    if (!dynamicTetromino.canMoveDown(0.001)) {
+                        goTo(ST_STARTED);
+                    } else { // ELSE: beginning dropping
+                        goTo(ST_DROPPING);
+                    }
+                    break;
+                case ST_DROPPING:
+                    drop();
+                    break;
+                case ST_MOVING_LEFT:
+                    moveLeft();
+                    drop();
+                    break;
+                case ST_MOVING_RIGHT:
+                    // move right
+                    moveRight();
+                    drop();
+                    break;
+                case ST_ROTATING:
+                    drop();
+                    // do rotation
+                    break;
+                case ST_LOCKED:
+                    //  pin every minos to the grid
+                    dynamicTetromino.pin();
+                    // clear lines
+                    playField.squeeze();
+                    goTo(ST_SPAWNING);
+                    break;
+                default:  // should not reach here
+                    throw new RuntimeException();
+            }
+
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        //             Constructor                                         //
+        /////////////////////////////////////////////////////////////////////
+        public GameLogic() {
+            gameControl.addStatusListener(new GameControl.StatusListener() {
+                @Override
+                public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
+                    switch (newStatus) {
+                        case PLAY_GAME:
+                            if (!isRunning) {
+                                isRunning = true;
+                                gameControl.restart();
+                            } else {
+                                timeline.play();
+                            }
+                            break;
+                        case RESTART_GAME:
+                            goTo(ST_STARTED);
+                            timeline.play();
+                            isPaused = false;
+                            break;
+                        case STOP_GAME:
+                            timeline.pause();
+                            break;
+                    }
+                }
+            });
+
+            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    switch (keyEvent.getCode()) {
+                        case P:
+                            toggle();
+                            break;
+                        case R:
+                            gameControl.restart();
+                            break;
+                        case LEFT:
+                            if (getState() == ST_DROPPING) {
+                                movingBeingCycle = cycleCount;
+                                moveLeft();
+                                goTo(ST_MOVING_LEFT);
+                            }
+                            break;
+                        case RIGHT:
+                            if (getState() == ST_DROPPING) {
+                                movingBeingCycle = cycleCount;
+                                moveRight();
+                                goTo(ST_MOVING_RIGHT);
+                            }
+                            break;
+                    }
+                }
+            });
+
+            GameUI.this.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    switch (keyEvent.getCode()) {
+                        case LEFT:
+                            if (getState() == ST_MOVING_LEFT) {
+                                goTo(getOldState());
+                            }
+                            break;
+                        case RIGHT:
+                            if (getState() == ST_MOVING_RIGHT) {
+                                goTo(getOldState());
+                            }
+                            break;
+                    }
+                }
+            });
+        } // end GameLogic()
+    }  // end GameLogic
 
 }

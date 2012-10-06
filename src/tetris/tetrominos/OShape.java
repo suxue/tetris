@@ -46,29 +46,37 @@ public class OShape extends SimpleTetromino {
     }
 
     @Override
-    public boolean moveDown(double len) {
-        if (tetrominoMinos[2].canMoveDown(len) && tetrominoMinos[3].canMoveDown(len)) {
-            yProperty().set(yProperty().get() + len);
-            return true;
-        } else
-            return false;
+    public void moveDown(double len) {
+        yProperty().set(yProperty().get() + len);
     }
 
     @Override
-    public boolean moveLeft() {
-        if (tetrominoMinos[0].canMoveLeft(1) && tetrominoMinos[2].canMoveLeft(1)) {
-            xProperty().set(xProperty().get() - 1);
-            return true;
-        } else
-            return false;
+    public void moveLeft() {
+        xProperty().set(xProperty().get() - 1);
     }
 
     @Override
-    public boolean moveRight() {
-        if (tetrominoMinos[1].canMoveRight(1) && tetrominoMinos[3].canMoveRight(1)) {
-            xProperty().set(xProperty().get() + 1);
+    public void moveRight() {
+        xProperty().set(xProperty().get() + 1);
+    }
+
+    @Override
+    public boolean canMoveDown(double len) {
+        if (tetrominoMinos[2].canMoveDown(len)
+              && tetrominoMinos[3].canMoveDown(len) ) {
             return true;
-        } else
+        } else {
             return false;
+        }
+    }
+
+    @Override
+    public boolean canMoveLeft() {
+        return tetrominoMinos[0].canMoveLeft(1) && tetrominoMinos[2].canMoveLeft(1);
+    }
+
+    @Override
+    public boolean canMoveRight() {
+        return tetrominoMinos[1].canMoveRight(1) && tetrominoMinos[3].canMoveRight(1);
     }
 }
