@@ -122,4 +122,16 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     abstract public int[][]     getRotatingData();
+
+
+    private Point2D      pivotToBoundingBox(Point2D pivot) {
+        Point2D shift = getBoundingBoxOffset();
+        return new Point2D(pivot.getX() + shift.getX(), pivot.getY() + shift.getY());
+    }
+
+    private Point2D      boundingBoxToPivot(Point2D bb) {
+        Point2D shift = getBoundingBoxOffset();
+        return new Point2D(bb.getX() - shift.getX(), bb.getY() - shift.getY());
+    }
+
 }

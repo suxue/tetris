@@ -47,15 +47,9 @@ public final class IShape extends SimpleTetromino {
     }
 
 
-
     @Override
-    public Point2D pivotToBoundingBox(Point2D pivot) {
-        return new Point2D(pivot.getX() - 2, pivot.getY() - 1);
-    }
-
-    @Override
-    public Point2D boundingBoxToPivot(Point2D bb) {
-        return new Point2D(bb.getX() + 2, bb.getY() + 1);
+    public Point2D getBoundingBoxOffset() {
+        return new Point2D(-2, -1);
     }
 
     @Override
@@ -97,7 +91,7 @@ public final class IShape extends SimpleTetromino {
 
 
     @Override
-    public void rotateRight() { // status++
+    public boolean rotateRight() { // status++
 
         // calculate the new position
         int newSt = (getStatus() + 1) % 4;
@@ -107,10 +101,13 @@ public final class IShape extends SimpleTetromino {
 //        int newSt = (getStatus() + 1) % 4;
 //        rebindMinos();
 //        setStatus(newSt);
+
+        return false;
     }
 
     @Override
-    public void rotateLeft() { // status--
+    public boolean rotateLeft() { // status--
+        return false;
     }
 
 }

@@ -27,9 +27,11 @@ public interface Tetromino {
 
     public Point2D      getPivot();
     public void         setPivot(Point2D pivot);
-    public Point2D      pivotToBoundingBox(Point2D pivot);
-    public Point2D      boundingBoxToPivot(Point2D bb);
 
+    // the offset to transfer current pivot to the corresponding bonding box(4x2)
+    public Point2D      getBoundingBoxOffset();
+
+    // 0, 1, 2, 3
     public int          getStatus();
 
     // after attaching, I'll be showed in that grid
@@ -46,6 +48,6 @@ public interface Tetromino {
     public boolean canMoveLeft();
     public boolean canMoveRight();
 
-    public void    rotateRight();
-    public void    rotateLeft();
+    public boolean rotateRight();
+    public boolean rotateLeft();
 }

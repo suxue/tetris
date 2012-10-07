@@ -52,13 +52,8 @@ public class OShape extends SimpleTetromino {
     }
 
     @Override
-    public Point2D pivotToBoundingBox(Point2D pivot) {
-        return new Point2D(pivot.getX() - 1, pivot.getY() - 1);
-    }
-
-    @Override
-    public Point2D boundingBoxToPivot(Point2D bb) {
-        return new Point2D(bb.getX() + 1, bb.getY() + 1);
+    public Point2D getBoundingBoxOffset() {
+        return new Point2D(-2, -1);
     }
 
     @Override
@@ -99,13 +94,15 @@ public class OShape extends SimpleTetromino {
 
 
     @Override
-    public void rotateRight() {
-        // do nothing
+    public boolean rotateRight() {
+        setStatus((getStatus() + 1) % 4);
+        return true;
     }
 
     @Override
-    public void rotateLeft() {
-        // do nothing
+    public boolean rotateLeft() {
+        setStatus((getStatus() - 1) % 4);
+        return true;
     }
 
 }
