@@ -238,6 +238,11 @@ public class GameUI extends HBox {
         //             Auxiliary Functions                                 //
         /////////////////////////////////////////////////////////////////////
 
+        private void restart() {
+            goTo(ST_STARTED);
+            timeline.play();
+            isPaused = false;
+        }
 
         private void toggle() {
             if (isPaused) {
@@ -256,7 +261,7 @@ public class GameUI extends HBox {
         }
 
         private void goTo(State newState) {
-//            System.out.println("from " + oldState + " to " + newState);
+            System.out.println("from " + oldState + " to " + newState);
             oldState = getState();
             state = newState;
         }
@@ -300,6 +305,14 @@ public class GameUI extends HBox {
             } else {
                 if (++stopCycles == lockDelay) {
                     goTo(ST_LOCKED);
+                }
+            }
+        }
+
+        private void rotate() {
+            if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
+                if (dynamicTetromino.canRotateRight()) {
+                    dynamicTetromino.rotateRight();
                 }
             }
         }
@@ -371,8 +384,9 @@ public class GameUI extends HBox {
                     drop();
                     break;
                 case ST_ROTATING:
-                    drop();
                     // do rotation
+                    rotate();
+                    drop();
                     break;
                 case ST_LOCKED:
                     //  pin every minos to the grid
@@ -404,9 +418,7 @@ public class GameUI extends HBox {
                             }
                             break;
                         case RESTART_GAME:
-                            goTo(ST_STARTED);
-                            timeline.play();
-                            isPaused = false;
+                            restart();
                             break;
                         case STOP_GAME:
                             timeline.pause();
@@ -423,7 +435,14 @@ public class GameUI extends HBox {
                             toggle();
                             break;
                         case R:
-                            gameControl.restart();
+                            restart();
+                            break;
+                        case UP: // rotateRight
+                            if (getState() == ST_DROPPING) {
+                                movingStartingCycle = cycleCount;
+                                rotate();
+                                goTo(ST_ROTATING);
+                            }
                             break;
                         case LEFT:
                             if (getState() == ST_DROPPING) {
@@ -457,6 +476,12 @@ public class GameUI extends HBox {
                                 goTo(getOldState());
                             }
                             break;
+                        case UP:
+                            if (getState() == ST_ROTATING) {
+                                goTo(getOldState());
+                            }
+                            break;
+
                     }
                 }
             });

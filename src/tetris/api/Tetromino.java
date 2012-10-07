@@ -11,11 +11,18 @@
 package tetris.api;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Point2D;
 
 // a shape can mostly has four orientation
 //  see http://tetrisconcept.net/wiki/Orientation
 //  they are: Point UP|RIGHT|DOWN|LEFT
 public interface Tetromino {
+
+    public class BoundingBox extends Point2D {
+        public BoundingBox(double x, double y)  {
+            super(x, y);
+        }
+    }
 
 
     /*
@@ -25,8 +32,10 @@ public interface Tetromino {
     public DoubleProperty xProperty();
     public DoubleProperty yProperty();
 
-    public double getPivotXShift();
-    public double getPivotYShift();
+    public BoundingBox getBoundingBox();
+    public void        setBoundingBox(BoundingBox bb);
+
+    public int         getStatus();
 
     // after attaching, I'll be showed in that grid
     public void attach(Grid grid);
@@ -41,4 +50,7 @@ public interface Tetromino {
     public boolean canMoveDown(double len);
     public boolean canMoveLeft();
     public boolean canMoveRight();
+
+    public boolean canRotateRight();
+    public void    rotateRight();
 }

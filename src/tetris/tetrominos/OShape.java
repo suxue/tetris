@@ -11,6 +11,7 @@
 package tetris.tetrominos;
 
 import tetris.api.Grid;
+import tetris.api.Tetromino;
 
 /*
  *    ---------
@@ -23,30 +24,40 @@ import tetris.api.Grid;
 public class OShape extends SimpleTetromino {
     public OShape(Grid grid) {
         super();
-        tetrominoMinos =  grid.allocateMinos(4);
+        allMinos =  grid.allocateMinos(4);
         setCssClass("oShape");
 
-        tetrominoMinos[0].getMinoXProperty().bind(xProperty().subtract(1));
-        tetrominoMinos[0].getMinoYProperty().bind(yProperty().subtract(1));
+        allMinos[0].getMinoXProperty().bind(xProperty().subtract(1));
+        allMinos[0].getMinoYProperty().bind(yProperty().subtract(1));
 
-        tetrominoMinos[1].getMinoXProperty().bind(xProperty());
-        tetrominoMinos[1].getMinoYProperty().bind(yProperty().subtract(1));
+        allMinos[1].getMinoXProperty().bind(xProperty());
+        allMinos[1].getMinoYProperty().bind(yProperty().subtract(1));
 
-        tetrominoMinos[2].getMinoXProperty().bind(xProperty().subtract(1));
-        tetrominoMinos[2].getMinoYProperty().bind(yProperty());
+        allMinos[2].getMinoXProperty().bind(xProperty().subtract(1));
+        allMinos[2].getMinoYProperty().bind(yProperty());
 
-        tetrominoMinos[3].getMinoXProperty().bind(xProperty());
-        tetrominoMinos[3].getMinoYProperty().bind(yProperty());
+        allMinos[3].getMinoXProperty().bind(xProperty());
+        allMinos[3].getMinoYProperty().bind(yProperty());
+    }
+
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return (new BoundingBox(
+                allMinos[0].getMinoXProperty().get()
+                , allMinos[0].getMinoYProperty().get()
+        ));
     }
 
     @Override
-    public final double getPivotXShift() {
-        return 1;
+    public void setBoundingBox(BoundingBox bb) {
+        xProperty().set(bb.getX() + 2);
+        yProperty().set(bb.getY() + 1);
     }
 
     @Override
-    public final double getPivotYShift() {
-        return 1;
+    public int[][] getRotatingData() {
+        throw  new RuntimeException();
     }
 
     @Override
@@ -66,8 +77,8 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean canMoveDown(double len) {
-        if (tetrominoMinos[2].canMoveDown(len)
-              && tetrominoMinos[3].canMoveDown(len) ) {
+        if (allMinos[2].canMoveDown(len)
+              && allMinos[3].canMoveDown(len) ) {
             return true;
         } else {
             return false;
@@ -76,11 +87,22 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean canMoveLeft() {
-        return tetrominoMinos[0].canMoveLeft(1) && tetrominoMinos[2].canMoveLeft(1);
+        return allMinos[0].canMoveLeft(1) && allMinos[2].canMoveLeft(1);
+    }
+
+    @Override
+    public void rotateRight() {
+        // do nothing
     }
 
     @Override
     public boolean canMoveRight() {
-        return tetrominoMinos[1].canMoveRight(1) && tetrominoMinos[3].canMoveRight(1);
+        return allMinos[1].canMoveRight(1) && allMinos[3].canMoveRight(1);
     }
+
+    @Override
+    public boolean canRotateRight() {
+        return true;
+    }
+
 }
