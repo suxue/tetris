@@ -38,7 +38,6 @@ import tetris.tetrominos.TetrisGrid;
 import static  tetris.core.State.*;
 import static tetris.core.State.ST_DROPPING;
 
-import java.io.IOException;
 import java.util.Random;
 
 
@@ -191,13 +190,21 @@ public class GameUI extends HBox {
         private Tetromino dynamicTetromino;
         private Tetromino staticTetromino;
         private int cycleCount;
-        private int sleepCycles;
-        private int stopCycles;
-        private int movingBeingCycle;
 
+        // how many cycles are left for sleeping, 0 if awake
+        private int sleepCycles;
+
+        // how many cycles has the dynamicTetromino been stopped?
+        private int stopCycles;
+        // when does the moving(rotating/moving left/moving right) begin?
+        private int movingStartingCycle;
+        // how many cycles should be wait before locking the dynamicTetromino
+        // after it has stopped?
         private int lockDelay = 30; //  frames
         private int movingDelay = 5; // frames
         private int startDelay = 60; // frames
+
+        private double baseSpeed = 1/48.0; // how many grids to be moved within a frame
 
         private boolean isRunning = false;
 
@@ -263,6 +270,7 @@ public class GameUI extends HBox {
         }
 
         private Tetromino getNewTetromino() {
+
             Tetromino t;
             int tetroClass = randGenerator.nextInt() % 2;
 
@@ -281,9 +289,13 @@ public class GameUI extends HBox {
             return t;
         }
 
+        private double getSpeed() {
+            return baseSpeed;
+        }
+
         private void drop() {
-            if (dynamicTetromino.canMoveDown(0.05)) {
-                dynamicTetromino.moveDown(0.05);
+            if (dynamicTetromino.canMoveDown(getSpeed())) {
+                dynamicTetromino.moveDown(getSpeed());
                 stopCycles = 0;
             } else {
                 if (++stopCycles == lockDelay) {
@@ -293,7 +305,7 @@ public class GameUI extends HBox {
         }
 
         private void moveLeft() {
-            if ((cycleCount - movingBeingCycle) % movingDelay == 0) {
+            if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
                 if (dynamicTetromino.canMoveLeft()) {
                     dynamicTetromino.moveLeft();
                 }
@@ -301,7 +313,7 @@ public class GameUI extends HBox {
         }
 
         private void moveRight() {
-            if ((cycleCount - movingBeingCycle) % movingDelay == 0) {
+            if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
                 if (dynamicTetromino.canMoveRight()) {
                     dynamicTetromino.moveRight();
                 }
@@ -415,14 +427,14 @@ public class GameUI extends HBox {
                             break;
                         case LEFT:
                             if (getState() == ST_DROPPING) {
-                                movingBeingCycle = cycleCount;
+                                movingStartingCycle = cycleCount;
                                 moveLeft();
                                 goTo(ST_MOVING_LEFT);
                             }
                             break;
                         case RIGHT:
                             if (getState() == ST_DROPPING) {
-                                movingBeingCycle = cycleCount;
+                                movingStartingCycle = cycleCount;
                                 moveRight();
                                 goTo(ST_MOVING_RIGHT);
                             }
