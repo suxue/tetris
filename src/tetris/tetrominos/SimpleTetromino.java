@@ -27,6 +27,13 @@ abstract public class SimpleTetromino implements Tetromino {
 
     protected  boolean hasBound = false;
 
+    protected SimpleTetromino(Grid grid) {
+        allMinos = grid.allocateMinos(4);
+        setStatus(0);
+        rebindMinos();
+        hasBound = true;
+    }
+
     @Override
     public int getStatus() {
         return status;
@@ -42,13 +49,11 @@ abstract public class SimpleTetromino implements Tetromino {
     private final DoubleProperty xPropertyImpl = new SimpleDoubleProperty(0);
     private final DoubleProperty yPropertyImpl = new SimpleDoubleProperty(0);
 
-    @Override
-    public final DoubleProperty xProperty() {
+    protected final DoubleProperty xProperty() {
         return xPropertyImpl;
     }
 
-    @Override
-    public final DoubleProperty yProperty() {
+    protected final DoubleProperty yProperty() {
         return yPropertyImpl;
     }
 
@@ -132,6 +137,21 @@ abstract public class SimpleTetromino implements Tetromino {
     private Point2D      boundingBoxToPivot(Point2D bb) {
         Point2D shift = getBoundingBoxOffset();
         return new Point2D(bb.getX() - shift.getX(), bb.getY() - shift.getY());
+    }
+
+    @Override
+    public void moveDown(double len) {
+        yProperty().set(yProperty().get() + len);
+    }
+
+    @Override
+    public void moveLeft() {
+        xProperty().set(xProperty().get() - 1);
+    }
+
+    @Override
+    public void moveRight() {
+        xProperty().set(xProperty().get() + 1);
     }
 
 }

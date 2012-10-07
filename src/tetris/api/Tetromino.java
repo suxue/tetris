@@ -18,13 +18,6 @@ import javafx.geometry.Point2D;
 //  they are: Point UP|RIGHT|DOWN|LEFT
 public interface Tetromino {
 
-    /*
-     *   @xProperty: x-coordinate of my pivot
-     *   @yProperty: y-coordinate of my pivot
-     */
-    public DoubleProperty xProperty();
-    public DoubleProperty yProperty();
-
     public Point2D      getPivot();
     public void         setPivot(Point2D pivot);
 

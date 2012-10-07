@@ -12,7 +12,6 @@ package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 import tetris.api.Grid;
-import tetris.api.Tetromino;
 
 /*
  *    ---------
@@ -23,53 +22,27 @@ import tetris.api.Tetromino;
  *    color:Yellow
 */
 public class OShape extends SimpleTetromino {
-    public OShape(Grid grid) {
-        super();
-        allMinos =  grid.allocateMinos(4);
-        setCssClass("oShape");
-
-        allMinos[0].getMinoXProperty().bind(xProperty().subtract(1));
-        allMinos[0].getMinoYProperty().bind(yProperty().subtract(1));
-
-        allMinos[1].getMinoXProperty().bind(xProperty());
-        allMinos[1].getMinoYProperty().bind(yProperty().subtract(1));
-
-        allMinos[2].getMinoXProperty().bind(xProperty().subtract(1));
-        allMinos[2].getMinoYProperty().bind(yProperty());
-
-        allMinos[3].getMinoXProperty().bind(xProperty());
-        allMinos[3].getMinoYProperty().bind(yProperty());
-    }
-
-
-
-
+    private static int[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
+    private static int[][] data = {line, line, line, line};
 
 
     @Override
     public int[][] getRotatingData() {
-        throw  new RuntimeException();
+        return data;
     }
+
+    public OShape(Grid grid) {
+        super(grid);
+        setCssClass("oShape");
+    }
+
+
 
     @Override
     public Point2D getBoundingBoxOffset() {
         return new Point2D(-2, -1);
     }
 
-    @Override
-    public void moveDown(double len) {
-        yProperty().set(yProperty().get() + len);
-    }
-
-    @Override
-    public void moveLeft() {
-        xProperty().set(xProperty().get() - 1);
-    }
-
-    @Override
-    public void moveRight() {
-        xProperty().set(xProperty().get() + 1);
-    }
 
     @Override
     public boolean canMoveDown(double len) {

@@ -29,7 +29,7 @@ public final class IShape extends SimpleTetromino {
             ,   { 0, -2,  0, -1,  0,  0,  0, -2}
             ,   {-2,  0, -1,  0,  0,  0,  1,  0}
             ,   {-1, -2, -1, -1, -1,  0, -1,  1}
-    } ;
+    };
 
 
     @Override
@@ -39,11 +39,8 @@ public final class IShape extends SimpleTetromino {
 
 
     public IShape(Grid grid) {
-        allMinos = grid.allocateMinos(4);
+        super(grid);
         setCssClass("iShape");
-        setStatus(0);
-        rebindMinos();
-        hasBound = true;
     }
 
 
@@ -52,20 +49,6 @@ public final class IShape extends SimpleTetromino {
         return new Point2D(-2, -1);
     }
 
-    @Override
-    public void moveDown(double len) {
-        yProperty().set(yProperty().get() + len);
-    }
-
-    @Override
-    public void moveLeft() {
-        xProperty().set(xProperty().get() - 1);
-    }
-
-    @Override
-    public void moveRight() {
-        xProperty().set(xProperty().get() + 1);
-    }
 
     @Override
     public boolean canMoveDown(double len) {
