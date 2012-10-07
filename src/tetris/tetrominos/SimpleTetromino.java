@@ -92,13 +92,6 @@ abstract public class SimpleTetromino implements Tetromino {
         }
     }
 
-    @Override
-    public void rotateRight() {
-        int newSt = (getStatus() + 1) % 4;
-        rebindMinos();
-        setStatus(newSt);
-    }
-
 
     protected void rebindMinos() {
         if (hasBound) { // unbind first if has bound

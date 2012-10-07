@@ -203,7 +203,7 @@ public class GameUI extends HBox {
         // how many cycles should be wait before locking the dynamicTetromino
         // after it has stopped?
         private int lockDelay = 30; //  frames
-        private int movingDelay = 5; // frames
+        private int movingDelay = 10; // frames
         private int startDelay = 60; // frames
 
         private double baseSpeed = 1/48.0; // how many grids to be moved within a frame

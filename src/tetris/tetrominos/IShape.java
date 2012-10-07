@@ -100,4 +100,17 @@ public final class IShape extends SimpleTetromino {
     public boolean canMoveRight() {
         return allMinos[3].canMoveRight(1);
     }
+
+
+    @Override
+    public void rotateRight() {
+        int newSt = (getStatus() + 1) % 4;
+        rebindMinos();
+        setStatus(newSt);
+    }
+
+    @Override
+    public void rotateLeft() {
+    }
+
 }
