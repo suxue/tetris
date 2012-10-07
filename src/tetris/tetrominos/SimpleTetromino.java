@@ -13,7 +13,6 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.paint.Paint;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
 

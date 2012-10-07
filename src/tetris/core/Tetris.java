@@ -223,8 +223,14 @@ public class Tetris extends TetrisDynamic implements GameControl {
             cssurl = Tetris.class.getResource("/css/stylesheet.css");
         }
 
+        URL fallbackCssUrl = Tetris.class.getResource("/css/fallback-stylesheet.bss");
+        if (fallbackCssUrl == null) {
+            fallbackCssUrl = Tetris.class.getResource("/css/fallback-stylesheet.css");
+        }
+
         Scene primaryScene = SceneBuilder.create()
                 .root(new RootUI(this))
+                .stylesheets(fallbackCssUrl.toExternalForm())
                 .stylesheets(cssurl.toExternalForm())
                 .width(getWidth())
                 .height(getHeight())

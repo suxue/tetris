@@ -35,10 +35,10 @@ import tetris.api.game.GameState;
 import tetris.tetrominos.IShape;
 import tetris.tetrominos.OShape;
 import tetris.tetrominos.TetrisGrid;
-import static  tetris.core.State.*;
-import static tetris.core.State.ST_DROPPING;
 
 import java.util.Random;
+
+import static tetris.core.State.*;
 
 
 enum State {

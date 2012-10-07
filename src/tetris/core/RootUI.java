@@ -27,9 +27,7 @@ import tetris.api.game.GameControl.Status;
 import tetris.api.game.GameControl.StatusListener;
 import tetris.api.game.GameState;
 
-import static tetris.api.game.GameControl.Status.PLAY_GAME;
-import static tetris.api.game.GameControl.Status.RESTART_GAME;
-import static tetris.api.game.GameControl.Status.SHOW_MENU;
+import static tetris.api.game.GameControl.Status.*;
 
 public class RootUI extends BorderPane {
 

@@ -10,7 +10,6 @@
  */
 package tetris.tetrominos;
 
-import javafx.scene.paint.Color;
 import tetris.api.Grid;
 
 /*
