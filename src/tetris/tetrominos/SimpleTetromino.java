@@ -13,6 +13,7 @@ package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Point2D;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
 
@@ -51,8 +52,17 @@ abstract public class SimpleTetromino implements Tetromino {
         return yPropertyImpl;
     }
 
-    private void setToTopMiddle(Grid grid) {
+    @Override
+    public final Point2D getPivot() {
+        return new Point2D(xProperty().get(), yProperty().get());
     }
+
+    @Override
+    public void setPivot(Point2D pivot) {
+        xProperty().set(pivot.getX());
+        yProperty().set(pivot.getY());
+    }
+
 
     @Override
     public final void attach(Grid grid) {
@@ -60,7 +70,7 @@ abstract public class SimpleTetromino implements Tetromino {
             c.attach(grid);
         }
         // set to the top middle position
-        setBoundingBox(new BoundingBox((grid.getColumnNo() / 2) - 2, 0));
+        setPivot(boundingBoxToPivot(new Point2D((grid.getColumnNo() / 2) - 2, 0)));
         hostGrid = grid;
     }
 
@@ -81,8 +91,9 @@ abstract public class SimpleTetromino implements Tetromino {
 
     @Override
     public void pin() {
-        BoundingBox bb = getBoundingBox();
-        setBoundingBox(new BoundingBox(bb.getX(), Math.ceil(bb.getY())));
+        Point2D bb = pivotToBoundingBox(getPivot());
+        Point2D newbb = new Point2D(bb.getX(), Math.ceil(bb.getY()));
+        setPivot(boundingBoxToPivot(newbb));
 
         for (Mino c : allMinos) {
             hostGrid.set((int) c.getMinoXProperty().get()
@@ -107,6 +118,7 @@ abstract public class SimpleTetromino implements Tetromino {
             allMinos[i].getMinoYProperty().bind(yProperty().add(rotatingArray[2*i + 1]));
         }
     }
+
 
 
     abstract public int[][]     getRotatingData();

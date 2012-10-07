@@ -18,13 +18,6 @@ import javafx.geometry.Point2D;
 //  they are: Point UP|RIGHT|DOWN|LEFT
 public interface Tetromino {
 
-    public class BoundingBox extends Point2D {
-        public BoundingBox(double x, double y)  {
-            super(x, y);
-        }
-    }
-
-
     /*
      *   @xProperty: x-coordinate of my pivot
      *   @yProperty: y-coordinate of my pivot
@@ -32,10 +25,12 @@ public interface Tetromino {
     public DoubleProperty xProperty();
     public DoubleProperty yProperty();
 
-    public BoundingBox getBoundingBox();
-    public void        setBoundingBox(BoundingBox bb);
+    public Point2D      getPivot();
+    public void         setPivot(Point2D pivot);
+    public Point2D      pivotToBoundingBox(Point2D pivot);
+    public Point2D      boundingBoxToPivot(Point2D bb);
 
-    public int         getStatus();
+    public int          getStatus();
 
     // after attaching, I'll be showed in that grid
     public void attach(Grid grid);

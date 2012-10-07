@@ -10,6 +10,7 @@
  */
 package tetris.tetrominos;
 
+import javafx.geometry.Point2D;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
 
@@ -41,23 +42,23 @@ public class OShape extends SimpleTetromino {
     }
 
 
-    @Override
-    public BoundingBox getBoundingBox() {
-        return (new BoundingBox(
-                allMinos[0].getMinoXProperty().get()
-                , allMinos[0].getMinoYProperty().get()
-        ));
-    }
 
-    @Override
-    public void setBoundingBox(BoundingBox bb) {
-        xProperty().set(bb.getX() + 2);
-        yProperty().set(bb.getY() + 1);
-    }
+
+
 
     @Override
     public int[][] getRotatingData() {
         throw  new RuntimeException();
+    }
+
+    @Override
+    public Point2D pivotToBoundingBox(Point2D pivot) {
+        return new Point2D(pivot.getX() - 1, pivot.getY() - 1);
+    }
+
+    @Override
+    public Point2D boundingBoxToPivot(Point2D bb) {
+        return new Point2D(bb.getX() + 1, bb.getY() + 1);
     }
 
     @Override
