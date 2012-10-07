@@ -1,7 +1,18 @@
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  tetromino I
+ *  @author: $Author$
+ *  @date:   $Date$
+ */
 package tetris.tetrominos;
 
 import javafx.scene.paint.Color;
 import tetris.api.Grid;
+
 
 
 /*

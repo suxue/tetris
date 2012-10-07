@@ -1,9 +1,13 @@
-/* Include the shared functions among different tetrominos, every concrete
-   tetromino class should inherit me.
-
-   Copyright (C) 2012, thu10e team.
-   This file is part of the implementaion of Tetris Game  made by thu10e team
-   for the assessment of COMP1110/67 ** 10 assignment.
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  Include the shared functions among different tetrominos, every
+ *  concrete tetromino class should inherit me.
+ *  @author: $Author$
+ *  @date:   $Date$
  */
 package tetris.tetrominos;
 
