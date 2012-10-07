@@ -25,7 +25,7 @@ public class OShape extends SimpleTetromino {
     public OShape(Grid grid) {
         super();
         tetrominoMinos =  grid.allocateMinos(4);
-        setColor(Color.YELLOW);
+        setCssClass("oShape");
 
         tetrominoMinos[0].getMinoXProperty().bind(xProperty().subtract(1));
         tetrominoMinos[0].getMinoYProperty().bind(yProperty().subtract(1));

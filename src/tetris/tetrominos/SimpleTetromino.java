@@ -56,9 +56,9 @@ abstract public class SimpleTetromino implements Tetromino {
         hostGrid = null;
     }
 
-    protected void setColor(Paint color) {
+    protected void setCssClass(String cssClass) {
         for (Mino c : tetrominoMinos)
-            c.setFill(color);
+            c.getStyleClass().add(cssClass);
     }
 
 

@@ -1,4 +1,4 @@
-.button {
+#exitButton, #playButton, #replayButton {
     -fx-font-size:28pt;
     -fx-background-size: 100%;
     -fx-background-repeat: no-repeat; 
@@ -7,5 +7,16 @@
     -fx-underline: true;
     -fx-background-position: center;
     -fx-background-image: url('../img/button.png'); 
+}
+
+.iShape, .oShape {
+}
+
+.iShape {
+    -fx-fill: deepskyblue;
+}
+
+.oShape {
+    -fx-fill: gold;
 }
 

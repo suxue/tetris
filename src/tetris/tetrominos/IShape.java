@@ -38,7 +38,7 @@ public final class IShape extends SimpleTetromino {
 
     public IShape(Grid grid) {
         tetrominoMinos = grid.allocateMinos(4);
-        setColor(Color.BLUE);
+        setCssClass("iShape");
         relayoutToHorizontal();
     }
 
