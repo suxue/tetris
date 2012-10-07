@@ -51,6 +51,6 @@ public interface Tetromino {
     public boolean canMoveLeft();
     public boolean canMoveRight();
 
-    public boolean canRotateRight();
     public void    rotateRight();
+    public void    rotateLeft();
 }

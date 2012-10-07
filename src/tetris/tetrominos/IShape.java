@@ -100,9 +100,4 @@ public final class IShape extends SimpleTetromino {
     public boolean canMoveRight() {
         return allMinos[3].canMoveRight(1);
     }
-
-    @Override
-    public boolean canRotateRight() {
-        return true;
-    }
 }

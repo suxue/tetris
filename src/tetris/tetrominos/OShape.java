@@ -90,19 +90,21 @@ public class OShape extends SimpleTetromino {
         return allMinos[0].canMoveLeft(1) && allMinos[2].canMoveLeft(1);
     }
 
-    @Override
-    public void rotateRight() {
-        // do nothing
-    }
 
     @Override
     public boolean canMoveRight() {
         return allMinos[1].canMoveRight(1) && allMinos[3].canMoveRight(1);
     }
 
+
     @Override
-    public boolean canRotateRight() {
-        return true;
+    public void rotateRight() {
+        // do nothing
+    }
+
+    @Override
+    public void rotateLeft() {
+        // do nothing
     }
 
 }

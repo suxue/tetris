@@ -39,6 +39,7 @@ import tetris.tetrominos.TetrisGrid;
 import java.util.Random;
 
 import static tetris.core.State.*;
+import static tetris.core.State.ST_ROTATING_LEFT;
 
 
 enum State {
@@ -47,7 +48,8 @@ enum State {
     ST_DROPPING,
     ST_MOVING_LEFT,
     ST_MOVING_RIGHT,
-    ST_ROTATING,
+    ST_ROTATING_RIGHT,
+    ST_ROTATING_LEFT,
     ST_LOCKED,
 }
 
@@ -309,11 +311,15 @@ public class GameUI extends HBox {
             }
         }
 
-        private void rotate() {
+        private void rotateRight() {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                if (dynamicTetromino.canRotateRight()) {
-                    dynamicTetromino.rotateRight();
-                }
+                dynamicTetromino.rotateRight();
+            }
+        }
+
+        private void rotateLeft() {
+            if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
+                dynamicTetromino.rotateLeft();
             }
         }
 
@@ -383,11 +389,14 @@ public class GameUI extends HBox {
                     moveRight();
                     drop();
                     break;
-                case ST_ROTATING:
+                case ST_ROTATING_RIGHT:
                     // do rotation
-                    rotate();
+                    rotateRight();
                     drop();
                     break;
+                case ST_ROTATING_LEFT:
+                    rotateLeft();
+                    drop();
                 case ST_LOCKED:
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
@@ -437,11 +446,18 @@ public class GameUI extends HBox {
                         case R:
                             restart();
                             break;
-                        case UP: // rotateRight
+                        case UP: // rotateLeft
+                             if (getState() == ST_DROPPING) {
+                                movingStartingCycle = cycleCount;
+                                rotateLeft();
+                                goTo(ST_ROTATING_LEFT);
+                            }
+                            break;
+                        case DOWN: // rotae right
                             if (getState() == ST_DROPPING) {
                                 movingStartingCycle = cycleCount;
-                                rotate();
-                                goTo(ST_ROTATING);
+                                rotateRight();
+                                goTo(ST_ROTATING_RIGHT);
                             }
                             break;
                         case LEFT:
@@ -477,11 +493,15 @@ public class GameUI extends HBox {
                             }
                             break;
                         case UP:
-                            if (getState() == ST_ROTATING) {
+                            if (getState() == ST_ROTATING_LEFT) {
                                 goTo(getOldState());
                             }
                             break;
-
+                        case DOWN:
+                            if (getState() == ST_ROTATING_RIGHT) {
+                                goTo(getOldState());
+                            }
+                            break;
                     }
                 }
             });
