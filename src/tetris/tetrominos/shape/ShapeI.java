@@ -8,10 +8,11 @@
  *  @author: $Author$
  *  @date:   $Date$
  */
-package tetris.tetrominos;
+package tetris.tetrominos.shape;
 
 import javafx.geometry.Point2D;
 import tetris.api.Grid;
+import tetris.tetrominos.SimpleTetromino;
 
 
 /*
@@ -35,10 +36,10 @@ import tetris.api.Grid;
 public final class ShapeI extends SimpleTetromino {
 
     private static double[][] rotationData = {
-                {-2, -1, -1, -1,  0, -1,  1, -1}
-            ,   { 0, -2,  0, -1,  0,  0,  0,  1}
-            ,   {-2,  0, -1,  0,  0,  0,  1,  0}
-            ,   {-1, -2, -1, -1, -1,  0, -1,  1}
+            {-2, -1, -1, -1, 0, -1, 1, -1}
+            , {0, -2, 0, -1, 0, 0, 0, 1}
+            , {-2, 0, -1, 0, 0, 0, 1, 0}
+            , {-1, -2, -1, -1, -1, 0, -1, 1}
     };
 
 
@@ -46,7 +47,6 @@ public final class ShapeI extends SimpleTetromino {
     public final double[][] getRotatingData() {
         return rotationData;
     }
-
 
 
     public ShapeI(Grid grid) {
@@ -65,9 +65,9 @@ public final class ShapeI extends SimpleTetromino {
     public boolean canMoveDown(double len) {
         if (getStatus() % 2 == 0) { // case 0 & 2
             if (allMinos[0].canMoveDown(len)
-                && allMinos[1].canMoveDown(len)
-                && allMinos[2].canMoveDown(len)
-                && allMinos[3].canMoveDown(len) ) {
+                    && allMinos[1].canMoveDown(len)
+                    && allMinos[2].canMoveDown(len)
+                    && allMinos[3].canMoveDown(len)) {
                 return true;
             }
         } else {  // case 1, 3
@@ -85,7 +85,7 @@ public final class ShapeI extends SimpleTetromino {
             return allMinos[0].canMoveLeft();
         } else {  // case 1, 3
             return allMinos[0].canMoveLeft()
-                   && allMinos[1].canMoveLeft()
+                    && allMinos[1].canMoveLeft()
                     && allMinos[2].canMoveLeft()
                     && allMinos[3].canMoveLeft();
         }
@@ -105,15 +105,15 @@ public final class ShapeI extends SimpleTetromino {
 
     // only clockwise
     private static int[][] wallKickData = {
-        {0, 0, -2, 0, +1, 0, -2,-1, +1,+2}
-        ,{ 0, 0,-1, 0,+2, 0,-1,+2,+2,-1}
-        ,{ 0, 0 ,+2, 0 ,-1, 0, 2, 1, -1,-2}
-        ,{ 0, 0, +1, 0, -2, 0, +1,-2, -2,+1 }
+            {0, 0, -2, 0, +1, 0, -2, -1, +1, +2}
+            , {0, 0, -1, 0, +2, 0, -1, +2, +2, -1}
+            , {0, 0, +2, 0, -1, 0, 2, 1, -1, -2}
+            , {0, 0, +1, 0, -2, 0, +1, -2, -2, +1}
     };
 
 
     @Override
     public final int[][] getWallKickData() {
-        return  wallKickData;
+        return wallKickData;
     }
 }

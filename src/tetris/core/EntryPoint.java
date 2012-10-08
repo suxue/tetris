@@ -59,7 +59,7 @@ public class EntryPoint extends Application {
 
                 switch (result) {
                     case 'h':
-                        System.out.format(IO.readResource("/txt/help.txt") , tetrisGame.getTitle());
+                        System.out.format(IO.readResource("/txt/help.txt"), tetrisGame.getTitle());
                         System.exit(0);
                         break;
                     case 'v':

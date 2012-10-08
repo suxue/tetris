@@ -1,9 +1,19 @@
-package tetris.tetrominos;
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  tetromino T
+ *  @author: $Author$
+ *  @date:   $Date$
+ */package tetris.tetrominos.shape;
 
 import javafx.geometry.Point2D;
 import tetris.api.Grid;
+import tetris.tetrominos.SimpleTSZJLTetromino;
 
-public class TShape extends  SimpleTSZJLTetromino {
+public class TShape extends SimpleTSZJLTetromino {
 
     public TShape(Grid grid) {
         super(grid);
@@ -14,7 +24,6 @@ public class TShape extends  SimpleTSZJLTetromino {
     public Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-1.5, -1.5);
     }
-
 
 
     @Override

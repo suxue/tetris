@@ -8,10 +8,11 @@
  *  @author: $Author$
  *  @date:   $Date$
  */
-package tetris.tetrominos;
+package tetris.tetrominos.shape;
 
 import javafx.geometry.Point2D;
 import tetris.api.Grid;
+import tetris.tetrominos.SimpleTetromino;
 
 /*
  *    ---------
@@ -53,7 +54,7 @@ public class ShapeO extends SimpleTetromino {
     @Override
     public boolean canMoveDown(double len) {
         if (allMinos[2].canMoveDown(len)
-              && allMinos[3].canMoveDown(len) ) {
+                && allMinos[3].canMoveDown(len)) {
             return true;
         } else {
             return false;

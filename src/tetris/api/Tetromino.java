@@ -17,28 +17,35 @@ import javafx.geometry.Point2D;
 //  they are: Point UP|RIGHT|DOWN|LEFT
 public interface Tetromino {
 
-    public Point2D      getPivot();
-    public void         setPivot(Point2D pivot);
+    public Point2D getPivot();
+
+    public void setPivot(Point2D pivot);
 
     // the offset to transfer current pivot to the corresponding bonding box(4x2)
     // only need to be implemented for the first of the four shapes
-    public Point2D      getInitialBoundingBoxOffset();
+    public Point2D getInitialBoundingBoxOffset();
 
     // 0, 1, 2, 3
-    public int          getStatus();
+    public int getStatus();
 
     // after attaching, I'll be showed in that grid
     public void attach(Grid grid);
+
     public void detach();
+
     public void pin();
 
     // movement function family
     public void moveDown(double len);
+
     public void moveLeft();
+
     public void moveRight();
 
     public boolean canMoveDown(double len);
+
     public boolean canMoveLeft();
+
     public boolean canMoveRight();
 
 

@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class TetrisGrid extends AnchorPane implements Grid{
+public class TetrisGrid extends AnchorPane implements Grid {
 
 
     private MinoPool minoPool = null;
     private OccupationMonitor occupationMonitor = null;
+
     private OccupationMonitor getOccupationMonitor() {
         if (occupationMonitor == null) {
             occupationMonitor = new OccupationMonitor();
@@ -57,6 +58,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
         void set(int x, int y, Mino c) {
             chessBoard[x][y] = c;
         }
+
         void unset(int x, int y) {
             chessBoard[x][y] = null;
         }
@@ -141,6 +143,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
             chessBoard = new Mino[getColumnNo()][getRowNo()];
         }
     }
+
     private class MinoPool extends ArrayList<Mino> {
         private Mino[] allMinos;
 
@@ -247,7 +250,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
 
     @Override
     public Node toJavaFXNode() {
-        return (Node)this;
+        return (Node) this;
     }
 
     private int columnNumber;
@@ -257,11 +260,11 @@ public class TetrisGrid extends AnchorPane implements Grid{
     public final int getColumnNo() {
         return columnNumber;
     }
+
     @Override
     public final int getRowNo() {
         return rowNumber;
     }
-
 
 
     public TetrisGrid(Paint fill, int rowNo, int columnNo

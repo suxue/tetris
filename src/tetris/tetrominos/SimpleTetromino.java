@@ -23,9 +23,9 @@ abstract public class SimpleTetromino implements Tetromino {
 
     protected Mino[] allMinos;  // all cells included within me
     protected Grid hostGrid = null;
-    private  int  status;
+    private int status;
 
-    protected  boolean hasBound = false;
+    protected boolean hasBound = false;
 
     protected SimpleTetromino(Grid grid) {
         allMinos = grid.allocateMinos(4);
@@ -41,7 +41,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
     protected void setStatus(int s) {
         if (s > 3 || s < 0)
-            throw  new RuntimeException();
+            throw new RuntimeException();
 
         this.status = s;
     }
@@ -101,7 +101,7 @@ abstract public class SimpleTetromino implements Tetromino {
     public void pin() {
         Mino firstMino = allMinos[0];
         double offset = Math.ceil(firstMino.getMinoYProperty().get())
-                    - firstMino.getMinoYProperty().get();
+                - firstMino.getMinoYProperty().get();
         Point2D pivot = getPivot();
         setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
 
@@ -123,19 +123,19 @@ abstract public class SimpleTetromino implements Tetromino {
         }
 
         double[] rotatingArray = getRotatingData()[getStatus()];
-        for (int i=0; i < 4; i++) {
-            allMinos[i].getMinoXProperty().bind(xProperty().add(rotatingArray[2*i]));
-            allMinos[i].getMinoYProperty().bind(yProperty().add(rotatingArray[2*i + 1]));
+        for (int i = 0; i < 4; i++) {
+            allMinos[i].getMinoXProperty().bind(xProperty().add(rotatingArray[2 * i]));
+            allMinos[i].getMinoYProperty().bind(yProperty().add(rotatingArray[2 * i + 1]));
         }
     }
 
 
+    abstract public double[][] getRotatingData();
 
-    abstract public double[][]     getRotatingData();
-    abstract public int[][]     getWallKickData();
+    abstract public int[][] getWallKickData();
 
 
-    private Point2D      boundingBoxToPivot(Point2D bb) {
+    private Point2D boundingBoxToPivot(Point2D bb) {
         Point2D shift = getInitialBoundingBoxOffset();
         return new Point2D(bb.getX() - shift.getX(), bb.getY() - shift.getY());
     }
@@ -163,7 +163,7 @@ abstract public class SimpleTetromino implements Tetromino {
         {
             double y = pivot.getY();
             double t = Math.ceil(y) - y;
-            kickOffset = (t > 0 && t < 0.2) ? t: 0;
+            kickOffset = (t > 0 && t < 0.2) ? t : 0;
         }
 
         int st;
@@ -172,38 +172,37 @@ abstract public class SimpleTetromino implements Tetromino {
             st = (st == -1) ? 3 : st;
             st = (st == 4) ? 0 : st;
         }
-        double[]  rd = getRotatingData()[st];
-        int[]  wd;
+        double[] rd = getRotatingData()[st];
+        int[] wd;
         if (clockWise) {
             wd = getWallKickData()[getStatus()];
         } else {
             int[] p = getWallKickData()[st];
-            wd      = new int[10];
-            for (int i=0; i<10; i++) {
+            wd = new int[10];
+            for (int i = 0; i < 10; i++) {
                 wd[i] = -p[i];
             }
         }
 
 
-
         double x;
         double y;
-        int    floor;
-        int    ceil;
-        int    i = 0;
-        int    j = 0;
-        int    k = 0;
-        for (i=0; i < 5; i++) {
-            for (j=0; j < 4; j++) {
-                x = pivot.getX() +  wd[i*2]   + rd[j*2];
-                y = pivot.getY() +  wd[i*2+1] + rd[j*2 + 1];
-                floor = (int)Math.floor(y);
-                ceil  = (int)Math.ceil(y);
-                if (! hostGrid.isAccessible((int) x, floor)) {
+        int floor;
+        int ceil;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 4; j++) {
+                x = pivot.getX() + wd[i * 2] + rd[j * 2];
+                y = pivot.getY() + wd[i * 2 + 1] + rd[j * 2 + 1];
+                floor = (int) Math.floor(y);
+                ceil = (int) Math.ceil(y);
+                if (!hostGrid.isAccessible((int) x, floor)) {
                     break;
                 }
 
-                if (floor != ceil && ! hostGrid.isAccessible((int)x, ceil)) {
+                if (floor != ceil && !hostGrid.isAccessible((int) x, ceil)) {
                     break;
                 }
             }
@@ -214,10 +213,10 @@ abstract public class SimpleTetromino implements Tetromino {
 
             // check kicked postion
             if (kickOffset != 0) {
-                for (k=0; k < 4; k++) {
-                    x = pivot.getX() + wd[i*2]     +  rd[k*2];
-                    y = pivot.getY() + wd[i*2 + 1] +  rd[k*2 + 1] + kickOffset;
-                    if (! hostGrid.isAccessible((int) x, (int) y)) {
+                for (k = 0; k < 4; k++) {
+                    x = pivot.getX() + wd[i * 2] + rd[k * 2];
+                    y = pivot.getY() + wd[i * 2 + 1] + rd[k * 2 + 1] + kickOffset;
+                    if (!hostGrid.isAccessible((int) x, (int) y)) {
                         break;
                     }
                 }
@@ -234,11 +233,11 @@ abstract public class SimpleTetromino implements Tetromino {
         }
 
         if (j == 4) {
-            setPivot(new Point2D(pivot.getX() + wd[i*2], pivot.getY() + wd[i*2+1]));
+            setPivot(new Point2D(pivot.getX() + wd[i * 2], pivot.getY() + wd[i * 2 + 1]));
         } else if (k == 4) {
-            setPivot(new Point2D(pivot.getX() + wd[i*2], pivot.getY() + wd[i*2+1] + kickOffset));
+            setPivot(new Point2D(pivot.getX() + wd[i * 2], pivot.getY() + wd[i * 2 + 1] + kickOffset));
         } else {
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
 
 

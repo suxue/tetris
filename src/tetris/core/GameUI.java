@@ -33,9 +33,8 @@ import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.*;
+import tetris.tetrominos.shape.*;
 import tetris.util.Rand;
-
-import java.util.Random;
 
 import static tetris.core.State.*;
 
@@ -60,7 +59,6 @@ public class GameUI extends HBox {
     private GameControl gameControl = null;
     private Grid playField = null;
     private Grid previewField = null;
-
 
 
     /* java beans properties */
@@ -181,7 +179,7 @@ public class GameUI extends HBox {
         //             Data Section                                        //
         /////////////////////////////////////////////////////////////////////
         private final int frameRate = 60;
-        private Rand   randGenerator = new Rand();
+        private Rand randGenerator = new Rand();
         private final double frameIntervalInMileSecond = 1000 / frameRate;
         private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
 
@@ -204,7 +202,7 @@ public class GameUI extends HBox {
         private int movingDelay = 10; // frames
         private int startDelay = 60; // frames
 
-        private double baseSpeed = 1/48.0; // how many grids to be moved within a frame
+        private double baseSpeed = 1 / 48.0; // how many grids to be moved within a frame
 
         private boolean isRunning = false;
 
@@ -230,7 +228,7 @@ public class GameUI extends HBox {
                     }
                 }
         );
-        private final Timeline timeline = TimelineBuilder.create() .cycleCount(Animation.INDEFINITE)
+        private final Timeline timeline = TimelineBuilder.create().cycleCount(Animation.INDEFINITE)
                 .keyFrames(mainFrame).build();
 
 
@@ -459,7 +457,7 @@ public class GameUI extends HBox {
                             restart();
                             break;
                         case UP: // rotateLeft
-                             if (getState() == ST_DROPPING) {
+                            if (getState() == ST_DROPPING) {
                                 movingStartingCycle = cycleCount;
                                 rotateLeft();
                                 goTo(ST_ROTATING_LEFT);

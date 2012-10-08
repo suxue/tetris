@@ -69,16 +69,16 @@ public class Mino extends Rectangle {
     }
 
     private boolean canMoveHorizontal(int len) {
-        int targetX = (int)(getMinoXProperty().get() + len);
+        int targetX = (int) (getMinoXProperty().get() + len);
         double targetY = getMinoYProperty().get();
-        int y1 = (int)(Math.floor(targetY));
-        int y2 = (int)(Math.ceil(targetY));
+        int y1 = (int) (Math.floor(targetY));
+        int y2 = (int) (Math.ceil(targetY));
 
-        if (! hostGrid.isAccessible(targetX, y1)) {
+        if (!hostGrid.isAccessible(targetX, y1)) {
             return false;
         }
 
-        if (y2 != y1 && ! hostGrid.isAccessible(targetX, y2)) {
+        if (y2 != y1 && !hostGrid.isAccessible(targetX, y2)) {
             return false;
         }
 
@@ -96,8 +96,8 @@ public class Mino extends Rectangle {
 
 
     public boolean canMoveDown(double len) {
-        int targetX = (int)(getMinoXProperty().get());
-        int targetY = (int)(Math.ceil(getMinoYProperty().get() + len));
+        int targetX = (int) (getMinoXProperty().get());
+        int targetY = (int) (Math.ceil(getMinoYProperty().get() + len));
 
         return hostGrid.isAccessible(targetX, targetY);
     }
