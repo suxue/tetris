@@ -9,10 +9,7 @@
     -fx-background-image: url('../img/button.png'); 
 }
 
-.iShape, .oShape {
-}
-
-.iShape {
+.shapeI {
     -fx-fill: deepskyblue;
 }
 
@@ -33,6 +30,10 @@
 
 .shapeJ {
     -fx-fill: royalblue;
+}
+
+.shapeL {
+    -fx-fill: darkorange;
 }
 
 /* I, J, L, O, S, T, and Z,

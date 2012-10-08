@@ -276,11 +276,11 @@ public class GameUI extends HBox {
         private Tetromino getNewTetromino() {
 
             Tetromino t;
-            int tetroClass = randGenerator.nextInt() % 1;
+            int tetroClass = randGenerator.nextInt(7);
 
             switch (tetroClass) {
                 case 0:
-                    t = new ShapeJ(playField);
+                    t = new ShapeL(playField);
                     break;
                 case 1:
                     t = new ShapeO(playField);
@@ -297,10 +297,11 @@ public class GameUI extends HBox {
                 case 5:
                     t = new ShapeZ(playField);
                     break;
-                default:
-                    assert false;  // should not reach here
-                    t = new ShapeI(playField);
+                case 6:
+                    t = new ShapeJ(playField);
                     break;
+                default:
+                    throw new RuntimeException();
             }
             return t;
         }
