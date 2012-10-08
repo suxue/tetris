@@ -7,7 +7,7 @@ public class TShape extends  SimpleTSZJLTetromino {
 
     public TShape(Grid grid) {
         super(grid);
-        setCssClass("tShape");
+        setCssClass("shapeT");
     }
 
     @Override
