@@ -74,8 +74,7 @@ public class TetrisGrid extends AnchorPane implements Grid{
         // a Mino can reach/access/occupy this gridblock of (x, y)
         boolean isAccessible(int x, int y) {
             // do boundary check
-            if (x >= getColumnNo() || y >= getRowNo()
-                || x < 0 || y < 0) {
+            if (y < 0 || x < 0 || x >= getColumnNo() || y >= getRowNo()) {
                 return false;
             } else {
                 return isAccessibleWithoutBoundaryCheck(x, y);

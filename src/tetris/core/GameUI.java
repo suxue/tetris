@@ -313,13 +313,13 @@ public class GameUI extends HBox {
 
         private void rotateRight() {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotate(1);
+                dynamicTetromino.rotate(true);
             }
         }
 
         private void rotateLeft() {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotate(-1);
+                dynamicTetromino.rotate(false);
             }
         }
 

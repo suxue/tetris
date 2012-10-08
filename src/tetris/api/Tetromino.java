@@ -22,7 +22,8 @@ public interface Tetromino {
     public void         setPivot(Point2D pivot);
 
     // the offset to transfer current pivot to the corresponding bonding box(4x2)
-    public Point2D      getBoundingBoxOffset();
+    // only need to be implemented for the first of the four shapes
+    public Point2D      getInitialBoundingBoxOffset();
 
     // 0, 1, 2, 3
     public int          getStatus();
@@ -42,9 +43,9 @@ public interface Tetromino {
     public boolean canMoveRight();
 
 
-    // 1 : clock-wise/right
-    // -1: counter clock-wise/left
-    public boolean rotate(int length);
+    //  clock-wise/right
+    //  counter clock-wise/left
+    public boolean rotate(boolean clockWise);
 }
 
 

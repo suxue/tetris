@@ -40,7 +40,7 @@ public class OShape extends SimpleTetromino {
 
 
     @Override
-    public Point2D getBoundingBoxOffset() {
+    public Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-2, -1);
     }
 
@@ -67,8 +67,11 @@ public class OShape extends SimpleTetromino {
     }
 
     @Override
-    protected boolean rotateTo(int status) {
-        setStatus(status);
+    public boolean rotate(boolean clockWise) {
+        int newSt = getStatus() + (clockWise ? 1 : -1);
+        newSt = (newSt < 0) ? (newSt + 4) : newSt;
+        newSt = (newSt > 4) ? (newSt - 4) : newSt;
+        setStatus(newSt);
         return true;
     }
 

@@ -22,7 +22,7 @@ import tetris.api.Tetromino;
 abstract public class SimpleTetromino implements Tetromino {
 
     protected Mino[] allMinos;  // all cells included within me
-    private  Grid hostGrid = null;
+    protected Grid hostGrid = null;
     private  int  status;
 
     protected  boolean hasBound = false;
@@ -96,9 +96,11 @@ abstract public class SimpleTetromino implements Tetromino {
 
     @Override
     public void pin() {
-        Point2D bb = pivotToBoundingBox(getPivot());
-        Point2D newbb = new Point2D(bb.getX(), Math.ceil(bb.getY()));
-        setPivot(boundingBoxToPivot(newbb));
+        Mino firstMino = allMinos[0];
+        double offset = Math.ceil(firstMino.getMinoYProperty().get())
+                    - firstMino.getMinoYProperty().get();
+        Point2D pivot = getPivot();
+        setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
 
         for (Mino c : allMinos) {
             hostGrid.set((int) c.getMinoXProperty().get()
@@ -130,12 +132,12 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     private Point2D      pivotToBoundingBox(Point2D pivot) {
-        Point2D shift = getBoundingBoxOffset();
+        Point2D shift = getInitialBoundingBoxOffset();
         return new Point2D(pivot.getX() + shift.getX(), pivot.getY() + shift.getY());
     }
 
     private Point2D      boundingBoxToPivot(Point2D bb) {
-        Point2D shift = getBoundingBoxOffset();
+        Point2D shift = getInitialBoundingBoxOffset();
         return new Point2D(bb.getX() - shift.getX(), bb.getY() - shift.getY());
     }
 
@@ -153,14 +155,4 @@ abstract public class SimpleTetromino implements Tetromino {
     public void moveRight() {
         xProperty().set(xProperty().get() + 1);
     }
-
-    abstract  protected boolean rotateTo(int status);
-
-    @Override
-    public boolean rotate(int length) {
-        int newSt = getStatus() + length;
-        newSt = (newSt < 0) ? (newSt + 4): newSt;
-        return rotateTo(newSt);
-    }
-
 }
