@@ -6,7 +6,7 @@ import tetris.api.Grid;
 public class ShapeS extends SimpleTSZJLTetromino {
     public ShapeS(Grid grid) {
         super(grid);
-        setCssClass("shapeS");
+        setCssClass("sShape");
     }
 
     @Override

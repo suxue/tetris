@@ -280,10 +280,10 @@ public class GameUI extends HBox {
 
             switch (tetroClass) {
                 case 0:
-                    t = new ShapeZ(playField);
+                    t = new ShapeJ(playField);
                     break;
                 case 1:
-                    t = new shapeO(playField);
+                    t = new ShapeO(playField);
                     break;
                 case 2:
                     t = new ShapeI(playField);
@@ -293,6 +293,9 @@ public class GameUI extends HBox {
                     break;
                 case 4:
                     t = new ShapeS(playField);
+                    break;
+                case 5:
+                    t = new ShapeZ(playField);
                     break;
                 default:
                     assert false;  // should not reach here

@@ -31,6 +31,10 @@
    -fx-fill: RED;
 }
 
+.shapeJ {
+    -fx-fill: royalblue;
+}
+
 /* I, J, L, O, S, T, and Z,
  DEEPSKYBLUE, ROYALBLUE, DARKORANGE, GOLD, LIMEGREEN, DARKORCHID, and RED.*/
 
