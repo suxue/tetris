@@ -33,6 +33,7 @@ import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.*;
+import tetris.util.Rand;
 
 import java.util.Random;
 
@@ -180,7 +181,7 @@ public class GameUI extends HBox {
         //             Data Section                                        //
         /////////////////////////////////////////////////////////////////////
         private final int frameRate = 60;
-        private Random randGenerator = new Random();
+        private Rand   randGenerator = new Rand();
         private final double frameIntervalInMileSecond = 1000 / frameRate;
         private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
 
@@ -276,7 +277,7 @@ public class GameUI extends HBox {
         private Tetromino getNewTetromino() {
 
             Tetromino t;
-            int tetroClass = randGenerator.nextInt(7);
+            int tetroClass = randGenerator.get();
 
             switch (tetroClass) {
                 case 0:
