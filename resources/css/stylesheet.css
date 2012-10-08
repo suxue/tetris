@@ -11,7 +11,7 @@
 
 .shapeI, .shapeO, .shapeT, .shapeS, .shapeZ, .shapeJ, .shapeL {
     -fx-stroke: lightgrey;
-    -fx-stroke-width: 1.5pt;
+    -fx-stroke-width: 1.2pt;
     -fx-stroke-type: inside;
     -fx-stroke-line-cap: square;
 }
@@ -45,4 +45,5 @@
 .shapeL {
     -fx-fill: darkorange;
 }
+
 

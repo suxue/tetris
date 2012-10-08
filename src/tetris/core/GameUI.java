@@ -40,6 +40,7 @@ import static tetris.core.State.*;
 
 
 enum State {
+    ST_PAUSED,
     ST_STARTED,
     ST_SPAWNING,  // auto awake
     ST_DROPPING,
@@ -203,15 +204,18 @@ public class GameUI extends HBox {
         private int startDelay = 60; // frames
 
         private double baseSpeed = 1 / 48.0; // how many grids to be moved within a frame
+        private double speedFactor = 1;
 
-        private boolean isRunning = false;
 
-        private boolean isPaused;
 
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        if (getState() == ST_PAUSED) {
+                            return;
+                        }
+
                         cycleCount++;
 
                         //
@@ -238,19 +242,15 @@ public class GameUI extends HBox {
 
         private void restart() {
             goTo(ST_STARTED);
-            timeline.play();
-            isPaused = false;
         }
 
         private void toggle() {
-            if (isPaused) {
+            if (getState() == ST_PAUSED) {
                 System.out.println("resumed");
-                isPaused = false;
-                timeline.play();
+                goTo(getOldState());
             } else {
                 System.out.println("paused");
-                isPaused = true;
-                timeline.pause();
+                goTo(ST_PAUSED);
             }
         }
 
@@ -306,7 +306,7 @@ public class GameUI extends HBox {
         }
 
         private double getSpeed() {
-            return baseSpeed;
+            return baseSpeed * speedFactor;
         }
 
         private void drop() {
@@ -372,6 +372,7 @@ public class GameUI extends HBox {
 
                     break;
                 case ST_SPAWNING:
+                    speedFactor = 1.0;
 
                     staticTetromino.detach();
                     dynamicTetromino = staticTetromino;
@@ -429,18 +430,19 @@ public class GameUI extends HBox {
                 public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
                     switch (newStatus) {
                         case PLAY_GAME:
-                            if (!isRunning) {
-                                isRunning = true;
+                            if (timeline.getStatus() == Animation.Status.STOPPED) {
                                 gameControl.restart();
-                            } else {
                                 timeline.play();
                             }
+
+                            if (getState() == ST_PAUSED)
+                                toggle();
                             break;
                         case RESTART_GAME:
                             restart();
                             break;
                         case STOP_GAME:
-                            timeline.pause();
+                            goTo(ST_PAUSED);
                             break;
                     }
                 }
@@ -450,7 +452,11 @@ public class GameUI extends HBox {
                 @Override
                 public void handle(KeyEvent keyEvent) {
                     switch (keyEvent.getCode()) {
+                        case SPACE:
+                            speedFactor = 20;
+                            break;
                         case P:
+                        case ENTER:
                             toggle();
                             break;
                         case R:
