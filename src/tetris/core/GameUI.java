@@ -34,6 +34,7 @@ import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
 import tetris.tetrominos.IShape;
 import tetris.tetrominos.OShape;
+import tetris.tetrominos.TShape;
 import tetris.tetrominos.TetrisGrid;
 
 import java.util.Random;
@@ -279,14 +280,17 @@ public class GameUI extends HBox {
         private Tetromino getNewTetromino() {
 
             Tetromino t;
-            int tetroClass = randGenerator.nextInt() % 2;
+            int tetroClass = randGenerator.nextInt() % 1;
 
             switch (tetroClass) {
                 case 0:
-                    t = new IShape(playField);
+                    t = new TShape(playField);
                     break;
                 case 1:
                     t = new OShape(playField);
+                    break;
+                case 2:
+                    t = new IShape(playField);
                     break;
                 default:
                     assert false;  // should not reach here

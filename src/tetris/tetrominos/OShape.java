@@ -22,13 +22,19 @@ import tetris.api.Grid;
  *    color:Yellow
 */
 public class OShape extends SimpleTetromino {
-    private static int[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
-    private static int[][] data = {line, line, line, line};
+    private static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
+    private static double[][] data = {line, line, line, line};
 
 
     @Override
-    public int[][] getRotatingData() {
+    public double[][] getRotatingData() {
         return data;
+    }
+
+    @Override
+    public int[][] getWallKickData() {
+        // should not reach here
+        throw new RuntimeException();
     }
 
 
@@ -70,7 +76,7 @@ public class OShape extends SimpleTetromino {
     public boolean rotate(boolean clockWise) {
         int newSt = getStatus() + (clockWise ? 1 : -1);
         newSt = (newSt < 0) ? (newSt + 4) : newSt;
-        newSt = (newSt > 4) ? (newSt - 4) : newSt;
+        newSt = (newSt > 3) ? (newSt - 4) : newSt;
         setStatus(newSt);
         return true;
     }
