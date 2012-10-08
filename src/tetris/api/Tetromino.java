@@ -41,6 +41,10 @@ public interface Tetromino {
     public boolean canMoveLeft();
     public boolean canMoveRight();
 
-    public boolean rotateRight();
-    public boolean rotateLeft();
+
+    // 1 : clock-wise/right
+    // -1: counter clock-wise/left
+    public boolean rotate(int length);
 }
+
+

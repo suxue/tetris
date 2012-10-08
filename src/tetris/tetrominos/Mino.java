@@ -68,59 +68,37 @@ public class Mino extends Rectangle {
         return (hostGrid != null);
     }
 
-    public boolean canMoveLeft(double len) {
-        int targetX = (int) (getMinoXProperty().get() - len);
+    private boolean canMoveHorizontal(int len) {
+        int targetX = (int)(getMinoXProperty().get() + len);
         double targetY = getMinoYProperty().get();
-        int y1 = (int) (Math.floor(targetY));
-        int y2 = (int) (Math.ceil(targetY));
+        int y1 = (int)(Math.floor(targetY));
+        int y2 = (int)(Math.ceil(targetY));
 
-        if (targetX < 0)
+        if (! hostGrid.isAccessible(targetX, y1)) {
             return false;
-        else {
-            // check y1
-            if (!hostGrid.isAccessiblePlain(targetX, y1)) {
-                return false;
-            } else if (y2 != y1
-                 && ! hostGrid.isAccessiblePlain(targetX, y2)) {
-                return false;
-            } else
-                return true;
         }
+
+        if (y2 != y1 && ! hostGrid.isAccessible(targetX, y2)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean canMoveLeft() {
+        return canMoveHorizontal(-1);
     }
 
 
-    public boolean canMoveRight(double len) {
-        int targetX = (int) (getMinoXProperty().get() + len);
-        double targetY = getMinoYProperty().get();
-        int y1 = (int) (Math.floor(targetY));
-        int y2 = (int) (Math.ceil(targetY));
-
-        if (targetX > (hostGrid.getColumnNo() - 1))
-            return false;
-        else {
-            // check y1
-            if (!hostGrid.isAccessiblePlain(targetX, y1)) {
-                return false;
-            } else if (y2 != y1
-                   && !hostGrid.isAccessiblePlain(targetX, y2)) {
-                    return false;
-            } else { // can move
-                return true;
-            }
-        }
+    public boolean canMoveRight() {
+        return canMoveHorizontal(1);
     }
 
 
     public boolean canMoveDown(double len) {
-        int targetX = (int) getMinoXProperty().get();
-        double targetY = getMinoYProperty().get() + 1 + len;
-        int y = (int) (Math.floor(targetY));
+        int targetX = (int)(getMinoXProperty().get());
+        int targetY = (int)(Math.ceil(getMinoYProperty().get() + len));
 
-        // check y1
-        if (targetY >= hostGrid.getRowNo()) {
-            return false;
-        }
-
-        return hostGrid.isAccessiblePlain(targetX, y);
+        return hostGrid.isAccessible(targetX, targetY);
     }
 }

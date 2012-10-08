@@ -31,6 +31,7 @@ public class OShape extends SimpleTetromino {
         return data;
     }
 
+
     public OShape(Grid grid) {
         super(grid);
         setCssClass("oShape");
@@ -56,26 +57,20 @@ public class OShape extends SimpleTetromino {
 
     @Override
     public boolean canMoveLeft() {
-        return allMinos[0].canMoveLeft(1) && allMinos[2].canMoveLeft(1);
+        return allMinos[0].canMoveLeft() && allMinos[2].canMoveLeft();
     }
 
 
     @Override
     public boolean canMoveRight() {
-        return allMinos[1].canMoveRight(1) && allMinos[3].canMoveRight(1);
-    }
-
-
-    @Override
-    public boolean rotateRight() {
-        setStatus((getStatus() + 1) % 4);
-        return true;
+        return allMinos[1].canMoveRight() && allMinos[3].canMoveRight();
     }
 
     @Override
-    public boolean rotateLeft() {
-        setStatus((getStatus() - 1) % 4);
+    protected boolean rotateTo(int status) {
+        setStatus(status);
         return true;
     }
+
 
 }

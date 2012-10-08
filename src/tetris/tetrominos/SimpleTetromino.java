@@ -154,4 +154,13 @@ abstract public class SimpleTetromino implements Tetromino {
         xProperty().set(xProperty().get() + 1);
     }
 
+    abstract  protected boolean rotateTo(int status);
+
+    @Override
+    public boolean rotate(int length) {
+        int newSt = getStatus() + length;
+        newSt = (newSt < 0) ? (newSt + 4): newSt;
+        return rotateTo(newSt);
+    }
+
 }

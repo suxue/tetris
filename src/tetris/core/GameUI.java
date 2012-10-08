@@ -263,9 +263,9 @@ public class GameUI extends HBox {
         }
 
         private void goTo(State newState) {
-            System.out.println("from " + oldState + " to " + newState);
             oldState = getState();
             state = newState;
+            //System.out.println("from " + oldState + " to " + newState);
         }
 
         private State getState() {
@@ -313,13 +313,13 @@ public class GameUI extends HBox {
 
         private void rotateRight() {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotateRight();
+                dynamicTetromino.rotate(1);
             }
         }
 
         private void rotateLeft() {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotateLeft();
+                dynamicTetromino.rotate(-1);
             }
         }
 
@@ -397,6 +397,7 @@ public class GameUI extends HBox {
                 case ST_ROTATING_LEFT:
                     rotateLeft();
                     drop();
+                    break;
                 case ST_LOCKED:
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
@@ -484,22 +485,22 @@ public class GameUI extends HBox {
                     switch (keyEvent.getCode()) {
                         case LEFT:
                             if (getState() == ST_MOVING_LEFT) {
-                                goTo(getOldState());
+                                goTo(ST_DROPPING);
                             }
                             break;
                         case RIGHT:
                             if (getState() == ST_MOVING_RIGHT) {
-                                goTo(getOldState());
+                                goTo(ST_DROPPING);
                             }
                             break;
                         case UP:
                             if (getState() == ST_ROTATING_LEFT) {
-                                goTo(getOldState());
+                                goTo(ST_DROPPING);
                             }
                             break;
                         case DOWN:
                             if (getState() == ST_ROTATING_RIGHT) {
-                                goTo(getOldState());
+                                goTo(ST_DROPPING);
                             }
                             break;
                     }

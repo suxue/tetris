@@ -22,8 +22,6 @@ public interface  Grid {
     public ReadOnlyDoubleProperty minoHeighthProperty();
     public ReadOnlyDoubleProperty minoWidthProperty();
     public boolean isAccessible(int x, int y);
-    public boolean isAccessible(int x, int y, int width, int height);
-    public boolean isAccessiblePlain(int x, int y);
     public int getColumnNo();
     public int getRowNo();
     public int squeeze();

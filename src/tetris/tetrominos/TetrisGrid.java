@@ -46,8 +46,8 @@ public class TetrisGrid extends AnchorPane implements Grid{
     }
 
     @Override
-    public boolean isAccessiblePlain(int x, int y) {
-        return getOccupationMonitor().isAccessibleWithoutBoundaryCheck(x, y);
+    public boolean isAccessible(int x, int y) {
+        return getOccupationMonitor().isAccessible(x, y);
     }
 
 
@@ -74,33 +74,16 @@ public class TetrisGrid extends AnchorPane implements Grid{
         // a Mino can reach/access/occupy this gridblock of (x, y)
         boolean isAccessible(int x, int y) {
             // do boundary check
-            if (x >= getColumnNo() || y >= getRowNo()) {
+            if (x >= getColumnNo() || y >= getRowNo()
+                || x < 0 || y < 0) {
                 return false;
             } else {
                 return isAccessibleWithoutBoundaryCheck(x, y);
             }
         }
 
-        public boolean isAccessibleWithoutBoundaryCheck(int x, int y) {
+        private boolean isAccessibleWithoutBoundaryCheck(int x, int y) {
             return get(x, y) == null;
-        }
-
-        boolean isAccessible(int x, int y, int width, int height) {
-            if (x >= getColumnNo() || y >= getRowNo()) {
-                return false;
-            } else {
-                int X = Math.max(x + width, getColumnNo());
-                int Y = Math.max(y + height, getRowNo());
-                boolean isAccessibleFlag = true;
-
-                for (int i=0; i < X; i++) {
-                    for (int j=0; j < Y; j++) {
-                        if (get(x, y) != null)
-                            isAccessibleFlag = false;
-                    }
-                }
-                return isAccessibleFlag;
-            }
         }
 
 
@@ -215,10 +198,6 @@ public class TetrisGrid extends AnchorPane implements Grid{
         return getOccupationMonitor().get(x, y);
     }
 
-    @Override
-    public boolean isAccessible(int x, int y) {
-        return getOccupationMonitor().isAccessible(x, y);
-    }
 
     @Override
     public Mino[] allocateMinos(int number) {
@@ -230,10 +209,6 @@ public class TetrisGrid extends AnchorPane implements Grid{
         getMinoPool().recoverAllAllocatedMinos();
     }
 
-    @Override
-    public boolean isAccessible(int x, int y, int width, int height) {
-        return getOccupationMonitor().isAccessible(x, y, width, height);
-    }
 
     @Override
     public void set(int x, int y, Mino c) {

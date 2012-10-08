@@ -24,7 +24,7 @@ import tetris.api.Grid;
 */
 public final class IShape extends SimpleTetromino {
 
-    private static int[][] data  = {
+    private static int[][] rdata = {
                 {-2, -1, -1, -1,  0, -1,  1, -1}
             ,   { 0, -2,  0, -1,  0,  0,  0, -2}
             ,   {-2,  0, -1,  0,  0,  0,  1,  0}
@@ -34,8 +34,9 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public int[][] getRotatingData() {
-        return data;
+        return rdata;
     }
+
 
 
     public IShape(Grid grid) {
@@ -64,32 +65,17 @@ public final class IShape extends SimpleTetromino {
 
     @Override
     public boolean canMoveLeft() {
-        return allMinos[0].canMoveLeft(1);
+        return allMinos[0].canMoveLeft();
     }
 
     @Override
     public boolean canMoveRight() {
-        return allMinos[3].canMoveRight(1);
+        return allMinos[3].canMoveRight();
     }
 
 
     @Override
-    public boolean rotateRight() { // status++
-
-        // calculate the new position
-        int newSt = (getStatus() + 1) % 4;
-
-
-/////////////////////////////////////////////////////////
-//        int newSt = (getStatus() + 1) % 4;
-//        rebindMinos();
-//        setStatus(newSt);
-
-        return false;
-    }
-
-    @Override
-    public boolean rotateLeft() { // status--
+    protected boolean rotateTo(int status) {
         return false;
     }
 
