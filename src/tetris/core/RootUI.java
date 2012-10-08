@@ -1,7 +1,12 @@
-/* The out most UI container for the whole game
-   Copyright (C) 2012, thu10e team.
-   This file is part of the implementaion of Tetris Game  made by thu10e team
-   for the assessment of COMP1110/67 ** 10 assignment.
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  The out most UI container for the whole game
+ *  @author: $Author$
+ *  @date:   $Date$
  */
 
 package tetris.core;
@@ -22,8 +27,7 @@ import tetris.api.game.GameControl.Status;
 import tetris.api.game.GameControl.StatusListener;
 import tetris.api.game.GameState;
 
-import static tetris.api.game.GameControl.Status.PLAY_GAME;
-import static tetris.api.game.GameControl.Status.SHOW_MENU;
+import static tetris.api.game.GameControl.Status.*;
 
 public class RootUI extends BorderPane {
 
@@ -107,7 +111,8 @@ public class RootUI extends BorderPane {
         ((GameControl) gs).addStatusListener(new StatusListener() {
             @Override
             public void callback(Status oldStatus, Status newStatus) {
-                if (newStatus == PLAY_GAME && oldStatus == SHOW_MENU) {
+                if ((newStatus == PLAY_GAME || newStatus == RESTART_GAME)
+                        && oldStatus == SHOW_MENU) {
                     RootUI.this.setCenter(gameUI);
                     gameUI.requestFocus();
                 } else if (newStatus == SHOW_MENU) {

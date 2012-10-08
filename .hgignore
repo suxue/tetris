@@ -12,3 +12,6 @@ build/
 .idea/
 *.eml
 *.iml
+docs/*.log
+docs/*.png
+game.jar

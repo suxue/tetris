@@ -1,4 +1,4 @@
-.button {
+#exitButton, #playButton, #replayButton {
     -fx-font-size:28pt;
     -fx-background-size: 100%;
     -fx-background-repeat: no-repeat; 
@@ -8,4 +8,42 @@
     -fx-background-position: center;
     -fx-background-image: url('../img/button.png'); 
 }
+
+.shapeI, .shapeO, .shapeT, .shapeS, .shapeZ, .shapeJ, .shapeL {
+    -fx-stroke: lightgrey;
+    -fx-stroke-width: 1.2pt;
+    -fx-stroke-type: inside;
+    -fx-stroke-line-cap: square;
+}
+
+.shapeI {
+    -fx-fill: deepskyblue;
+    -fx-stroke: purple;
+}
+
+.shapeO {
+    -fx-stroke: darkblue;
+    -fx-fill: gold;
+}
+.shapeT {
+    -fx-fill: darkorchid;
+}
+
+.shapeS {
+    -fx-fill: limegreen;
+    -fx-stroke: red;
+}
+
+.shapeZ {
+   -fx-fill: RED;
+}
+
+.shapeJ {
+    -fx-fill: royalblue;
+}
+
+.shapeL {
+    -fx-fill: darkorange;
+}
+
 

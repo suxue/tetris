@@ -1,8 +1,13 @@
-/* the core class of whole project, connects EntryPoint to the UI and logic part
-  Copyright (C) 2012, thu10e team.
-  This file is part of the implementaion of Tetris Game  made by thu10e team
-  for the assessment of COMP1110/67 ** 10 assignment.
-*/
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  the core class of whole project, connects EntryPoint to the UI and logic part
+ *  @author: $Author$
+ *  @date:   $Date$
+ */
 
 package tetris.core;
 
@@ -21,7 +26,6 @@ import tetris.api.game.GameControl;
 import tetris.api.game.GameProperty;
 import tetris.api.game.GameState;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import static tetris.api.game.GameControl.Status.*;
@@ -29,7 +33,7 @@ import static tetris.api.game.GameControl.Status.*;
 
 class TetrisStatic implements GameProperty {
 
-    private final static SimpleStringProperty _version = new SimpleStringProperty("0.01");
+    private final static SimpleStringProperty _version = new SimpleStringProperty("0.02");
     private final static SimpleStringProperty _name = new SimpleStringProperty("Tetris Game");
 
     @Override
@@ -219,9 +223,15 @@ public class Tetris extends TetrisDynamic implements GameControl {
             cssurl = Tetris.class.getResource("/css/stylesheet.css");
         }
 
+        URL fallbackCssUrl = Tetris.class.getResource("/css/fallback-stylesheet.bss");
+        if (fallbackCssUrl == null) {
+            fallbackCssUrl = Tetris.class.getResource("/css/fallback-stylesheet.css");
+        }
+
         Scene primaryScene = SceneBuilder.create()
                 .root(new RootUI(this))
-                .stylesheets(cssurl.toExternalForm() )
+                .stylesheets(fallbackCssUrl.toExternalForm())
+                .stylesheets(cssurl.toExternalForm())
                 .width(getWidth())
                 .height(getHeight())
                 .fill(Color.LIGHTSEAGREEN)
