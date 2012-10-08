@@ -33,7 +33,7 @@ import static tetris.api.game.GameControl.Status.*;
 
 class TetrisStatic implements GameProperty {
 
-    private final static SimpleStringProperty _version = new SimpleStringProperty("0.01");
+    private final static SimpleStringProperty _version = new SimpleStringProperty("0.02");
     private final static SimpleStringProperty _name = new SimpleStringProperty("Tetris Game");
 
     @Override
