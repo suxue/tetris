@@ -89,8 +89,11 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
     protected void setCssClass(String cssClass) {
-        for (Mino c : allMinos)
+        for (Mino c : allMinos) {
+            c.getStyleClass().clear();
             c.getStyleClass().add(cssClass);
+        }
+
     }
 
 

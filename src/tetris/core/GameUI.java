@@ -32,15 +32,11 @@ import tetris.api.Grid;
 import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
-import tetris.tetrominos.IShape;
-import tetris.tetrominos.OShape;
-import tetris.tetrominos.TShape;
-import tetris.tetrominos.TetrisGrid;
+import tetris.tetrominos.*;
 
 import java.util.Random;
 
 import static tetris.core.State.*;
-import static tetris.core.State.ST_ROTATING_LEFT;
 
 
 enum State {
@@ -284,13 +280,16 @@ public class GameUI extends HBox {
 
             switch (tetroClass) {
                 case 0:
-                    t = new TShape(playField);
+                    t = new SShape(playField);
                     break;
                 case 1:
                     t = new OShape(playField);
                     break;
                 case 2:
                     t = new IShape(playField);
+                    break;
+                case 3:
+                    t = new TShape(playField);
                     break;
                 default:
                     assert false;  // should not reach here

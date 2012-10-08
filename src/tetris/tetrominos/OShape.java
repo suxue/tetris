@@ -44,7 +44,6 @@ public class OShape extends SimpleTetromino {
     }
 
 
-
     @Override
     public Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-2, -1);

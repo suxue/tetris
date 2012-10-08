@@ -23,6 +23,10 @@
     -fx-fill: darkorchid;
 }
 
+.sShape {
+    -fx-fill: limegreen;
+}
+
 /* I, J, L, O, S, T, and Z,
  DEEPSKYBLUE, ROYALBLUE, DARKORANGE, GOLD, LIMEGREEN, DARKORCHID, and RED.*/
 

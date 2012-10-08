@@ -10,7 +10,6 @@
  */
 package tetris.api;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point2D;
 
 // a shape can mostly has four orientation
