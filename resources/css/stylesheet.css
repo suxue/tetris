@@ -9,11 +9,20 @@
     -fx-background-image: url('../img/button.png'); 
 }
 
+.shapeI, .shapeO, .shapeT, .shapeS, .shapeZ, .shapeJ, .shapeL {
+    -fx-stroke: lightgrey;
+    -fx-stroke-width: 1.5pt;
+    -fx-stroke-type: inside;
+    -fx-stroke-line-cap: square;
+}
+
 .shapeI {
     -fx-fill: deepskyblue;
+    -fx-stroke: purple;
 }
 
 .shapeO {
+    -fx-stroke: darkblue;
     -fx-fill: gold;
 }
 .shapeT {
@@ -22,6 +31,7 @@
 
 .shapeS {
     -fx-fill: limegreen;
+    -fx-stroke: red;
 }
 
 .shapeZ {
@@ -35,7 +45,4 @@
 .shapeL {
     -fx-fill: darkorange;
 }
-
-/* I, J, L, O, S, T, and Z,
- DEEPSKYBLUE, ROYALBLUE, DARKORANGE, GOLD, LIMEGREEN, DARKORCHID, and RED.*/
 
