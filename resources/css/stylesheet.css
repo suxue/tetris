@@ -16,15 +16,19 @@
     -fx-fill: deepskyblue;
 }
 
-.oShape {
+.shapeO {
     -fx-fill: gold;
 }
-.tShape {
+.shapeT {
     -fx-fill: darkorchid;
 }
 
-.sShape {
+.shapeS {
     -fx-fill: limegreen;
+}
+
+.shapeZ {
+   -fx-fill: RED;
 }
 
 /* I, J, L, O, S, T, and Z,

@@ -3,10 +3,10 @@ package tetris.tetrominos;
 import javafx.geometry.Point2D;
 import tetris.api.Grid;
 
-public class SShape extends SimpleTSZJLTetromino {
-    public SShape(Grid grid) {
+public class ShapeS extends SimpleTSZJLTetromino {
+    public ShapeS(Grid grid) {
         super(grid);
-        setCssClass("sShape");
+        setCssClass("shapeS");
     }
 
     @Override

@@ -21,7 +21,7 @@ import tetris.api.Grid;
  *    ---------
  *    color:Yellow
 */
-public class OShape extends SimpleTetromino {
+public class shapeO extends SimpleTetromino {
     private static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
     private static double[][] data = {line, line, line, line};
 
@@ -38,9 +38,9 @@ public class OShape extends SimpleTetromino {
     }
 
 
-    public OShape(Grid grid) {
+    public shapeO(Grid grid) {
         super(grid);
-        setCssClass("oShape");
+        setCssClass("shapeO");
     }
 
 

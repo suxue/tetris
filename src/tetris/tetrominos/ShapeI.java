@@ -32,7 +32,7 @@ import tetris.api.Grid;
   | 3 |
   -----
 */
-public final class IShape extends SimpleTetromino {
+public final class ShapeI extends SimpleTetromino {
 
     private static double[][] rotationData = {
                 {-2, -1, -1, -1,  0, -1,  1, -1}
@@ -49,9 +49,9 @@ public final class IShape extends SimpleTetromino {
 
 
 
-    public IShape(Grid grid) {
+    public ShapeI(Grid grid) {
         super(grid);
-        setCssClass("iShape");
+        setCssClass("shapeI");
     }
 
 
