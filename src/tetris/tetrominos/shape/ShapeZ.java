@@ -20,7 +20,7 @@ public class ShapeZ extends SimpleTSZJLTetromino {
     }
 
     @Override
-    public Point2D getInitialBoundingBoxOffset() {
+    public final Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-1.5, -1.5);
     }
 
@@ -30,7 +30,7 @@ public class ShapeZ extends SimpleTSZJLTetromino {
                    3          1 0     0
            pivot is always in the centre of $2
      */
-    private static double[][] rotationData = {
+    private final static double[][] rotationData = {
             {-1.5, -1.5, -0.5, -1.5, -0.5, -0.5, 0.5, -0.5},
             {0.5, -1.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5},
             {0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -1.5, -0.5},
@@ -38,7 +38,7 @@ public class ShapeZ extends SimpleTSZJLTetromino {
     };
 
     @Override
-    public double[][] getRotatingData() {
+    public final double[][] getRotatingData() {
         return rotationData;
     }
 }

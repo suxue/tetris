@@ -21,7 +21,7 @@ import tetris.api.Tetromino;
 // maintain my rotation status
 abstract public class SimpleTetromino implements Tetromino {
 
-    protected Mino[] allMinos;  // all cells included within me
+    protected final Mino[] allMinos;  // all cells included within me
     protected Grid hostGrid = null;
     private int status;
 
@@ -35,11 +35,11 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
     @Override
-    public int getStatus() {
+    public final int getStatus() {
         return status;
     }
 
-    protected void setStatus(int s) {
+    protected final void setStatus(int s) {
         if (s > 3 || s < 0)
             throw new RuntimeException();
 
@@ -63,7 +63,7 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
     @Override
-    public void setPivot(Point2D pivot) {
+    public final void setPivot(Point2D pivot) {
         xProperty().set(pivot.getX());
         yProperty().set(pivot.getY());
     }
@@ -88,7 +88,7 @@ abstract public class SimpleTetromino implements Tetromino {
         hostGrid = null;
     }
 
-    protected void setCssClass(String cssClass) {
+    protected final void setCssClass(String cssClass) {
         for (Mino c : allMinos) {
             c.getStyleClass().clear();
             c.getStyleClass().add(cssClass);
@@ -97,7 +97,7 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
     @Override
-    public void align() {
+    public final void align() {
         Mino firstMino = allMinos[0];
         double offset = Math.ceil(firstMino.getMinoYProperty().get())
                 - firstMino.getMinoYProperty().get();
@@ -107,7 +107,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     @Override
-    public void pin() {
+    public final void pin() {
         for (Mino c : allMinos) {
             hostGrid.set((int) c.getMinoXProperty().get()
                     , (int) c.getMinoYProperty().get(), c);
@@ -117,7 +117,7 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
 
-    protected void rebindMinos() {
+    protected final void rebindMinos() {
         if (hasBound) { // unbind first if has bound
             for (Mino m : allMinos) {
                 m.getMinoXProperty().unbind();
@@ -144,22 +144,22 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
     @Override
-    public void moveDown(double len) {
+    public final void moveDown(double len) {
         yProperty().set(yProperty().get() + len);
     }
 
     @Override
-    public void moveLeft() {
+    public final void moveLeft() {
         xProperty().set(xProperty().get() - 1);
     }
 
     @Override
-    public void moveRight() {
+    public final void moveRight() {
         xProperty().set(xProperty().get() + 1);
     }
 
     @Override
-    public boolean canMoveRight() {
+    public final boolean canMoveRight() {
         return allMinos[0].canMoveRight()
               && allMinos[1].canMoveRight()
               && allMinos[2].canMoveRight()
@@ -168,7 +168,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     @Override
-    public boolean canMoveDown(double len) {
+    public final boolean canMoveDown(double len) {
         return allMinos[0].canMoveDown(len)
                 && allMinos[1].canMoveDown(len)
                 && allMinos[2].canMoveDown(len)
@@ -177,7 +177,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     @Override
-    public boolean canMoveLeft() {
+    public final boolean canMoveLeft() {
         return allMinos[0].canMoveLeft()
                 && allMinos[1].canMoveLeft()
                 && allMinos[2].canMoveLeft()

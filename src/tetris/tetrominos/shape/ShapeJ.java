@@ -21,7 +21,7 @@ public class ShapeJ extends SimpleTSZJLTetromino {
     }
 
     @Override
-    public Point2D getInitialBoundingBoxOffset() {
+    public final Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-1.5, -1.5);
     }
 
@@ -32,7 +32,7 @@ public class ShapeJ extends SimpleTSZJLTetromino {
                   3                       0 1
                   pivot is at $2
      */
-    private static double[][] rotationData = {
+    private final static double[][] rotationData = {
             {-1.5, -1.5, -1.5, -0.5, -0.5, -0.5, 0.5, -0.5},
             {0.5, -1.5, -0.5, -1.5, -0.5, -0.5, -0.5, 0.5},
             {0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -1.5, -0.5},

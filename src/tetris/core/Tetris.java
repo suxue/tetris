@@ -70,7 +70,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 
     TetrisDynamic() {
-        this(559, 525);
+        this(745, 700);
     }
 
     @Override
@@ -104,12 +104,12 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 
     @Override
-    public DoubleProperty heightProperty() {
+    public final DoubleProperty heightProperty() {
         return _height;
     }
 
     @Override
-    public double getHeight() {
+    public final double getHeight() {
         return heightProperty().getValue();
     }
 

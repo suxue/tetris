@@ -23,17 +23,17 @@ import tetris.tetrominos.SimpleTetromino;
  *    color:Yellow
 */
 public class ShapeO extends SimpleTetromino {
-    private static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
-    private static double[][] data = {line, line, line, line};
+    private final static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
+    private final static double[][] data = {line, line, line, line};
 
 
     @Override
-    public double[][] getRotatingData() {
+    public final double[][] getRotatingData() {
         return data;
     }
 
     @Override
-    public int[][] getWallKickData() {
+    public final int[][] getWallKickData() {
         // should not reach here
         throw new RuntimeException();
     }
@@ -46,14 +46,14 @@ public class ShapeO extends SimpleTetromino {
 
 
     @Override
-    public Point2D getInitialBoundingBoxOffset() {
+    public final Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-2, -1);
     }
 
 
 
     @Override
-    public boolean rotate(boolean clockWise, boolean canRotateUp) {
+    public final boolean rotate(boolean clockWise, boolean canRotateUp) {
         int newSt = getStatus() + (clockWise ? 1 : -1);
         newSt = (newSt < 0) ? (newSt + 4) : newSt;
         newSt = (newSt > 3) ? (newSt - 4) : newSt;
