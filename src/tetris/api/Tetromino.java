@@ -34,6 +34,7 @@ public interface Tetromino {
     public void detach();
 
     public void pin();
+    public void align();
 
     // movement function family
     public void moveDown(double len);

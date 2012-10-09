@@ -96,15 +96,18 @@ abstract public class SimpleTetromino implements Tetromino {
 
     }
 
-
     @Override
-    public void pin() {
+    public void align() {
         Mino firstMino = allMinos[0];
         double offset = Math.ceil(firstMino.getMinoYProperty().get())
                 - firstMino.getMinoYProperty().get();
         Point2D pivot = getPivot();
         setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
+    }
 
+
+    @Override
+    public void pin() {
         for (Mino c : allMinos) {
             hostGrid.set((int) c.getMinoXProperty().get()
                     , (int) c.getMinoYProperty().get(), c);

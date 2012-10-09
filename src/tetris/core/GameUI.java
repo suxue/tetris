@@ -314,6 +314,8 @@ public class GameUI extends HBox {
                 dynamicTetromino.moveDown(getSpeed());
                 stopCycles = 0;
             } else {
+                // cannot move, align first
+                dynamicTetromino.align();
                 if (++stopCycles == lockDelay) {
                     goTo(ST_LOCKED);
                 }
