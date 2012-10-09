@@ -23,7 +23,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -327,7 +326,7 @@ public class GameUI extends HBox {
                     t = new ShapeI(playField);
                     break;
                 case 3:
-                    t = new TShape(playField);
+                    t = new ShapeT(playField);
                     break;
                 case 4:
                     t = new ShapeS(playField);
