@@ -56,52 +56,10 @@ public final class ShapeI extends SimpleTetromino {
 
 
     @Override
-    public Point2D getInitialBoundingBoxOffset() {
+    public final Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-2, -1);
     }
 
-
-    @Override
-    public boolean canMoveDown(double len) {
-        if (getStatus() % 2 == 0) { // case 0 & 2
-            if (allMinos[0].canMoveDown(len)
-                    && allMinos[1].canMoveDown(len)
-                    && allMinos[2].canMoveDown(len)
-                    && allMinos[3].canMoveDown(len)) {
-                return true;
-            }
-        } else {  // case 1, 3
-            if (allMinos[3].canMoveDown(len)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean canMoveLeft() {
-        if (getStatus() % 2 == 0) { // case 0 & 2
-            return allMinos[0].canMoveLeft();
-        } else {  // case 1, 3
-            return allMinos[0].canMoveLeft()
-                    && allMinos[1].canMoveLeft()
-                    && allMinos[2].canMoveLeft()
-                    && allMinos[3].canMoveLeft();
-        }
-    }
-
-    @Override
-    public boolean canMoveRight() {
-        if (getStatus() % 2 == 0) { // case 0 & 2
-            return allMinos[3].canMoveRight();
-        } else {  // case 1, 3
-            return allMinos[0].canMoveRight()
-                    && allMinos[1].canMoveRight()
-                    && allMinos[2].canMoveRight()
-                    && allMinos[3].canMoveRight();
-        }
-    }
 
     // only clockwise
     private static int[][] wallKickData = {

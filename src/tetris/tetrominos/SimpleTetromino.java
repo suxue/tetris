@@ -158,6 +158,32 @@ abstract public class SimpleTetromino implements Tetromino {
         xProperty().set(xProperty().get() + 1);
     }
 
+    @Override
+    public boolean canMoveRight() {
+        return allMinos[0].canMoveRight()
+              && allMinos[1].canMoveRight()
+              && allMinos[2].canMoveRight()
+              && allMinos[3].canMoveRight();
+    }
+
+
+    @Override
+    public boolean canMoveDown(double len) {
+        return allMinos[0].canMoveDown(len)
+                && allMinos[1].canMoveDown(len)
+                && allMinos[2].canMoveDown(len)
+                && allMinos[3].canMoveDown(len);
+    }
+
+
+    @Override
+    public boolean canMoveLeft() {
+        return allMinos[0].canMoveLeft()
+                && allMinos[1].canMoveLeft()
+                && allMinos[2].canMoveLeft()
+                && allMinos[3].canMoveLeft();
+    }
+
 
     @Override
     public boolean rotate(boolean clockWise, boolean canRotateUp) {

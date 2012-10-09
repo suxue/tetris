@@ -51,26 +51,6 @@ public class ShapeO extends SimpleTetromino {
     }
 
 
-    @Override
-    public boolean canMoveDown(double len) {
-        if (allMinos[2].canMoveDown(len)
-                && allMinos[3].canMoveDown(len)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean canMoveLeft() {
-        return allMinos[0].canMoveLeft() && allMinos[2].canMoveLeft();
-    }
-
-
-    @Override
-    public boolean canMoveRight() {
-        return allMinos[1].canMoveRight() && allMinos[3].canMoveRight();
-    }
 
     @Override
     public boolean rotate(boolean clockWise, boolean canRotateUp) {
