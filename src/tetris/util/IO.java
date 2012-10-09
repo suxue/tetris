@@ -15,7 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class IO {
+public final class IO {
     public static String readResource(String resourceName) {
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 IO.class.getResourceAsStream(resourceName)));

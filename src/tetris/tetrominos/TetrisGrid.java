@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class TetrisGrid extends AnchorPane implements Grid {
+public final class TetrisGrid extends AnchorPane implements Grid {
 
 
     private MinoPool minoPool = null;

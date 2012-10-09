@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 import tetris.api.Grid;
 
 
-public class Mino extends Rectangle {
+public final class Mino extends Rectangle {
 
     private Grid hostGrid = null;
 

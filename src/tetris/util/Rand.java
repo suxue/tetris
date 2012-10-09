@@ -14,7 +14,7 @@ package tetris.util;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Rand {
+public final class Rand {
     private boolean[] record = new boolean[7];
     private int counter = 0;
     private Random rand = new Random();

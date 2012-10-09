@@ -13,7 +13,7 @@ import javafx.geometry.Point2D;
 import tetris.api.Grid;
 import tetris.tetrominos.SimpleTSZJLTetromino;
 
-public class ShapeL extends SimpleTSZJLTetromino {
+public final class ShapeL extends SimpleTSZJLTetromino {
     public ShapeL(Grid grid) {
         super(grid);
         setCssClass("shapeL");

@@ -29,7 +29,7 @@ import tetris.api.game.GameState;
 
 import static tetris.api.game.GameControl.Status.*;
 
-public class RootUI extends BorderPane {
+public final class RootUI extends BorderPane {
 
     private static final double scaleFactor = 0.15;
 

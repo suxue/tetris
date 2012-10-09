@@ -23,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -486,6 +487,14 @@ public class GameUI extends HBox {
             GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
+                    if (getState() == ST_PAUSED) {
+                        if (keyEvent.getCode() == KeyCode.P
+                                || keyEvent.getCode() == KeyCode.ENTER) {
+                            toggle();
+                        }
+                        return;
+                    }
+
                     switch (keyEvent.getCode()) {
                         case SPACE:
                             speedFactor = 20;

@@ -19,7 +19,7 @@ import tetris.util.IO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class EntryPoint extends Application {
+public final class EntryPoint extends Application {
 
     private Tetris tetrisGame = new Tetris();
 

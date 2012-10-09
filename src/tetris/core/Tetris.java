@@ -121,7 +121,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
 }
 
 
-public class Tetris extends TetrisDynamic implements GameControl {
+public final class Tetris extends TetrisDynamic implements GameControl {
     private GameControl gameControl = new GameControl() {
         private StatusProperty runningStatus = new StatusProperty(PREPARE_ALL);
 
