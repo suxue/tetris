@@ -15,6 +15,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -89,8 +91,37 @@ public class GameUI extends HBox {
         ScoreZoneHeightPercentage = 0.30;
     }
 
-    private Grid createPlayFieldGrid() {
-        playField = new TetrisGrid(Color.BLACK, 20, 10, mainZoneWidthProperty, componentHeightProperty);
+    private Grid createPlayFieldGrid(final Rectangle background) {
+        final int rows = 20;
+        final int columns = 10;
+
+        final DoubleProperty width = new SimpleDoubleProperty();
+        final DoubleProperty height = new SimpleDoubleProperty();
+        DoubleBinding subtract = background.widthProperty().subtract(
+                background.heightProperty().multiply(((double) columns) / rows)
+        );
+        subtract.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
+                if (oldVal.doubleValue() < 0 && newVal.doubleValue() > 0) {
+                    width.unbind();
+                    height.unbind();
+                    width.bind(background.heightProperty().multiply(((double) columns) / rows));
+                    height.bind(background.heightProperty());
+                } else if (oldVal.doubleValue() > 0 && newVal.doubleValue() < 0) {
+                    width.unbind();
+                    height.unbind();
+                    width.bind(background.widthProperty());
+                    height.bind(background.widthProperty().multiply(((double)rows)/ columns));
+                }
+            }
+        });
+
+
+
+        playField = new TetrisGrid(Color.BLACK, rows, columns,  width, height);
+        playField.toJavaFXNode().layoutXProperty().bind(background.widthProperty().subtract(width).divide(2.0));
+        playField.toJavaFXNode().layoutYProperty().bind(background.heightProperty().subtract(height).divide(2.0));
         return playField;
     }
 
@@ -146,8 +177,16 @@ public class GameUI extends HBox {
             }
         });
 
-        Grid playField = createPlayFieldGrid();
-        this.getChildren().add(playField.toJavaFXNode());
+        final VBox leftPane = new VBox();
+        final Rectangle background = new Rectangle();
+        Grid playField = createPlayFieldGrid(background);
+        background.setFill(Color.LIGHTSEAGREEN);
+        background.heightProperty().bind(componentHeightProperty);
+        background.widthProperty().bind(mainZoneWidthProperty);
+        playField.toJavaFXNode().setManaged(false);
+        leftPane.getChildren().addAll(background, playField.toJavaFXNode());
+        this.getChildren().add(leftPane);
+
 
         final VBox rightPane = new VBox();
         rightPane.spacingProperty().bind(componentHeightProperty

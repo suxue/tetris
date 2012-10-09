@@ -70,7 +70,7 @@ class TetrisDynamic extends TetrisStatic implements GameState {
     }
 
     TetrisDynamic() {
-        this(800, 600);
+        this(559, 525);
     }
 
     @Override
@@ -241,6 +241,8 @@ public class Tetris extends TetrisDynamic implements GameControl {
         primaryStage.titleProperty().bindBidirectional(title());
         widthProperty().bind(primaryStage.widthProperty());
         heightProperty().bind(primaryStage.heightProperty());
+
+
         primaryStage.setScene(primaryScene);
         primaryScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override

@@ -249,8 +249,8 @@ public class TetrisGrid extends AnchorPane implements Grid {
     }
 
     @Override
-    public Node toJavaFXNode() {
-        return (Node) this;
+    public AnchorPane toJavaFXNode() {
+        return (AnchorPane) this;
     }
 
     private int columnNumber;
