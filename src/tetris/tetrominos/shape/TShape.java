@@ -71,9 +71,12 @@ public class TShape extends SimpleTSZJLTetromino {
                         && allMinos[3].canMoveDown(len);
             case 1:
             case 3:
-                return allMinos[3].canMoveDown(len);
+                return allMinos[0].canMoveDown(len)
+                        && allMinos[3].canMoveDown(len);
             case 2:
-                return allMinos[0].canMoveDown(len);
+                return allMinos[0].canMoveDown(len) 
+                        && allMinos[1].canMoveDown(len)
+                        && allMinos[3].canMoveDown(len);
             default:
                 return false;
         }
