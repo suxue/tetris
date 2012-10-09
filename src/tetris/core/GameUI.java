@@ -322,15 +322,9 @@ public class GameUI extends HBox {
             }
         }
 
-        private void rotateRight() {
+        private void rotate(boolean clockwise) {
             if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotate(true);
-            }
-        }
-
-        private void rotateLeft() {
-            if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-                dynamicTetromino.rotate(false);
+                dynamicTetromino.rotate(clockwise, (stopCycles == 0));
             }
         }
 
@@ -375,6 +369,7 @@ public class GameUI extends HBox {
                     break;
                 case ST_SPAWNING:
                     speedFactor = 1.0;
+                    stopCycles = 0;
 
                     staticTetromino.detach();
                     dynamicTetromino = staticTetromino;
@@ -403,11 +398,11 @@ public class GameUI extends HBox {
                     break;
                 case ST_ROTATING_RIGHT:
                     // do rotation
-                    rotateRight();
+                    rotate(true);
                     drop();
                     break;
                 case ST_ROTATING_LEFT:
-                    rotateLeft();
+                    rotate(false);
                     drop();
                     break;
                 case ST_LOCKED:
@@ -467,14 +462,14 @@ public class GameUI extends HBox {
                         case UP: // rotateLeft
                             if (getState() == ST_DROPPING) {
                                 movingStartingCycle = cycleCount;
-                                rotateLeft();
+                                rotate(false);
                                 goTo(ST_ROTATING_LEFT);
                             }
                             break;
                         case DOWN: // rotae right
                             if (getState() == ST_DROPPING) {
                                 movingStartingCycle = cycleCount;
-                                rotateRight();
+                                rotate(true);
                                 goTo(ST_ROTATING_RIGHT);
                             }
                             break;

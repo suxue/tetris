@@ -52,7 +52,7 @@ public interface Tetromino {
 
     //  clock-wise/right
     //  counter clock-wise/left
-    public boolean rotate(boolean clockWise);
+    public boolean rotate(boolean clockWise, boolean canRotateUp);
 }
 
 

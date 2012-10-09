@@ -160,7 +160,7 @@ abstract public class SimpleTetromino implements Tetromino {
 
 
     @Override
-    public boolean rotate(boolean clockWise) {
+    public boolean rotate(boolean clockWise, boolean canRotateUp) {
         Point2D pivot = getPivot();
         double kickOffset;
         {
@@ -195,10 +195,19 @@ abstract public class SimpleTetromino implements Tetromino {
         int i = 0;
         int j = 0;
         int k = 0;
+        int offsetX;
+        int offsetY;
+
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 4; j++) {
-                x = pivot.getX() + wd[i * 2] + rd[j * 2];
-                y = pivot.getY() + wd[i * 2 + 1] + rd[j * 2 + 1];
+                offsetX = wd[i*2];
+                offsetY = wd[i*2+1];
+
+                if (!canRotateUp && offsetY < 0)
+                    break;
+
+                x = pivot.getX() + offsetX + rd[j * 2];
+                y = pivot.getY() + offsetY + rd[j * 2 + 1];
                 floor = (int) Math.floor(y);
                 ceil = (int) Math.ceil(y);
                 if (!hostGrid.isAccessible((int) x, floor)) {
@@ -217,8 +226,13 @@ abstract public class SimpleTetromino implements Tetromino {
             // check kicked postion
             if (kickOffset != 0) {
                 for (k = 0; k < 4; k++) {
-                    x = pivot.getX() + wd[i * 2] + rd[k * 2];
-                    y = pivot.getY() + wd[i * 2 + 1] + rd[k * 2 + 1] + kickOffset;
+                    offsetX = wd[i*2];
+                    offsetY = wd[i*2+1];
+                    if (!canRotateUp && offsetY < 0)
+                        break;
+
+                    x = pivot.getX() + offsetX + rd[k * 2];
+                    y = pivot.getY() + offsetY + rd[k * 2 + 1] + kickOffset;
                     if (!hostGrid.isAccessible((int) x, (int) y)) {
                         break;
                     }
