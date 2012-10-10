@@ -23,13 +23,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
@@ -63,6 +67,7 @@ public class GameUI extends HBox {
     private GameControl gameControl = null;
     private Grid playField = null;
     private Grid previewField = null;
+    private int score=0;
     int speedFactor = 1;
     int gravity=1;
     Text t,t1;
@@ -198,8 +203,8 @@ public class GameUI extends HBox {
 
         final Grid tetrominoZone = createPredicationField();
 
-        final Rectangle levelZone = new Rectangle();
-        final Rectangle scoreZone = new Rectangle();
+       // final Rectangle levelZone = new Rectangle();
+       // final Rectangle scoreZone = new Rectangle();
         t =new Text("    SCORE \n   "+score);       
         t.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
         t.setTextAlignment(TextAlignment.CENTER);   
@@ -211,11 +216,11 @@ public class GameUI extends HBox {
          t1.setTextOrigin(VPos.CENTER); 
          t1.setFill(Color.DEEPPINK);
 
-        levelZone.widthProperty().bind(rightPaneWidthProperty);
-        scoreZone.widthProperty().bind(rightPaneWidthProperty);
-        levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
-        scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
-        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), levelZone, scoreZone);
+       // levelZone.widthProperty().bind(rightPaneWidthProperty);
+       // scoreZone.widthProperty().bind(rightPaneWidthProperty);
+       // levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
+       // scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
+        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), t,t1);
 
 
         this.getChildren().add(rightPane);
@@ -421,7 +426,7 @@ public class GameUI extends HBox {
 
                     break;
                 case ST_SPAWNING:
-                    speedFactor = 1.0;
+                    speedFactor = gravity;
                     stopCycles = 0;
 
                     staticTetromino.detach();
@@ -510,6 +515,17 @@ public class GameUI extends HBox {
                     }
 
                     switch (keyEvent.getCode()) {
+                    case U:
+                        gravity++;
+                        t1.setText("    LEVEL \n    "+gravity);
+                        System.out.println("U pressed"+gravity);
+                        break;
+                    case D:
+                        System.out.println("D pressed"+speedFactor);
+                        if(gravity>1)
+                       gravity--;
+                        t1.setText("    LEVEL \n    "+gravity);
+                        break; 
                         case SPACE:
                             speedFactor = 20;
                             break;
