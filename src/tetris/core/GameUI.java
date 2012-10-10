@@ -71,6 +71,13 @@ public class GameUI extends HBox {
     int speedFactor = 1;
     int gravity=1;
     Text t,t1;
+    
+
+private void updateScore(int newScore) {
+           score = newScore;         
+           t.setText("    SCORE \n   "+(score*10)) ;          
+       }
+    
 
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
