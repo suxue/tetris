@@ -11,10 +11,13 @@
 package tetris.core;
 
 
+import javafx.scene.control.Label;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -24,12 +27,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+
+import javax.swing.event.ChangeEvent;
+
 import tetris.api.Grid;
 import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
@@ -62,8 +73,11 @@ public class GameUI extends HBox {
     private GameControl gameControl = null;
     private Grid playField = null;
     private Grid previewField = null;
-
-
+    
+    private int score;
+    int speedFactor = 1;
+    int gravity=1;
+    Text t,t1;
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
     private final DoubleProperty componentHeightProperty = new SimpleDoubleProperty();
@@ -94,6 +108,7 @@ public class GameUI extends HBox {
     private Grid createPlayFieldGrid(final Rectangle background) {
         final int rows = 20;
         final int columns = 10;
+        
 
         final DoubleProperty width = new SimpleDoubleProperty();
         final DoubleProperty height = new SimpleDoubleProperty();
@@ -128,7 +143,10 @@ public class GameUI extends HBox {
     private Grid createPredicationField() {
         return (previewField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
-
+   
+   
+  
+    
     public GameUI(GameState gameState) {
 
         gameControl = (GameControl) gameState;
@@ -195,25 +213,29 @@ public class GameUI extends HBox {
 
         final Grid tetrominoZone = createPredicationField();
 
-        final Rectangle levelZone = new Rectangle();
-        final Rectangle scoreZone = new Rectangle();
-        levelZone.widthProperty().bind(rightPaneWidthProperty);
-        scoreZone.widthProperty().bind(rightPaneWidthProperty);
-        levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
-        scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
-        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), levelZone, scoreZone);
-
-
+        
+       // final Rectangle scoreZone = new Rectangle();
+       t =new Text("    SCORE \n   "+score);       
+       t.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+       t.setTextAlignment(TextAlignment.CENTER);   
+       t.setFill(Color.GREEN);
+        
+        t1=new Text("    LEVEL \n    "+gravity);        
+        t1.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+        t1.setTextAlignment(TextAlignment.CENTER);
+        t1.setTextOrigin(VPos.CENTER); 
+        t1.setFill(Color.DEEPPINK);
+        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(),t, t1);
         this.getChildren().add(rightPane);
-
         this.spacingProperty().bind(widthProperty()
-                .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
+                .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));    
+      
 
-
+        
         new GameLogic();
     }
 
-
+   
     private class GameLogic {
         /////////////////////////////////////////////////////////////////////
         //             Data Section                                        //
@@ -222,7 +244,13 @@ public class GameUI extends HBox {
         private Rand randGenerator = new Rand();
         private final double frameIntervalInMileSecond = 1000 / frameRate;
         private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
-
+       
+           
+       private void updateScore(int newScore) {
+           score = newScore;         
+           t.setText("    SCORE \n   "+(score*10)) ;          
+       }
+       
         private State state;
         private State oldState;
         private Tetromino dynamicTetromino;
@@ -241,10 +269,10 @@ public class GameUI extends HBox {
         private int lockDelay = 30; //  frames
         private int movingDelay = 10; // frames
         private int startDelay = 60; // frames
-
-        private double baseSpeed = 1 / 48.0; // how many grids to be moved within a frame
-        private double speedFactor = 1;
-
+        
+        private double baseSpeed = (1 / 48.0) ; // how many grids to be moved within a frame
+        
+       
 
 
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
@@ -407,7 +435,7 @@ public class GameUI extends HBox {
 
                     break;
                 case ST_SPAWNING:
-                    speedFactor = 1.0;
+                    speedFactor = gravity;
                     stopCycles = 0;
 
                     staticTetromino.detach();
@@ -448,7 +476,12 @@ public class GameUI extends HBox {
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
                     // clear lines
-                    playField.squeeze();
+                    int t = playField.squeeze();
+                    if (t > 0) {
+                        updateScore(t + score);
+                        System.out.println(score);
+                    }
+                        
                     goTo(ST_SPAWNING);
                     break;
                 default:  // should not reach here
@@ -488,7 +521,18 @@ public class GameUI extends HBox {
                 @Override
                 public void handle(KeyEvent keyEvent) {
                     switch (keyEvent.getCode()) {
-                        case SPACE:
+                    case U:
+                        gravity++;
+                        t1.setText("    LEVEL \n    "+gravity);
+                        System.out.println("U pressed"+gravity);
+                        break;
+                    case D:
+                        System.out.println("D pressed"+speedFactor);
+                        if(gravity>1)
+                       gravity--;
+                        t1.setText("    LEVEL \n    "+gravity);
+                        break; 
+                    case SPACE:
                             speedFactor = 20;
                             break;
                         case P:
