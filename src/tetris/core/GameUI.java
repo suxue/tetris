@@ -474,6 +474,10 @@ private void updateScore(int newScore) {
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
                     // clear lines
+                    if (t > 0) {
+                        updateScore(t + score);
+                        System.out.println(score);
+                    }
                     playField.squeeze();
                     goTo(ST_SPAWNING);
                     break;
