@@ -29,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
@@ -62,7 +63,9 @@ public class GameUI extends HBox {
     private GameControl gameControl = null;
     private Grid playField = null;
     private Grid previewField = null;
-
+    int speedFactor = 1;
+    int gravity=1;
+    Text t,t1;
 
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
@@ -197,6 +200,17 @@ public class GameUI extends HBox {
 
         final Rectangle levelZone = new Rectangle();
         final Rectangle scoreZone = new Rectangle();
+        t =new Text("    SCORE \n   "+score);       
+        t.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+        t.setTextAlignment(TextAlignment.CENTER);   
+        t.setFill(Color.GREEN);
+         
+         t1=new Text("    LEVEL \n    "+gravity);        
+         t1.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+         t1.setTextAlignment(TextAlignment.CENTER);
+         t1.setTextOrigin(VPos.CENTER); 
+         t1.setFill(Color.DEEPPINK);
+
         levelZone.widthProperty().bind(rightPaneWidthProperty);
         scoreZone.widthProperty().bind(rightPaneWidthProperty);
         levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
