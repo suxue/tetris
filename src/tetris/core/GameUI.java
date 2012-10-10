@@ -474,6 +474,7 @@ private void updateScore(int newScore) {
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
                     // clear lines
+                    int t=playField.squeeze();
                     if (t > 0) {
                         updateScore(t + score);
                         System.out.println(score);
