@@ -47,9 +47,9 @@ public final class Mino extends Rectangle {
 
     public final void attach(Grid grid) {
         widthProperty().bind(grid.minoWidthProperty());
-        heightProperty().bind(grid.minoHeighthProperty());
-        xProperty().bind((widthProperty().multiply(minoXProperty)));
-        yProperty().bind((heightProperty().multiply(minoYProperty)));
+        heightProperty().bind(grid.minoHeightProperty());
+        xProperty().bind(grid.xShiftProperty().add(widthProperty().multiply(minoXProperty)));
+        yProperty().bind(grid.yShiftProperty().add(heightProperty().multiply(minoYProperty)));
         grid.addMino(this);
         hostGrid = grid;
     }

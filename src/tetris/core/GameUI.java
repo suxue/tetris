@@ -15,27 +15,21 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import tetris.api.Grid;
 import tetris.api.Tetromino;
 import tetris.api.game.GameControl;
 import tetris.api.game.GameState;
-import tetris.tetrominos.*;
 import tetris.tetrominos.shape.*;
+import tetris.ui.Box;
+import tetris.ui.LeftPane;
+import tetris.ui.RightPane;
 import tetris.util.Rand;
 
 import static tetris.core.State.*;
@@ -54,7 +48,7 @@ enum State {
 }
 
 // response for drawing the interface
-public class GameUI extends HBox {
+public class GameUI extends Box {
 
     /////////////////////////////////////////////////////////////////////
     //             Data Section                                        //
@@ -91,124 +85,17 @@ public class GameUI extends HBox {
         ScoreZoneHeightPercentage = 0.30;
     }
 
-    private Grid createPlayFieldGrid(final Rectangle background) {
-        final int rows = 20;
-        final int columns = 10;
-
-        final DoubleProperty width = new SimpleDoubleProperty();
-        final DoubleProperty height = new SimpleDoubleProperty();
-        DoubleBinding subtract = background.widthProperty().subtract(
-                background.heightProperty().multiply(((double) columns) / rows)
-        );
-        subtract.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
-                if (oldVal.doubleValue() < 0 && newVal.doubleValue() > 0) {
-                    width.unbind();
-                    height.unbind();
-                    width.bind(background.heightProperty().multiply(((double) columns) / rows));
-                    height.bind(background.heightProperty());
-                } else if (oldVal.doubleValue() > 0 && newVal.doubleValue() < 0) {
-                    width.unbind();
-                    height.unbind();
-                    width.bind(background.widthProperty());
-                    height.bind(background.widthProperty().multiply(((double)rows)/ columns));
-                }
-            }
-        });
-
-
-
-        playField = new TetrisGrid(Color.BLACK, rows, columns,  width, height);
-        playField.toJavaFXNode().layoutXProperty().bind(background.widthProperty().subtract(width).divide(2.0));
-        playField.toJavaFXNode().layoutYProperty().bind(background.heightProperty().subtract(height).divide(2.0));
-        return playField;
-    }
-
-    private Grid createPredicationField() {
-        return (previewField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
-    }
 
     public GameUI(GameState gameState) {
+        super(0.02, 0.02, 0, 0);
+        gameControl = GameControl.class.cast(gameState);
+        setSpacing(0);
 
-        gameControl = (GameControl) gameState;
+        final LeftPane leftPane = new LeftPane(this);
+        playField = leftPane.getPlayField();
 
-        componentWidthProperty.bind(gameState.widthProperty().multiply(ComponentWidthPercentage));
-        componentHeightProperty.bind(gameState.heightProperty().multiply(ComponentHeightPercentage));
-        topBottomPaddingProperty.bind(gameState.heightProperty().subtract(componentHeightProperty).divide(2.0f));
-        leftRightPaddingProperty.bind(gameState.widthProperty().subtract(componentWidthProperty).divide(2.0f));
-        mainZoneWidthProperty.bind(componentWidthProperty.multiply(MainZoneWidthPercentage));
-        rightPaneWidthProperty.bind(componentWidthProperty.multiply(RightPaneWidthPercentage));
-
-
-        this.setWidth(gameState.getWidth());
-        this.setHeight(gameState.getHeight());
-        // set initial widthProperty and padding
-        this.setPadding(new Insets(
-                topBottomPaddingProperty.doubleValue()
-                , leftRightPaddingProperty.doubleValue()
-                , topBottomPaddingProperty.doubleValue()
-                , leftRightPaddingProperty.doubleValue()
-        ));
-
-        // addMino listener to keep padding
-        gameState.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue
-                    , Number oldVal, Number newVal) {
-                final double newPadding = leftRightPaddingProperty.doubleValue();
-                final Insets oldInsets = GameUI.this.getPadding();
-                final Insets newInsets = new Insets(oldInsets.getTop(), newPadding
-                        , oldInsets.getBottom(), newPadding);
-                GameUI.this.setPadding(newInsets);
-            }
-        });
-
-
-        gameState.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue
-                    , Number oldVal, Number newVal) {
-                final double newPadding = topBottomPaddingProperty.doubleValue();
-                final Insets oldInsets = GameUI.this.getPadding();
-                final Insets newInsets = new Insets(newPadding, oldInsets.getRight()
-                        , newPadding, oldInsets.getLeft());
-                GameUI.this.setPadding(newInsets);
-            }
-        });
-
-        final VBox leftPane = new VBox();
-        final Rectangle background = new Rectangle();
-        Grid playField = createPlayFieldGrid(background);
-        background.setFill(Color.LIGHTSEAGREEN);
-        background.heightProperty().bind(componentHeightProperty);
-        background.widthProperty().bind(mainZoneWidthProperty);
-        playField.toJavaFXNode().setManaged(false);
-        leftPane.getChildren().addAll(background, playField.toJavaFXNode());
-        this.getChildren().add(leftPane);
-
-
-        final VBox rightPane = new VBox();
-        rightPane.spacingProperty().bind(componentHeightProperty
-                .multiply(1 - TetrominoZoneHeightPercentage
-                        - LevelZoneHeightPercentage - ScoreZoneHeightPercentage).multiply(0.5));
-
-        final Grid tetrominoZone = createPredicationField();
-
-        final Rectangle levelZone = new Rectangle();
-        final Rectangle scoreZone = new Rectangle();
-        levelZone.widthProperty().bind(rightPaneWidthProperty);
-        scoreZone.widthProperty().bind(rightPaneWidthProperty);
-        levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
-        scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
-        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), levelZone, scoreZone);
-
-
-        this.getChildren().add(rightPane);
-
-        this.spacingProperty().bind(widthProperty()
-                .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
-
+        final RightPane rightPane = new RightPane(this);
+        previewField = rightPane.getPreviewField();
 
         new GameLogic();
     }

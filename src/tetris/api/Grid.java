@@ -12,8 +12,6 @@
 package tetris.api;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import tetris.tetrominos.Mino;
 
 public interface Grid {
@@ -21,11 +19,11 @@ public interface Grid {
 
     public Mino[] allocateMinos(int number);
 
-    public AnchorPane toJavaFXNode();
-
-    public ReadOnlyDoubleProperty minoHeighthProperty();
+    public ReadOnlyDoubleProperty minoHeightProperty();
 
     public ReadOnlyDoubleProperty minoWidthProperty();
+    public ReadOnlyDoubleProperty xShiftProperty();
+    public ReadOnlyDoubleProperty yShiftProperty();
 
     public boolean isAccessible(int x, int y);
 
