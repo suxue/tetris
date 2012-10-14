@@ -1,17 +1,39 @@
 package tetris.core;
 
+<<<<<<< local
+=======
+
+import javafx.scene.control.Label;
+
+>>>>>>> other
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
+<<<<<<< local
+=======
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+>>>>>>> other
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 <<<<<<< local
 =======
 import javafx.geometry.Insets;
+<<<<<<< local
+=======
+import javafx.geometry.Point2D;
+>>>>>>> other
 import javafx.geometry.VPos;
+<<<<<<< local
 >>>>>>> other
 import javafx.scene.input.KeyCode;
+=======
+>>>>>>> other
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -20,6 +42,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+<<<<<<< local
+=======
+
+import javax.swing.event.ChangeEvent;
+
+import tetris.api.Grid;
+import tetris.api.Tetromino;
+import tetris.api.game.GameControl;
+import tetris.api.game.GameState;
+>>>>>>> other
 import tetris.tetrominos.*;
 import tetris.util.Rand;
 
@@ -52,10 +84,16 @@ public class GameUI extends HBox {
     private GameControl gameControl = null;
     private Grid playField = null;
     private Grid previewField = null;
+<<<<<<< local
     private int score=0;
+=======
+    
+    private int score;
+>>>>>>> other
     int speedFactor = 1;
     int gravity=1;
     Text t,t1;
+<<<<<<< local
     
 
 private void updateScore(int newScore) {
@@ -64,6 +102,8 @@ private void updateScore(int newScore) {
        }
     
 
+=======
+>>>>>>> other
     /* java beans properties */
     private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
     private final DoubleProperty componentHeightProperty = new SimpleDoubleProperty();
@@ -94,6 +134,7 @@ private void updateScore(int newScore) {
     private Grid createPlayFieldGrid(final Rectangle background) {
         final int rows = 20;
         final int columns = 10;
+        
 
         final DoubleProperty width = new SimpleDoubleProperty();
         final DoubleProperty height = new SimpleDoubleProperty();
@@ -128,7 +169,10 @@ private void updateScore(int newScore) {
     private Grid createPredicationField() {
         return (previewField = new TetrisGrid(Color.BLACK, 2, 4, rightPaneWidthProperty, componentHeightProperty.multiply(TetrominoZoneHeightPercentage)));
     }
-
+   
+   
+  
+    
     public GameUI(GameState gameState) {
 
         gameControl = (GameControl) gameState;
@@ -195,8 +239,13 @@ private void updateScore(int newScore) {
 
         final Grid tetrominoZone = createPredicationField();
 
+<<<<<<< local
        // final Rectangle levelZone = new Rectangle();
+=======
+        
+>>>>>>> other
        // final Rectangle scoreZone = new Rectangle();
+<<<<<<< local
         t =new Text("    SCORE \n   "+score);       
         t.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
         t.setTextAlignment(TextAlignment.CENTER);   
@@ -213,18 +262,29 @@ private void updateScore(int newScore) {
        // levelZone.heightProperty().bind(componentHeightProperty.multiply(LevelZoneHeightPercentage));
        // scoreZone.heightProperty().bind(componentHeightProperty.multiply(ScoreZoneHeightPercentage));
         rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(), t,t1);
-
-
+=======
+       t =new Text("    SCORE \n   "+score);       
+       t.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+       t.setTextAlignment(TextAlignment.CENTER);   
+       t.setFill(Color.GREEN);
+        
+        t1=new Text("    LEVEL \n    "+gravity);        
+        t1.setFont(Font.font("Ariel Black", FontWeight.BOLD,20));
+        t1.setTextAlignment(TextAlignment.CENTER);
+        t1.setTextOrigin(VPos.CENTER); 
+        t1.setFill(Color.DEEPPINK);
+        rightPane.getChildren().addAll(tetrominoZone.toJavaFXNode(),t, t1);
         this.getChildren().add(rightPane);
-
         this.spacingProperty().bind(widthProperty()
-                .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));
+                .multiply(1 - MainZoneWidthPercentage - RightPaneWidthPercentage));    
+      
+>>>>>>> other
 
-
+        
         new GameLogic();
     }
 
-
+   
     private class GameLogic {
 >>>>>>> other
         /////////////////////////////////////////////////////////////////////
@@ -238,7 +298,13 @@ private void updateScore(int newScore) {
         private Rand randGenerator = new Rand();
         private final double frameIntervalInMileSecond = 1000 / frameRate;
         private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
-
+       
+           
+       private void updateScore(int newScore) {
+           score = newScore;         
+           t.setText("    SCORE \n   "+(score*10)) ;          
+       }
+       
         private State state;
         private State oldState;
         private Tetromino dynamicTetromino;
@@ -257,10 +323,10 @@ private void updateScore(int newScore) {
         private int lockDelay = 30; //  frames
         private int movingDelay = 10; // frames
         private int startDelay = 60; // frames
-
-        private double baseSpeed = 1 / 48.0; // how many grids to be moved within a frame
-        private double speedFactor = 1;
-
+        
+        private double baseSpeed = (1 / 48.0) ; // how many grids to be moved within a frame
+        
+       
 
 
         private final KeyFrame mainFrame = new KeyFrame(frameInterval,
@@ -465,11 +531,19 @@ private void updateScore(int newScore) {
                     //  pin every minos to the grid
                     dynamicTetromino.pin();
                     // clear lines
+<<<<<<< local
+=======
+                    int t = playField.squeeze();
+>>>>>>> other
                     if (t > 0) {
                         updateScore(t + score);
                         System.out.println(score);
                     }
+<<<<<<< local
                     playField.squeeze();
+=======
+                        
+>>>>>>> other
                     goTo(ST_SPAWNING);
                     break;
                 case ST_STOPPED:
@@ -528,7 +602,11 @@ private void updateScore(int newScore) {
                        gravity--;
                         t1.setText("    LEVEL \n    "+gravity);
                         break; 
+<<<<<<< local
                         case SPACE:
+=======
+                    case SPACE:
+>>>>>>> other
                             speedFactor = 20;
                             break;
                         case P:
