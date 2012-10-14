@@ -1,38 +1,21 @@
-/*  Copyright (c) 2012 All Right Reserved
- *
- *  This source is subject to the GNU general public License.  Please see the
- *  gpl.txt file for more information.  All other rights reserved.
- *
- *  @file:   $File$
- *  @brief:  all UI components(not includng tetrominos) will be initialized within me
- *  @author: $Author$
- *  @date:   $Date$
- */
 package tetris.core;
-
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import tetris.api.Grid;
-import tetris.api.Tetromino;
-import tetris.api.game.GameControl;
-import tetris.api.game.GameState;
-import tetris.tetrominos.shape.*;
-import tetris.ui.Box;
-import tetris.ui.LeftPane;
-import tetris.ui.RightPane;
+import tetris.tetrominos.*;
 import tetris.util.Rand;
 
 import static tetris.core.State.*;
+import static tetris.core.State.ST_STOPPED;
 
 
 enum State {
@@ -45,66 +28,17 @@ enum State {
     ST_ROTATING_RIGHT,
     ST_ROTATING_LEFT,
     ST_LOCKED,
+    ST_STOPPED,
 }
 
-// response for drawing the interface
-public class GameUI extends Box {
-
-    /////////////////////////////////////////////////////////////////////
-    //             Data Section                                        //
-    /////////////////////////////////////////////////////////////////////
-    private GameControl gameControl = null;
-    private Grid playField = null;
-    private Grid previewField = null;
-
-
-    /* java beans properties */
-    private final DoubleProperty componentWidthProperty = new SimpleDoubleProperty();
-    private final DoubleProperty componentHeightProperty = new SimpleDoubleProperty();
-    private final DoubleProperty topBottomPaddingProperty = new SimpleDoubleProperty();
-    private final DoubleProperty leftRightPaddingProperty = new SimpleDoubleProperty();
-    private final DoubleProperty mainZoneWidthProperty = new SimpleDoubleProperty();
-    private final DoubleProperty rightPaneWidthProperty = new SimpleDoubleProperty();
-
-    /* layout constants */
-    static final double ComponentHeightPercentage;
-    static final double ComponentWidthPercentage;
-    static final double MainZoneWidthPercentage;
-    static final double RightPaneWidthPercentage;
-    static final double TetrominoZoneHeightPercentage;
-    static final double LevelZoneHeightPercentage;
-    static final double ScoreZoneHeightPercentage;
-
-    static {
-        ComponentHeightPercentage = 0.80;
-        ComponentWidthPercentage = 0.77;
-        MainZoneWidthPercentage = 0.60;
-        RightPaneWidthPercentage = 0.30;
-        TetrominoZoneHeightPercentage = 0.15;
-        LevelZoneHeightPercentage = 0.30;
-        ScoreZoneHeightPercentage = 0.30;
-    }
-
-
-    public GameUI(GameState gameState) {
-        super(0.02, 0.02, 0, 0);
-        gameControl = GameControl.class.cast(gameState);
-        setSpacing(0);
-
-        final LeftPane leftPane = new LeftPane(this);
-        playField = leftPane.getPlayField();
-
-        final RightPane rightPane = new RightPane(this);
-        previewField = rightPane.getPreviewField();
-
-        new GameLogic();
-    }
-
-
-    private class GameLogic {
+class Game{
         /////////////////////////////////////////////////////////////////////
         //             Data Section                                        //
         /////////////////////////////////////////////////////////////////////
+
+        private Grid playField;
+        private Grid previewField;
+
         private final int frameRate = 60;
         private Rand randGenerator = new Rand();
         private final double frameIntervalInMileSecond = 1000 / frameRate;
@@ -168,6 +102,7 @@ public class GameUI extends Box {
 
         private void restart() {
             goTo(ST_STARTED);
+            timeline.play();
         }
 
         private void toggle() {
@@ -305,7 +240,7 @@ public class GameUI extends Box {
 
                     // IF reach boundary
                     if (!dynamicTetromino.canMoveDown(0.001)) {
-                        goTo(ST_STARTED);
+                        goTo(ST_STOPPED);
                     } else { // ELSE: beginning dropping
                         goTo(ST_DROPPING);
                     }
@@ -338,6 +273,9 @@ public class GameUI extends Box {
                     playField.squeeze();
                     goTo(ST_SPAWNING);
                     break;
+                case ST_STOPPED:
+                    timeline.stop();
+                    break;
                 default:  // should not reach here
                     throw new RuntimeException();
             }
@@ -347,31 +285,28 @@ public class GameUI extends Box {
         /////////////////////////////////////////////////////////////////////
         //             Constructor                                         //
         /////////////////////////////////////////////////////////////////////
-        public GameLogic() {
-            gameControl.addStatusListener(new GameControl.StatusListener() {
-                @Override
-                public void callback(GameControl.Status oldStatus, GameControl.Status newStatus) {
-                    switch (newStatus) {
-                        case PLAY_GAME:
-                            if (timeline.getStatus() == Animation.Status.STOPPED) {
-                                gameControl.restart();
-                                timeline.play();
-                            }
+        public Game(UIController uiController, Option option) {
 
-                            if (getState() == ST_PAUSED)
-                                toggle();
-                            break;
-                        case RESTART_GAME:
-                            restart();
-                            break;
-                        case STOP_GAME:
-                            goTo(ST_PAUSED);
-                            break;
-                    }
-                }
-            });
 
-            GameUI.this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            Pane parent = uiController.getCenter();
+
+            int columns = Integer.class.cast(option.get("column"));
+            int rows     = Integer.class.cast(option.get("row"));
+
+            playField = new Grid(rows, columns, parent);
+            previewField = new Grid(2, 4, uiController.getPreviewBox());
+
+            Rectangle wall = new Rectangle();
+            wall.setManaged(false);
+            wall.setId("wall");
+            wall.xProperty().bind(playField.xShiftProperty());
+            wall.yProperty().bind(playField.yShiftProperty());
+            wall.widthProperty().bind(playField.minoWidthProperty().multiply(playField.getColumnNo()));
+            wall.heightProperty().bind(playField.minoHeightProperty().multiply(playField.getRowNo()));
+            parent.getChildren().add(wall);
+
+
+            parent.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
                     if (getState() == ST_PAUSED) {
@@ -425,7 +360,8 @@ public class GameUI extends Box {
                 }
             });
 
-            GameUI.this.setOnKeyReleased(new EventHandler<KeyEvent>() {
+
+            parent.setOnKeyReleased(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
                     switch (keyEvent.getCode()) {
@@ -453,6 +389,7 @@ public class GameUI extends Box {
                 }
             });
         } // end GameLogic()
-    }  // end GameLogic
 
-}
+
+
+    }  // end GameLogic

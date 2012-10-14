@@ -14,8 +14,6 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
-import tetris.api.Grid;
-import tetris.api.Tetromino;
 
 // combination of cells
 // maintain my rotation status
@@ -289,3 +287,4 @@ abstract public class SimpleTetromino implements Tetromino {
         return true;
     }
 }
+

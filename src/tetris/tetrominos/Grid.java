@@ -8,6 +8,7 @@
  *  @author: $Author$
  *  @date:   $Date$
  */
+
 package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
@@ -16,13 +17,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
-import tetris.api.Grid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public final class TetrisGrid implements Grid {
+public final class Grid {
 
     private MinoPool minoPool = null;
     private OccupationMonitor occupationMonitor = null;
@@ -43,7 +43,7 @@ public final class TetrisGrid implements Grid {
         return minoPool;
     }
 
-    @Override
+
     public boolean isAccessible(int x, int y) {
         return getOccupationMonitor().isAccessible(x, y);
     }
@@ -184,63 +184,63 @@ public final class TetrisGrid implements Grid {
     }
 
 
-    @Override
+
     public int squeeze() {
         return getOccupationMonitor().squeeze();
     }
 
-    @Override
+
     public void unsetAllCooridinate() {
         getOccupationMonitor().unsetAll();
     }
 
-    @Override
+
     public Mino get(int x, int y) {
         return getOccupationMonitor().get(x, y);
     }
 
 
-    @Override
+
     public Mino[] allocateMinos(int number) {
         return getMinoPool().allocateMinos(number);
     }
 
-    @Override
+
     public void recoverAllocatedMinos() {
         getMinoPool().recoverAllAllocatedMinos();
     }
 
 
-    @Override
+
     public void set(int x, int y, Mino c) {
         getOccupationMonitor().set(x, y, c);
     }
 
-    @Override
+
     public void unset(int x, int y) {
         getOccupationMonitor().unset(x, y);
     }
 
     private DoubleProperty minoSize = new SimpleDoubleProperty(0);
 
-    @Override
+
     public ReadOnlyDoubleProperty minoWidthProperty() {
         return minoSize;
     }
 
-    @Override
+
     public ReadOnlyDoubleProperty minoHeightProperty() {
         return minoSize;
     }
 
 
-    @Override
+
     public void removeMino(Mino c) {
         container.getChildren().remove(c);
     }
 
 
-    @Override
+
     public void addMino(Mino c) {
         container.getChildren().add(c);
     }
@@ -250,12 +250,12 @@ public final class TetrisGrid implements Grid {
     private final int columnNumber;
     private final int rowNumber;
 
-    @Override
+
     public final int getColumnNo() {
         return columnNumber;
     }
 
-    @Override
+
     public final int getRowNo() {
         return rowNumber;
     }
@@ -263,12 +263,12 @@ public final class TetrisGrid implements Grid {
     private DoubleProperty xShiftPropertyImpl = new SimpleDoubleProperty();
     private DoubleProperty yShiftPropertyImpl = new SimpleDoubleProperty();
 
-    @Override
+
     public ReadOnlyDoubleProperty xShiftProperty() {
         return xShiftPropertyImpl;
     }
 
-    @Override
+
     public ReadOnlyDoubleProperty yShiftProperty() {
         return yShiftPropertyImpl;
     }
@@ -289,7 +289,7 @@ public final class TetrisGrid implements Grid {
     }
 
     private final Pane container;
-    public TetrisGrid(final int rowNo, final int columnNo
+    public Grid(final int rowNo, final int columnNo
             , final Pane container) {
         super();
         this.container = container;
@@ -298,18 +298,19 @@ public final class TetrisGrid implements Grid {
         this.rowNumber = rowNo;
 
         container.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
+
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number widthNo) {
                 recalculateMinoSize();
             }
         });
 
         container.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
+
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number heightNo) {
                 recalculateMinoSize();
             }
         });
+
+        recalculateMinoSize();
     }
 }
-

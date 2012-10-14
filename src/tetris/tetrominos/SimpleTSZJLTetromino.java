@@ -10,7 +10,8 @@
  */
 package tetris.tetrominos;
 
-import tetris.api.Grid;
+
+import tetris.tetrominos.Grid;
 
 public abstract class SimpleTSZJLTetromino extends SimpleTetromino {
     private static int[][] wallKickData = {

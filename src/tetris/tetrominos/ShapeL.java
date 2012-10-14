@@ -7,11 +7,9 @@
  *  @brief:  tetromino L
  *  @author: $Author$
  *  @date:   $Date$
- */package tetris.tetrominos.shape;
+ */package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
-import tetris.api.Grid;
-import tetris.tetrominos.SimpleTSZJLTetromino;
 
 public final class ShapeL extends SimpleTSZJLTetromino {
     public ShapeL(Grid grid) {

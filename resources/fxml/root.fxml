@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.layout.Priority?>
+
+
+<BorderPane fx:id="root" prefHeight="600" prefWidth="800" 
+    xmlns:fx="http://javafx.com/fxml" 
+    fx:controller="tetris.core.UIController"
+    stylesheets="/css/stylesheet.css">
+    <top>
+        <ToolBar fx:id="toolbar" prefHeight="60">
+            <Button       text="Restart"    fx:id="restartButton" focusTraversable="false"/>
+            <ToggleButton text="Pause"      fx:id="pauseButton" focusTraversable="false"/>
+            <Button       text="Option"     fx:id="optionButton" focusTraversable="false"/>
+            <ToggleButton text="fullscreen" fx:id="fullscreenButton" focusTraversable="false"/>
+            <Region                         fx:id="spring"/>
+            <StackPane prefWidth="100" prefHeight="50" fx:id="previewBox"></StackPane>
+        </ToolBar>
+    </top>
+    <center>
+        <fx:define>
+            <HBox fx:id="optionPage">
+                <Button text="hello"/>
+            </HBox>
+        </fx:define>
+        <HBox fx:id="center">
+        </HBox>
+    </center>
+</BorderPane>

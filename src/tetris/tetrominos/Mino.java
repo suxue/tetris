@@ -14,7 +14,6 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Rectangle;
-import tetris.api.Grid;
 
 
 public final class Mino extends Rectangle {

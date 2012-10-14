@@ -8,7 +8,7 @@
  *  @author: $Author$
  *  @date:   $Date$
  */
-package tetris.api;
+package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 
@@ -54,5 +54,4 @@ public interface Tetromino {
     //  counter clock-wise/left
     public boolean rotate(boolean clockWise, boolean canRotateUp);
 }
-
 

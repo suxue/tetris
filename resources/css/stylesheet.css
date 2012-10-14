@@ -1,12 +1,78 @@
-#exitButton, #playButton, #replayButton {
-    -fx-font-size:28pt;
-    -fx-background-size: 100%;
-    -fx-background-repeat: no-repeat; 
+.root {
+	-fx-background-color:green;
+}
+
+.mybutton{
+	-fx-background-color: red;
+}
+
+.rect {
+	-fx-fill: red;
+}
+
+
+.button  {
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 15 30 15 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 18px;
+    -fx-font-family: "Helvetica";
+}
+
+.toggle-button {
+        -fx-background-color:
+            linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+            linear-gradient(#020b02, #3a3a3a),
+            linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),
+            linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);
+        -fx-background-insets: 0,1,4,5;
+        -fx-background-radius: 9,8,5,4;
+        -fx-padding: 15 30 15 30;
+        -fx-font-family: "Helvetica";
+        -fx-font-size: 18px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #333333;
+        -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+
+.toggle-button textarea {
+    -fx-effect: dropshadow( one-pass-box , white , 0, 0.0 , 0 , 1 );
+}
+
+.toggle-button:selected{
+    -fx-background-color:
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-padding: 15 30 15 30;
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-opacity: 0.8;
-    -fx-underline: true;
-    -fx-background-position: center;
-    -fx-background-image: url('../img/button.png'); 
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+
+.toggle-button:selected textarea {
+     -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );}
+
+.button:hover {
+   -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#5a61af, #51536d),
+        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
+}
+
+#center {
+    -fx-background-color:grey;
 }
 
 .shapeI, .shapeO, .shapeT, .shapeS, .shapeZ, .shapeJ, .shapeL {
@@ -46,9 +112,13 @@
     -fx-fill: darkorange;
 }
 
+#wall {
+    -fx-fill: rgba(44, 24, 58, 0.77);
+    -fx-stroke: black;
+    -fx-stroke-width:2;
+}
 
- #previewBox{
-     -fx-background-color:black;
- }
-
+#previewBox {
+    -fx-background-color: black;
+}
 
