@@ -12,7 +12,7 @@ package tetris.ui;
 
 import javafx.scene.control.Button;
 
-public class AltButton extends Button{
+public class AltButton extends Button {
     public AltButton() {
         setFocusTraversable(false);
     }

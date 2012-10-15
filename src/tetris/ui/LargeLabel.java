@@ -12,7 +12,6 @@
 package tetris.ui;
 
 
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -52,7 +51,7 @@ class GridPaneAuxiliary {
     }
 }
 
-public class LargeLabel extends Label{
+public class LargeLabel extends Label {
     private GridPaneAuxiliary ga;
 
     public int getColumn() {

@@ -38,6 +38,7 @@ public class CustomizedSlider extends Slider {
     }
 
     private GridPaneAuxiliary ga;
+
     public CustomizedSlider() {
         ga = new GridPaneAuxiliary(this);
 

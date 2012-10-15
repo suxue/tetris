@@ -7,7 +7,8 @@
  *  @brief:  tetromino S
  *  @author: $Author$
  *  @date:   $Date$
- */package tetris.tetrominos;
+ */
+package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 
@@ -35,8 +36,6 @@ public class ShapeS extends ShapeJLSTZ {
             {0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -1.5, 0.5},
             {-0.5, 0.5, -0.5, -0.5, -1.5, -0.5, -1.5, -1.5}
     };
-
-
 
 
     @Override

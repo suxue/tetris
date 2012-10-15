@@ -49,7 +49,6 @@ public class ShapeO extends Tetromino {
     }
 
 
-
     @Override
     public final boolean rotate(boolean clockWise, boolean canRotateUp) {
         int newSt = getStatus() + (clockWise ? 1 : -1);

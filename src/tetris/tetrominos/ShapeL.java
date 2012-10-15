@@ -7,7 +7,8 @@
  *  @brief:  tetromino L
  *  @author: $Author$
  *  @date:   $Date$
- */package tetris.tetrominos;
+ */
+package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 

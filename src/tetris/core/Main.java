@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 
 /**
- *
  * @author shellfish
  */
 public class Main extends Application {
@@ -43,42 +42,48 @@ public class Main extends Application {
 
 
     @Override
-	public void start(final Stage stage) throws Exception {
+    public void start(final Stage stage) throws Exception {
         primaryStage = stage;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-		Parent root = (Parent) fxmlLoader.load(getClass().getResource("/fxml/root.fxml").openStream());
-        final UIController uiController = (UIController)(fxmlLoader.getController());
+        Parent root = (Parent) fxmlLoader.load(getClass().getResource("/fxml/root.fxml").openStream());
+        final UIController uiController = (UIController) (fxmlLoader.getController());
 
         /* full screen feature
         *  this is here because the primary stage will be involved
         * */
-		stage.setScene(new Scene(root));
-		stage.show();
+        stage.setScene(new Scene(root));
+        stage.show();
 
 
-        final WebView helpPage = (WebView)root.lookup("#helpPage");
+        final WebView helpPage = (WebView) root.lookup("#helpPage");
         root.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
-                    case F: toggleFullScreen(); break;
-                    case N: uiController.newGame(); break;
-                    case H: helpPage.setVisible(!helpPage.isVisible()); break;
+                    case F:
+                        toggleFullScreen();
+                        break;
+                    case N:
+                        uiController.newGame();
+                        break;
+                    case H:
+                        helpPage.setVisible(!helpPage.isVisible());
+                        break;
                 }
             }
         });
-	}
+    }
 
-	/**
-	 * The main() method is ignored in correctly deployed JavaFX
-	 * application. main() serves only as fallback in case the application
-	 * can not be launched through deployment artifacts, e.g., in IDEs with
-	 * limited FX support. NetBeans ignores main().
-	 *
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		launch(args);
-	}
+    /**
+     * The main() method is ignored in correctly deployed JavaFX
+     * application. main() serves only as fallback in case the application
+     * can not be launched through deployment artifacts, e.g., in IDEs with
+     * limited FX support. NetBeans ignores main().
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

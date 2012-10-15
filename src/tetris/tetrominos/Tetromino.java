@@ -150,9 +150,9 @@ abstract public class Tetromino {
 
     public final boolean canMoveRight() {
         return allMinos[0].canMoveRight()
-              && allMinos[1].canMoveRight()
-              && allMinos[2].canMoveRight()
-              && allMinos[3].canMoveRight();
+                && allMinos[1].canMoveRight()
+                && allMinos[2].canMoveRight()
+                && allMinos[3].canMoveRight();
     }
 
 
@@ -173,7 +173,7 @@ abstract public class Tetromino {
 
     // the offset to transfer current pivot to the corresponding bonding box(4x2)
     // only need to be implemented for the first of the four shapes
-    public abstract  Point2D getInitialBoundingBoxOffset();
+    public abstract Point2D getInitialBoundingBoxOffset();
 
 
     //  clock-wise/right
@@ -218,8 +218,8 @@ abstract public class Tetromino {
 
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 4; j++) {
-                offsetX = wd[i*2];
-                offsetY = wd[i*2+1];
+                offsetX = wd[i * 2];
+                offsetY = wd[i * 2 + 1];
 
                 if (!canRotateUp && offsetY < 0)
                     break;
@@ -244,8 +244,8 @@ abstract public class Tetromino {
             // check kicked postion
             if (kickOffset != 0) {
                 for (k = 0; k < 4; k++) {
-                    offsetX = wd[i*2];
-                    offsetY = wd[i*2+1];
+                    offsetX = wd[i * 2];
+                    offsetY = wd[i * 2 + 1];
                     if (!canRotateUp && offsetY < 0)
                         break;
 

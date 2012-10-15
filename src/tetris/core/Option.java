@@ -16,8 +16,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public final class Option {
     private SimpleIntegerProperty columnNumberProperty = new SimpleIntegerProperty();
-    private SimpleIntegerProperty rowNumberProperty    = new SimpleIntegerProperty();
-    private SimpleIntegerProperty frameRateProperty    = new SimpleIntegerProperty();
+    private SimpleIntegerProperty rowNumberProperty = new SimpleIntegerProperty();
+    private SimpleIntegerProperty frameRateProperty = new SimpleIntegerProperty();
 
     public IntegerProperty columnNumberProperty() {
         return columnNumberProperty;

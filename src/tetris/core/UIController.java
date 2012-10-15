@@ -26,10 +26,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-
-
 /**
- *
  * @author shellfish
  */
 public class UIController implements Initializable {
@@ -37,26 +34,42 @@ public class UIController implements Initializable {
     /*
         UI Components
      */
-    @FXML private StackPane window;
-    @FXML private ToolBar toolbar;
-    @FXML private ToggleButton toggleButton;
-    @FXML private Pane optionPage;
-	@FXML private Button restartButton;
-    @FXML private BorderPane root;
-    @FXML private HBox center;
-    @FXML private StackPane previewBox;
-    @FXML private Slider columnNumberSlider;
-    @FXML private Slider rowNumberSlider;
-    @FXML private Slider frameRateSlider;
-    @FXML private Pane   gameOverPage;
-    @FXML private Label  columnNumberLabel;
-    @FXML private Label  rowNumberLabel;
-    @FXML private Label  frameRateLabel;
-    @FXML private GridPane optionDisplay;
-    @FXML private WebView helpPage;
-    @FXML private  ToggleButton helpButton;
-
-
+    @FXML
+    private StackPane window;
+    @FXML
+    private ToolBar toolbar;
+    @FXML
+    private ToggleButton toggleButton;
+    @FXML
+    private Pane optionPage;
+    @FXML
+    private Button restartButton;
+    @FXML
+    private BorderPane root;
+    @FXML
+    private HBox center;
+    @FXML
+    private StackPane previewBox;
+    @FXML
+    private Slider columnNumberSlider;
+    @FXML
+    private Slider rowNumberSlider;
+    @FXML
+    private Slider frameRateSlider;
+    @FXML
+    private Pane gameOverPage;
+    @FXML
+    private Label columnNumberLabel;
+    @FXML
+    private Label rowNumberLabel;
+    @FXML
+    private Label frameRateLabel;
+    @FXML
+    private GridPane optionDisplay;
+    @FXML
+    private WebView helpPage;
+    @FXML
+    private ToggleButton helpButton;
 
 
     public HBox getCenter() {
@@ -75,7 +88,6 @@ public class UIController implements Initializable {
     private Option option;
 
 
-
     @FXML
     private void restartGame() {
         // restart current game
@@ -85,9 +97,11 @@ public class UIController implements Initializable {
         center.requestFocus();
     }
 
-    @FXML void startNewGame() {
+    @FXML
+    void startNewGame() {
         game = new Game(this, option) {
-            @Override public void stop() {
+            @Override
+            public void stop() {
                 root.setCenter(gameOverPage);
                 toggleButton.setDisable(true);
             }
@@ -119,8 +133,8 @@ public class UIController implements Initializable {
     }
 
 
-	@Override
-	public void initialize(URL url, ResourceBundle rb) {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         // initialize option
         option = new Option();
         option.frameRateProperty().bind(frameRateSlider.valueProperty());
@@ -135,7 +149,7 @@ public class UIController implements Initializable {
         frameRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                frameRateLabel.setText( String.valueOf(newVal.intValue()));
+                frameRateLabel.setText(String.valueOf(newVal.intValue()));
 
             }
         });

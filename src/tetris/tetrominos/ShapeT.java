@@ -7,7 +7,8 @@
  *  @brief:  tetromino T
  *  @author: $Author$
  *  @date:   $Date$
- */package tetris.tetrominos;
+ */
+package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 
@@ -22,8 +23,6 @@ public class ShapeT extends ShapeJLSTZ {
     public final Point2D getInitialBoundingBoxOffset() {
         return new Point2D(-1.5, -1.5);
     }
-
-
 
 
     //     0      1                   1

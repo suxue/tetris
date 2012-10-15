@@ -184,7 +184,6 @@ public final class Grid {
     }
 
 
-
     public int squeeze() {
         return getOccupationMonitor().squeeze();
     }
@@ -200,7 +199,6 @@ public final class Grid {
     }
 
 
-
     public Mino[] allocateMinos(int number) {
         return getMinoPool().allocateMinos(number);
     }
@@ -209,7 +207,6 @@ public final class Grid {
     public void recoverAllocatedMinos() {
         getMinoPool().recoverAllAllocatedMinos();
     }
-
 
 
     public void set(int x, int y, Mino c) {
@@ -234,17 +231,14 @@ public final class Grid {
     }
 
 
-
     public void removeMino(Mino c) {
         container.getChildren().remove(c);
     }
 
 
-
     public void addMino(Mino c) {
         container.getChildren().add(c);
     }
-
 
 
     private final int columnNumber;
@@ -278,7 +272,7 @@ public final class Grid {
         double height = container.getHeight() / rowNumber;
         if (width < height) {
             minoSize.set(width);
-            yShiftPropertyImpl.set((container.getHeight() - rowNumber*width) / 2);
+            yShiftPropertyImpl.set((container.getHeight() - rowNumber * width) / 2);
             xShiftPropertyImpl.set(0);
         } else {
             minoSize.set(height);
@@ -289,6 +283,7 @@ public final class Grid {
     }
 
     private final Pane container;
+
     public Grid(final int rowNo, final int columnNo
             , final Pane container) {
         super();

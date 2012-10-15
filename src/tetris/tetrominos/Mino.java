@@ -63,7 +63,7 @@ public final class Mino extends Rectangle {
     }
 
 
-    public final  boolean isAttached() {
+    public final boolean isAttached() {
         return (hostGrid != null);
     }
 
