@@ -11,8 +11,6 @@
 package tetris.tetrominos;
 
 
-import tetris.tetrominos.Grid;
-
 public abstract class SimpleTSZJLTetromino extends SimpleTetromino {
     private static int[][] wallKickData = {
             {0, 0, -1, 0, -1, +1, 0, -2, -1, -2}

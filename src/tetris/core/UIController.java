@@ -1,7 +1,16 @@
-package tetris.core;/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  controller for user interface, internal hold all used ui components
+ *           dynamic layout code resides in the initialize() function and will be
+ *           executed by the fxml loader when loading completing.
+ *  @author: $Author$
+ *  @date:   $Date$
  */
+package tetris.core;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,7 +20,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebView;
 
 import java.net.URL;
@@ -31,11 +39,9 @@ public class UIController implements Initializable {
      */
     @FXML private StackPane window;
     @FXML private ToolBar toolbar;
-    @FXML private Button newGameButton;
     @FXML private ToggleButton toggleButton;
     @FXML private Pane optionPage;
 	@FXML private Button restartButton;
-	@FXML private Rectangle rect;
     @FXML private BorderPane root;
     @FXML private HBox center;
     @FXML private StackPane previewBox;

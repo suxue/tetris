@@ -4,7 +4,7 @@
  *  gpl.txt file for more information.  All other rights reserved.
  *
  *  @file:   $File$
- *  @brief:  the core class of whole project, connects EntryPoint to the UI and logic part
+ *  @brief:  store game options
  *  @author: $Author$
  *  @date:   $Date$
  */

@@ -1,8 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  entry point of the game, whole story begins from here
+ *  @author: $Author$
+ *  @date:   $Date$
  */
-
 package tetris.core;
 
 import javafx.application.Application;

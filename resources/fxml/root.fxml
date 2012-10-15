@@ -7,11 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.layout.Priority?>
-<?import javafx.geometry.Orientation?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.web.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
+<?import tetris.ui.*?>
 
 
 <StackPane fx:id="window" prefHeight="600" prefWidth="800"
@@ -21,13 +19,11 @@
     <BorderPane fx:id="root">
         <top>
             <ToolBar fx:id="toolbar" prefHeight="60">
-                <Button       text="New Game"    onAction="#newGame" focusTraversable="false"/>
-                <ToggleButton text="Pause"      onAction="#toggleGame" fx:id="toggleButton" focusTraversable="false" disable="true"/>
-                <Button       text="Restart"     onAction="#restartGame" fx:id="restartButton" focusTraversable="false" disable="true"/>
-                <ToggleButton text="help"   fx:id="helpButton" focusTraversable="false"/>
-
-                <!-- empty space (fill horizontally)-->
-                <Region><HBox.hgrow><Priority fx:constant="ALWAYS"/></HBox.hgrow></Region>
+                <AltButton       text="New Game"    onAction="#newGame" />
+                <AltToggleButton text="Pause"      onAction="#toggleGame" fx:id="toggleButton" disable="true"/>
+                <AltButton       text="Restart"     onAction="#restartGame" fx:id="restartButton"  disable="true"/>
+                <AltToggleButton text="help"   fx:id="helpButton" />
+                <HSpacer/>
                 <StackPane prefWidth="100" prefHeight="50" fx:id="previewBox"></StackPane>
             </ToolBar>
         </top>
@@ -47,99 +43,23 @@
                             </ColumnConstraints>
                             <ColumnConstraints percentWidth="10" />
                         </columnConstraints>
-                        <children>
-                            <Label text="frame rate">
-                                <GridPane.rowIndex>0</GridPane.rowIndex>
-                                <GridPane.columnIndex>0</GridPane.columnIndex>
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                            </Label>
-                            <Slider fx:id="frameRateSlider">
-                                <GridPane.rowIndex>0</GridPane.rowIndex>
-                                <GridPane.columnIndex>1</GridPane.columnIndex>
-                                <min>50</min>
-                                <max>80</max>
-                                <showTickLabels>true</showTickLabels>
-                                <showTickMarks>true</showTickMarks>
-                                <minorTickCount>1</minorTickCount>
-                                <blockIncrement>5</blockIncrement>
-                                <majorTickUnit>5</majorTickUnit>
-                                <!-- set the default framerate -->
-                                <value>60</value>
-                            </Slider>
-                            <Label fx:id="frameRateLabel">
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                                <GridPane.rowIndex>0</GridPane.rowIndex>
-                                <GridPane.columnIndex>2</GridPane.columnIndex>
-                            </Label>
+                        <LargeLabel  row="0" column="0" text="frame rate" />
+                        <CustomizedSlider  row="0" column="1" fx:id="frameRateSlider" min="50" max="80" value="60"/>
+                        <LargeLabel  row="0" column="2" fx:id="frameRateLabel"/>
 
+                        <LargeLabel row="1" column="0" text="column number"/>
+                        <CustomizedSlider row="1" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
+                        <LargeLabel row="1" column="2" fx:id="columnNumberLabel"  />
 
-                            <Label text="column number">
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                                <GridPane.rowIndex>1</GridPane.rowIndex>
-                                <GridPane.columnIndex>0</GridPane.columnIndex>
-                            </Label>
-                            <Slider fx:id="columnNumberSlider" >
-                                <GridPane.rowIndex>1</GridPane.rowIndex>
-                                <GridPane.columnIndex>1</GridPane.columnIndex>
-                                <min>10</min>
-                                <max>50</max>
-                                <showTickLabels>true</showTickLabels>
-                                <showTickMarks>true</showTickMarks>
-                                <minorTickCount>1</minorTickCount>
-                                <blockIncrement>5</blockIncrement>
-                                <majorTickUnit>5</majorTickUnit>
-                                <!-- set the default framerate -->
-                                <value>10</value>
-                            </Slider>
-                            <Label fx:id="columnNumberLabel" >
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                                <GridPane.rowIndex>1</GridPane.rowIndex>
-                                <GridPane.columnIndex>2</GridPane.columnIndex>
-                            </Label>
+                        <LargeLabel row="2" column="0" text="row number" />
+                        <CustomizedSlider row="2" column="1" fx:id="rowNumberSlider" min="10" max="50" value="20" />
+                        <LargeLabel row="2" column="2" fx:id="rowNumberLabel" />
 
-
-                            <Label text="row number">
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                                <GridPane.rowIndex>2</GridPane.rowIndex>
-                                <GridPane.columnIndex>0</GridPane.columnIndex>
-                            </Label>
-                            <Slider fx:id="rowNumberSlider" >
-                                <GridPane.rowIndex>2</GridPane.rowIndex>
-                                <GridPane.columnIndex>1</GridPane.columnIndex>
-                                <min>10</min>
-                                <max>50</max>
-                                <showTickLabels>true</showTickLabels>
-                                <showTickMarks>true</showTickMarks>
-                                <minorTickCount>1</minorTickCount>
-                                <blockIncrement>5</blockIncrement>
-                                <majorTickUnit>5</majorTickUnit>
-                                <!-- set the default framerate -->
-                                <value>20</value>
-                            </Slider>
-                            <Label fx:id="rowNumberLabel">
-                                <font>
-                                    <Font name="Arial Black" size="24.0" />
-                                </font>
-                                <GridPane.rowIndex>2</GridPane.rowIndex>
-                                <GridPane.columnIndex>2</GridPane.columnIndex>
-                            </Label>
-
-                            <Button text="Start" onAction="#startNewGame">
-                                <GridPane.rowIndex>3</GridPane.rowIndex>
-                                <GridPane.columnIndex>1</GridPane.columnIndex>
-                                <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>
-                            </Button>
-                        </children>
+                        <Button text="Start" onAction="#startNewGame">
+                            <GridPane.rowIndex>3</GridPane.rowIndex>
+                            <GridPane.columnIndex>1</GridPane.columnIndex>
+                            <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>
+                        </Button>
                     </GridPane>
                 </VBox>
 

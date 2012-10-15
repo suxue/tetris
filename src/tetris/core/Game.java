@@ -1,3 +1,13 @@
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  represent a game entity, is (optionaly) associated to a  mino pool
+ *  @author: $Author$
+ *  @date:   $Date$
+ */
 package tetris.core;
 
 import javafx.animation.Animation;
@@ -16,7 +26,9 @@ import tetris.util.Rand;
 
 import static tetris.core.State.*;
 
-
+/*
+    all states in the game finite autometon
+ */
 enum State {
     ST_PAUSED,
     ST_STARTED,
