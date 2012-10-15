@@ -41,6 +41,7 @@ public class CustomizedSlider extends Slider {
 
     public CustomizedSlider() {
         ga = new GridPaneAuxiliary(this);
+        getStyleClass().add("customizedSlider");
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customizedSlider.fxml"));
         fxmlLoader.setRoot(this);

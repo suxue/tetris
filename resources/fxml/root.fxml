@@ -69,8 +69,10 @@
             </HBox>
         </center>
     </BorderPane>
-    <WebView fx:id="helpPage" opacity="0.77">
-        <focusTraversable>false</focusTraversable>
+    <HBox fx:id="helpContainer" prefWidth="500" prefHeight="500" opacity="0.60">
+        <WebView fx:id="helpPage">
+            <focusTraversable>false</focusTraversable>
+        </WebView>
         <visible>false</visible>
-    </WebView>
+    </HBox>
 </StackPane>
