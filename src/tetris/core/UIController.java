@@ -3,18 +3,19 @@ package tetris.core;/*
  * and open the template in the editor.
  */
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+
+
 
 /**
  *
@@ -22,15 +23,24 @@ import java.util.ResourceBundle;
  */
 public class UIController implements Initializable {
 
-	@FXML private Region spring;
+    /*
+        UI Components
+     */
+    @FXML private Button newGameButton;
+    @FXML private ToggleButton toggleButton;
+    @FXML private Pane optionPage;
 	@FXML private Button restartButton;
-    @FXML private Button optionButton;
     @FXML private ToggleButton fullscreenButton;
 	@FXML private Rectangle rect;
     @FXML private BorderPane root;
-    @FXML private HBox optionPage;
     @FXML private HBox center;
     @FXML private StackPane previewBox;
+    @FXML private Slider columnNumberSlider;
+    @FXML private Slider rowNumberSlider;
+    @FXML private Slider frameRateSlider;
+    @FXML private Pane   gameOverPage;
+
+
 
     public HBox getCenter() {
         return center;
@@ -44,27 +54,63 @@ public class UIController implements Initializable {
         return fullscreenButton;
     }
 
+    /*
+        UI State machine
+     */
+    private Game game;
+    private Option option;
 
-    public void activeFullScreenButton(Stage stage) {
-        System.out.println(stage.fullScreenProperty());
 
+
+    @FXML
+    private void restartGame() {
+        // restart current game
+        game.restart();
+        root.setCenter(center);
+        center.requestFocus();
     }
-	
+
+    @FXML void startNewGame() {
+        if (game != null) {
+            // delete current game
+            game.delete();
+            game = null;
+        }
+
+        game = new Game(this, option) {
+            @Override public void stop() {
+                root.setCenter(gameOverPage);
+            }
+        };
+
+        restartGame();
+        toggleButton.setDisable(false);
+        toggleButton.setSelected(false);
+        restartButton.setDisable(false);
+    }
+
+    @FXML
+    private void newGame() {
+        toggleButton.setDisable(true);
+        restartButton.setDisable(true);
+        root.setCenter(optionPage);
+    }
+
+    @FXML
+    private void toggleGame() {
+        if (root.getCenter() == center && game != null) {
+            // can only toggle when game is on top
+            game.toggle();
+        }
+    }
+
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-        // push preview zone to the very right position
-        HBox.setHgrow(spring, Priority.ALWAYS);
-
-        optionButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (root.getCenter() == optionPage) {
-                    root.setCenter(center);
-                } else {
-                    root.setCenter(optionPage);
-                }
-            }
-        });
-
+        // initialize option
+        option = new Option();
+        option.frameRateProperty().bind(frameRateSlider.valueProperty());
+        option.rowNumberProperty().bind(rowNumberSlider.valueProperty());
+        option.columnNumberProperty().bind(columnNumberSlider.valueProperty());
 	}
 }

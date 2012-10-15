@@ -8,6 +8,8 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.layout.Priority?>
+<?import javafx.geometry.Orientation?>
+<?import javafx.scene.layout.Priority?>
 
 
 <BorderPane fx:id="root" prefHeight="600" prefWidth="800" 
@@ -16,19 +18,77 @@
     stylesheets="/css/stylesheet.css">
     <top>
         <ToolBar fx:id="toolbar" prefHeight="60">
-            <Button       text="Restart"    fx:id="restartButton" focusTraversable="false"/>
-            <ToggleButton text="Pause"      fx:id="pauseButton" focusTraversable="false"/>
-            <Button       text="Option"     fx:id="optionButton" focusTraversable="false"/>
+            <Button       text="New Game"    onAction="#newGame" focusTraversable="false"/>
+            <ToggleButton text="Pause"      onAction="#toggleGame" fx:id="toggleButton" focusTraversable="false" disable="true"/>
+            <Button       text="Restart"     onAction="#restartGame" fx:id="restartButton" focusTraversable="false" disable="true"/>
             <ToggleButton text="fullscreen" fx:id="fullscreenButton" focusTraversable="false"/>
-            <Region                         fx:id="spring"/>
+
+            <!-- empty space (fill horizontally)-->
+            <Region><HBox.hgrow><Priority fx:constant="ALWAYS"/></HBox.hgrow></Region>
             <StackPane prefWidth="100" prefHeight="50" fx:id="previewBox"></StackPane>
         </ToolBar>
     </top>
     <center>
         <fx:define>
-            <HBox fx:id="optionPage">
-                <Button text="hello"/>
-            </HBox>
+            <TilePane fx:id="gameOverPage">
+                <Label text="Game Over"/>
+            </TilePane>
+            <TilePane fx:id="optionPage" prefWidth="500">
+                <alignment><Pos fx:constant="CENTER"/></alignment>
+                <orientation><Orientation fx:constant="VERTICAL"/></orientation>
+                <prefTileWidth>500</prefTileWidth>
+                <vgap>50</vgap>
+                
+                <HBox>
+                    <Label text="frame rate"/>
+                    <Slider fx:id="frameRateSlider" >
+                        <min>50</min>
+                        <max>80</max>
+                        <showTickLabels>true</showTickLabels>
+                        <showTickMarks>true</showTickMarks>
+                        <minorTickCount>1</minorTickCount>
+                        <blockIncrement>5</blockIncrement>
+                        <majorTickUnit>5</majorTickUnit>
+                        <!-- set the default framerate -->
+                        <value>60</value>
+                    </Slider>
+                </HBox>
+
+                <HBox>
+                    <Label text="column number"/>
+                    <Slider fx:id="columnNumberSlider" >
+                        <min>10</min>
+                        <max>50</max>
+                        <showTickLabels>true</showTickLabels>
+                        <showTickMarks>true</showTickMarks>
+                        <minorTickCount>1</minorTickCount>
+                        <blockIncrement>5</blockIncrement>
+                        <majorTickUnit>5</majorTickUnit>
+                        <!-- set the default framerate -->
+                        <value>10</value>
+                    </Slider>
+                </HBox>
+
+                <HBox>
+                    <Label text="row number"/>
+                    <Slider fx:id="rowNumberSlider" >
+                        <min>10</min>
+                        <max>50</max>
+                        <showTickLabels>true</showTickLabels>
+                        <showTickMarks>true</showTickMarks>
+                        <minorTickCount>1</minorTickCount>
+                        <blockIncrement>5</blockIncrement>
+                        <majorTickUnit>5</majorTickUnit>
+                        <!-- set the default framerate -->
+                        <value>20</value>
+                    </Slider>
+                </HBox>
+
+                <Button text="Start" onAction="#startNewGame">
+                    <TilePane.alignment><Pos fx:constant="BOTTOM_RIGHT"/></TilePane.alignment>
+                </Button>
+
+            </TilePane>
         </fx:define>
         <HBox fx:id="center">
         </HBox>

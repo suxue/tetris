@@ -78,8 +78,6 @@ public class Main extends Application {
             }
         });
 
-        Game game = new Game(uiController, new Option());
-        uiController.getCenter().requestFocus();
 	}
 
 	/**

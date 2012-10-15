@@ -15,7 +15,6 @@ import tetris.tetrominos.*;
 import tetris.util.Rand;
 
 import static tetris.core.State.*;
-import static tetris.core.State.ST_STOPPED;
 
 
 enum State {
@@ -100,12 +99,14 @@ class Game{
         //             Auxiliary Functions                                 //
         /////////////////////////////////////////////////////////////////////
 
-        private void restart() {
+        public void restart() {
             goTo(ST_STARTED);
             timeline.play();
         }
 
-        private void toggle() {
+
+
+        public void toggle() {
             if (getState() == ST_PAUSED) {
                 System.out.println("resumed");
                 goTo(getOldState());
@@ -275,6 +276,7 @@ class Game{
                     break;
                 case ST_STOPPED:
                     timeline.stop();
+                    stop();
                     break;
                 default:  // should not reach here
                     throw new RuntimeException();
@@ -282,21 +284,28 @@ class Game{
 
         }
 
+        // will be executed when game ending, so convinent for customize game over screen
+        public void stop() {
+        }
+
+        private Pane parent;
+        private Rectangle wall;
+
         /////////////////////////////////////////////////////////////////////
         //             Constructor                                         //
         /////////////////////////////////////////////////////////////////////
         public Game(UIController uiController, Option option) {
 
 
-            Pane parent = uiController.getCenter();
+            parent = uiController.getCenter();
 
-            int columns = Integer.class.cast(option.get("column"));
-            int rows     = Integer.class.cast(option.get("row"));
+            int columns = option.columnNumberProperty().get();
+            int rows    = option.rowNumberProperty().get();
 
             playField = new Grid(rows, columns, parent);
             previewField = new Grid(2, 4, uiController.getPreviewBox());
 
-            Rectangle wall = new Rectangle();
+            wall = new Rectangle();
             wall.setManaged(false);
             wall.setId("wall");
             wall.xProperty().bind(playField.xShiftProperty());
@@ -390,6 +399,10 @@ class Game{
             });
         } // end GameLogic()
 
-
+    public void delete() {
+        timeline.stop();
+        playField.recoverAllocatedMinos();
+        parent.getChildren().remove(wall);
+    }
 
     }  // end GameLogic

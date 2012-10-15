@@ -11,37 +11,24 @@
 
 package tetris.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public final class Option {
-    Map map = new HashMap<String, Object>();
+    private SimpleIntegerProperty columnNumberProperty = new SimpleIntegerProperty();
+    private SimpleIntegerProperty rowNumberProperty    = new SimpleIntegerProperty();
+    private SimpleIntegerProperty frameRateProperty    = new SimpleIntegerProperty();
 
-    public Object get(String key) {
-        return map.get(key);
+    public IntegerProperty columnNumberProperty() {
+        return columnNumberProperty;
     }
 
-    public int getInteger(String key) {
-        return Integer.class.cast(get(key));
+
+    public IntegerProperty rowNumberProperty() {
+        return rowNumberProperty;
     }
 
-    public String getString(String key) {
-        return String.class.cast(get(key));
-    }
-
-    public void set(String key, Object value) {
-        map.put(key, value);
-    }
-
-    public Option() {
-        // default values
-        set("level", 1);
-        set("column", 10);
-        set("row", 20);
-        set("user", "John");
-        set("version", "0.01");
-        set("title", "Option Game");
-        set("frameRate", 60);
-        set("baseSpeed", 1.0/48);
+    public IntegerProperty frameRateProperty() {
+        return frameRateProperty;
     }
 }
