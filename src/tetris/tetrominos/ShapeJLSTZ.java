@@ -11,7 +11,7 @@
 package tetris.tetrominos;
 
 
-public abstract class SimpleTSZJLTetromino extends SimpleTetromino {
+public abstract class ShapeJLSTZ extends Tetromino {
     private static int[][] wallKickData = {
             {0, 0, -1, 0, -1, +1, 0, -2, -1, -2}
             , {0, 0, +1, 0, +1, -1, 0, +2, +1, +2}
@@ -19,7 +19,7 @@ public abstract class SimpleTSZJLTetromino extends SimpleTetromino {
             , {0, 0, -1, 0, -1, -1, 0, +2, -1, +2}
     };
 
-    protected SimpleTSZJLTetromino(Grid grid) {
+    protected ShapeJLSTZ(Grid grid) {
         super(grid);
     }
 

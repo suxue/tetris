@@ -11,7 +11,7 @@
 
 import javafx.geometry.Point2D;
 
-public final class ShapeL extends SimpleTSZJLTetromino {
+public final class ShapeL extends ShapeJLSTZ {
     public ShapeL(Grid grid) {
         super(grid);
         setCssClass("shapeL");

@@ -12,7 +12,7 @@ package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
 
-public class ShapeJ extends SimpleTSZJLTetromino {
+public class ShapeJ extends ShapeJLSTZ {
     public ShapeJ(Grid grid) {
         super(grid);
         setCssClass("shapeJ");

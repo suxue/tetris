@@ -20,7 +20,7 @@ import javafx.geometry.Point2D;
  *    ---------
  *    color:Yellow
 */
-public class ShapeO extends SimpleTetromino {
+public class ShapeO extends Tetromino {
     private final static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
     private final static double[][] data = {line, line, line, line};
 

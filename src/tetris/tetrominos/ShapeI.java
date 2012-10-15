@@ -31,7 +31,7 @@ import javafx.geometry.Point2D;
   | 3 |
   -----
 */
-public final class ShapeI extends SimpleTetromino {
+public final class ShapeI extends Tetromino {
 
     private static double[][] rotationData = {
             {-2, -1, -1, -1, 0, -1, 1, -1}
