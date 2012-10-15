@@ -8,24 +8,21 @@
  *  @author: $Author$
  *  @date:   $Date$
  */
+
 package tetris.tetrominos;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import tetris.api.Grid;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class TetrisGrid extends AnchorPane implements Grid {
-
+public final class Grid {
 
     private MinoPool minoPool = null;
     private OccupationMonitor occupationMonitor = null;
@@ -46,7 +43,7 @@ public class TetrisGrid extends AnchorPane implements Grid {
         return minoPool;
     }
 
-    @Override
+
     public boolean isAccessible(int x, int y) {
         return getOccupationMonitor().isAccessible(x, y);
     }
@@ -187,101 +184,128 @@ public class TetrisGrid extends AnchorPane implements Grid {
     }
 
 
-    @Override
     public int squeeze() {
         return getOccupationMonitor().squeeze();
     }
 
-    @Override
+
     public void unsetAllCooridinate() {
         getOccupationMonitor().unsetAll();
     }
 
-    @Override
+
     public Mino get(int x, int y) {
         return getOccupationMonitor().get(x, y);
     }
 
 
-    @Override
     public Mino[] allocateMinos(int number) {
         return getMinoPool().allocateMinos(number);
     }
 
-    @Override
+
     public void recoverAllocatedMinos() {
         getMinoPool().recoverAllAllocatedMinos();
     }
 
 
-    @Override
     public void set(int x, int y, Mino c) {
         getOccupationMonitor().set(x, y, c);
     }
 
-    @Override
+
     public void unset(int x, int y) {
         getOccupationMonitor().unset(x, y);
     }
 
-    private DoubleProperty minoWidth = new SimpleDoubleProperty();
-    private DoubleProperty minoHeight = new SimpleDoubleProperty();
+    private DoubleProperty minoSize = new SimpleDoubleProperty(0);
 
-    @Override
+
     public ReadOnlyDoubleProperty minoWidthProperty() {
-        return minoWidth;
+        return minoSize;
     }
 
-    @Override
+
+    public ReadOnlyDoubleProperty minoHeightProperty() {
+        return minoSize;
+    }
+
+
     public void removeMino(Mino c) {
-        getChildren().remove(c);
+        container.getChildren().remove(c);
     }
 
 
-    @Override
     public void addMino(Mino c) {
-        getChildren().add(c);
+        container.getChildren().add(c);
     }
 
-    @Override
-    public ReadOnlyDoubleProperty minoHeighthProperty() {
-        return minoHeight;
-    }
 
-    @Override
-    public Node toJavaFXNode() {
-        return (Node) this;
-    }
+    private final int columnNumber;
+    private final int rowNumber;
 
-    private int columnNumber;
-    private int rowNumber;
 
-    @Override
     public final int getColumnNo() {
         return columnNumber;
     }
 
-    @Override
+
     public final int getRowNo() {
         return rowNumber;
     }
 
+    private DoubleProperty xShiftPropertyImpl = new SimpleDoubleProperty();
+    private DoubleProperty yShiftPropertyImpl = new SimpleDoubleProperty();
 
-    public TetrisGrid(Paint fill, int rowNo, int columnNo
-            , ObservableDoubleValue boundWidthProperty
-            , ObservableDoubleValue boundHeightProperty) {
+
+    public ReadOnlyDoubleProperty xShiftProperty() {
+        return xShiftPropertyImpl;
+    }
+
+
+    public ReadOnlyDoubleProperty yShiftProperty() {
+        return yShiftPropertyImpl;
+    }
+
+    private void recalculateMinoSize() {
+        double width = container.getWidth() / columnNumber;
+        double height = container.getHeight() / rowNumber;
+        if (width < height) {
+            minoSize.set(width);
+            yShiftPropertyImpl.set((container.getHeight() - rowNumber * width) / 2);
+            xShiftPropertyImpl.set(0);
+        } else {
+            minoSize.set(height);
+            xShiftPropertyImpl.set((container.getWidth() - columnNumber * height) / 2);
+            yShiftPropertyImpl.set(0);
+        }
+
+    }
+
+    private final Pane container;
+
+    public Grid(final int rowNo, final int columnNo
+            , final Pane container) {
         super();
+        this.container = container;
 
         this.columnNumber = columnNo;
         this.rowNumber = rowNo;
 
-        Rectangle background = new Rectangle();
-        background.setFill(fill);
-        getChildren().add(background);
-        background.widthProperty().bind(boundWidthProperty);
-        background.heightProperty().bind(boundHeightProperty);
-        minoWidth.bind(background.widthProperty().divide(getColumnNo()));
-        minoHeight.bind(background.heightProperty().divide(getRowNo()));
+        container.widthProperty().addListener(new ChangeListener<Number>() {
+
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number widthNo) {
+                recalculateMinoSize();
+            }
+        });
+
+        container.heightProperty().addListener(new ChangeListener<Number>() {
+
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number heightNo) {
+                recalculateMinoSize();
+            }
+        });
+
+        recalculateMinoSize();
     }
 }
-

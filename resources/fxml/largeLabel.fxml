@@ -1,0 +1,11 @@
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.text.Font?>
+
+<fx:root type="javafx.scene.control.Label" xmlns:fx="http://javafx.com/fxml">
+    <font>
+    <Font name="Arial Black" size="24.0" />
+    </font>
+</fx:root>
+
+

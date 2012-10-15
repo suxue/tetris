@@ -5,7 +5,7 @@
  *
  *  @file:   $File$
  *  @brief:  Include the shared functions among different tetrominos, every
- *  concrete tetromino class should inherit me.
+ *              concrete tetromino class should inherit me.
  *  @author: $Author$
  *  @date:   $Date$
  */
@@ -14,32 +14,30 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
-import tetris.api.Grid;
-import tetris.api.Tetromino;
 
 // combination of cells
 // maintain my rotation status
-abstract public class SimpleTetromino implements Tetromino {
+abstract public class Tetromino {
 
-    protected Mino[] allMinos;  // all cells included within me
+    protected final Mino[] allMinos;  // all cells included within me
     protected Grid hostGrid = null;
     private int status;
 
     protected boolean hasBound = false;
 
-    protected SimpleTetromino(Grid grid) {
+    protected Tetromino(Grid grid) {
         allMinos = grid.allocateMinos(4);
         setStatus(0);
         rebindMinos();
         hasBound = true;
     }
 
-    @Override
-    public int getStatus() {
+    // 0, 1, 2, 3
+    public final int getStatus() {
         return status;
     }
 
-    protected void setStatus(int s) {
+    protected final void setStatus(int s) {
         if (s > 3 || s < 0)
             throw new RuntimeException();
 
@@ -57,19 +55,17 @@ abstract public class SimpleTetromino implements Tetromino {
         return yPropertyImpl;
     }
 
-    @Override
     public final Point2D getPivot() {
         return new Point2D(xProperty().get(), yProperty().get());
     }
 
-    @Override
-    public void setPivot(Point2D pivot) {
+    public final void setPivot(Point2D pivot) {
         xProperty().set(pivot.getX());
         yProperty().set(pivot.getY());
     }
 
 
-    @Override
+    // after attaching, I'll be showed in that grid
     public final void attach(Grid grid) {
         for (Mino c : allMinos) {
             c.attach(grid);
@@ -80,7 +76,6 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
 
-    @Override
     public final void detach() {
         for (Mino c : allMinos) {
             c.detach();
@@ -88,7 +83,7 @@ abstract public class SimpleTetromino implements Tetromino {
         hostGrid = null;
     }
 
-    protected void setCssClass(String cssClass) {
+    protected final void setCssClass(String cssClass) {
         for (Mino c : allMinos) {
             c.getStyleClass().clear();
             c.getStyleClass().add(cssClass);
@@ -96,15 +91,16 @@ abstract public class SimpleTetromino implements Tetromino {
 
     }
 
-
-    @Override
-    public void pin() {
+    public final void align() {
         Mino firstMino = allMinos[0];
         double offset = Math.ceil(firstMino.getMinoYProperty().get())
                 - firstMino.getMinoYProperty().get();
         Point2D pivot = getPivot();
         setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
+    }
 
+
+    public final void pin() {
         for (Mino c : allMinos) {
             hostGrid.set((int) c.getMinoXProperty().get()
                     , (int) c.getMinoYProperty().get(), c);
@@ -114,7 +110,7 @@ abstract public class SimpleTetromino implements Tetromino {
     }
 
 
-    protected void rebindMinos() {
+    protected final void rebindMinos() {
         if (hasBound) { // unbind first if has bound
             for (Mino m : allMinos) {
                 m.getMinoXProperty().unbind();
@@ -140,24 +136,49 @@ abstract public class SimpleTetromino implements Tetromino {
         return new Point2D(bb.getX() - shift.getX(), bb.getY() - shift.getY());
     }
 
-    @Override
-    public void moveDown(double len) {
+    public final void moveDown(double len) {
         yProperty().set(yProperty().get() + len);
     }
 
-    @Override
-    public void moveLeft() {
+    public final void moveLeft() {
         xProperty().set(xProperty().get() - 1);
     }
 
-    @Override
-    public void moveRight() {
+    public final void moveRight() {
         xProperty().set(xProperty().get() + 1);
     }
 
+    public final boolean canMoveRight() {
+        return allMinos[0].canMoveRight()
+                && allMinos[1].canMoveRight()
+                && allMinos[2].canMoveRight()
+                && allMinos[3].canMoveRight();
+    }
 
-    @Override
-    public boolean rotate(boolean clockWise) {
+
+    public final boolean canMoveDown(double len) {
+        return allMinos[0].canMoveDown(len)
+                && allMinos[1].canMoveDown(len)
+                && allMinos[2].canMoveDown(len)
+                && allMinos[3].canMoveDown(len);
+    }
+
+
+    public final boolean canMoveLeft() {
+        return allMinos[0].canMoveLeft()
+                && allMinos[1].canMoveLeft()
+                && allMinos[2].canMoveLeft()
+                && allMinos[3].canMoveLeft();
+    }
+
+    // the offset to transfer current pivot to the corresponding bonding box(4x2)
+    // only need to be implemented for the first of the four shapes
+    public abstract Point2D getInitialBoundingBoxOffset();
+
+
+    //  clock-wise/right
+    //  counter clock-wise/left
+    public boolean rotate(boolean clockWise, boolean canRotateUp) {
         Point2D pivot = getPivot();
         double kickOffset;
         {
@@ -192,10 +213,19 @@ abstract public class SimpleTetromino implements Tetromino {
         int i = 0;
         int j = 0;
         int k = 0;
+        int offsetX;
+        int offsetY;
+
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 4; j++) {
-                x = pivot.getX() + wd[i * 2] + rd[j * 2];
-                y = pivot.getY() + wd[i * 2 + 1] + rd[j * 2 + 1];
+                offsetX = wd[i * 2];
+                offsetY = wd[i * 2 + 1];
+
+                if (!canRotateUp && offsetY < 0)
+                    break;
+
+                x = pivot.getX() + offsetX + rd[j * 2];
+                y = pivot.getY() + offsetY + rd[j * 2 + 1];
                 floor = (int) Math.floor(y);
                 ceil = (int) Math.ceil(y);
                 if (!hostGrid.isAccessible((int) x, floor)) {
@@ -214,8 +244,13 @@ abstract public class SimpleTetromino implements Tetromino {
             // check kicked postion
             if (kickOffset != 0) {
                 for (k = 0; k < 4; k++) {
-                    x = pivot.getX() + wd[i * 2] + rd[k * 2];
-                    y = pivot.getY() + wd[i * 2 + 1] + rd[k * 2 + 1] + kickOffset;
+                    offsetX = wd[i * 2];
+                    offsetY = wd[i * 2 + 1];
+                    if (!canRotateUp && offsetY < 0)
+                        break;
+
+                    x = pivot.getX() + offsetX + rd[k * 2];
+                    y = pivot.getY() + offsetY + rd[k * 2 + 1] + kickOffset;
                     if (!hostGrid.isAccessible((int) x, (int) y)) {
                         break;
                     }
@@ -246,3 +281,4 @@ abstract public class SimpleTetromino implements Tetromino {
         return true;
     }
 }
+

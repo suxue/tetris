@@ -14,23 +14,22 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Rectangle;
-import tetris.api.Grid;
 
 
-public class Mino extends Rectangle {
+public final class Mino extends Rectangle {
 
     private Grid hostGrid = null;
 
-    public DoubleProperty getMinoYProperty() {
+    public final DoubleProperty getMinoYProperty() {
         return minoYProperty;
     }
 
-    public DoubleProperty getMinoXProperty() {
+    public final DoubleProperty getMinoXProperty() {
         return minoXProperty;
     }
 
-    private DoubleProperty minoXProperty;
-    private DoubleProperty minoYProperty;
+    private final DoubleProperty minoXProperty;
+    private final DoubleProperty minoYProperty;
 
 
     public Mino(double x, double y) {
@@ -45,16 +44,16 @@ public class Mino extends Rectangle {
     }
 
 
-    public void attach(Grid grid) {
+    public final void attach(Grid grid) {
         widthProperty().bind(grid.minoWidthProperty());
-        heightProperty().bind(grid.minoHeighthProperty());
-        xProperty().bind((widthProperty().multiply(minoXProperty)));
-        yProperty().bind((heightProperty().multiply(minoYProperty)));
+        heightProperty().bind(grid.minoHeightProperty());
+        xProperty().bind(grid.xShiftProperty().add(widthProperty().multiply(minoXProperty)));
+        yProperty().bind(grid.yShiftProperty().add(heightProperty().multiply(minoYProperty)));
         grid.addMino(this);
         hostGrid = grid;
     }
 
-    public void detach() {
+    public final void detach() {
         hostGrid.removeMino(this);
         widthProperty().unbind();
         heightProperty().unbind();
@@ -64,11 +63,11 @@ public class Mino extends Rectangle {
     }
 
 
-    public boolean isAttached() {
+    public final boolean isAttached() {
         return (hostGrid != null);
     }
 
-    private boolean canMoveHorizontal(int len) {
+    private final boolean canMoveHorizontal(int len) {
         int targetX = (int) (getMinoXProperty().get() + len);
         double targetY = getMinoYProperty().get();
         int y1 = (int) (Math.floor(targetY));
@@ -85,17 +84,17 @@ public class Mino extends Rectangle {
         return true;
     }
 
-    public boolean canMoveLeft() {
+    public final boolean canMoveLeft() {
         return canMoveHorizontal(-1);
     }
 
 
-    public boolean canMoveRight() {
+    public final boolean canMoveRight() {
         return canMoveHorizontal(1);
     }
 
 
-    public boolean canMoveDown(double len) {
+    public final boolean canMoveDown(double len) {
         int targetX = (int) (getMinoXProperty().get());
         int targetY = (int) (Math.ceil(getMinoYProperty().get() + len));
 
