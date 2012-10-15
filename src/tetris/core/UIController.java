@@ -70,6 +70,8 @@ public class UIController implements Initializable {
     private WebView helpPage;
     @FXML
     private ToggleButton helpButton;
+    @FXML
+    private  HBox helpContainer;
 
 
     public HBox getCenter() {
@@ -173,11 +175,11 @@ public class UIController implements Initializable {
         // load help page
         String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
         helpPage.getEngine().load(helpLink);
-        helpPage.maxWidthProperty().bind(window.widthProperty().subtract(toolbar.heightProperty()).multiply(0.8));
-        helpPage.maxHeightProperty().bind(window.heightProperty().subtract(helpPage.translateYProperty()).multiply(0.8));
-        helpPage.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
+        helpContainer.maxWidthProperty().bind(window.widthProperty().subtract(toolbar.heightProperty()).multiply(0.8));
+        helpContainer.maxHeightProperty().bind(window.heightProperty().subtract(helpContainer.translateYProperty()).multiply(0.8));
+        helpContainer.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
 
-        helpPage.visibleProperty().addListener(new ChangeListener<Boolean>() {
+        helpContainer.visibleProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean newVal) {
                 helpButton.setSelected(newVal);
@@ -186,7 +188,7 @@ public class UIController implements Initializable {
         helpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                helpPage.setVisible(!helpPage.isVisible());
+                helpContainer.setVisible(!helpContainer.isVisible());
             }
         });
 

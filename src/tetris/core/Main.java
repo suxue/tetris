@@ -14,10 +14,10 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 
@@ -56,7 +56,7 @@ public class Main extends Application {
         stage.show();
 
 
-        final WebView helpPage = (WebView) root.lookup("#helpPage");
+        final Node helpContainer =  root.lookup("#helpContainer");
         root.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -68,7 +68,7 @@ public class Main extends Application {
                         uiController.newGame();
                         break;
                     case H:
-                        helpPage.setVisible(!helpPage.isVisible());
+                        helpContainer.setVisible(!helpContainer.isVisible());
                         break;
                     case R:
                         uiController.restartGame();

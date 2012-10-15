@@ -1,9 +1,5 @@
 .root {
-    -fx-background-position: center;
-    -fx-background-image: url('../img/background.jpg');
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-
+    -fx-background-color: linear (0%,0%) to (100%,100%) stops (0.0,#d7fbdd) (0.3, #439670) (0.55, #c7d49b)  (1.0, #def9c5);
 }
 
 .mybutton{
@@ -113,4 +109,12 @@
 
 #previewBox {
     -fx-background-color: black;
+}
+
+#helpContainer{
+    -fx-border-color: linear (0%,0%) to (100%,100%) stops (0.0,white) (1.0, darkgreen);
+    -fx-border-width:5px;
+    -fx-border-radius: 9, 9, 9, 9;
+    -fx-background-color: #e0ffff;
+    -fx-background-radius: 9, 9, 9, 9;
 }
