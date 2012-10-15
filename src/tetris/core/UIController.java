@@ -5,14 +5,14 @@ package tetris.core;/*
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.web.WebView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,11 +29,12 @@ public class UIController implements Initializable {
     /*
         UI Components
      */
+    @FXML private StackPane window;
+    @FXML private ToolBar toolbar;
     @FXML private Button newGameButton;
     @FXML private ToggleButton toggleButton;
     @FXML private Pane optionPage;
 	@FXML private Button restartButton;
-    @FXML private ToggleButton fullscreenButton;
 	@FXML private Rectangle rect;
     @FXML private BorderPane root;
     @FXML private HBox center;
@@ -46,6 +47,8 @@ public class UIController implements Initializable {
     @FXML private Label  rowNumberLabel;
     @FXML private Label  frameRateLabel;
     @FXML private GridPane optionDisplay;
+    @FXML private WebView helpPage;
+    @FXML private  ToggleButton helpButton;
 
 
 
@@ -58,9 +61,6 @@ public class UIController implements Initializable {
         return previewBox;
     }
 
-    public ToggleButton getFullscreenButton() {
-        return fullscreenButton;
-    }
 
     /*
         UI State machine
@@ -80,7 +80,6 @@ public class UIController implements Initializable {
     }
 
     @FXML void startNewGame() {
-
         game = new Game(this, option) {
             @Override public void stop() {
                 root.setCenter(gameOverPage);
@@ -138,7 +137,7 @@ public class UIController implements Initializable {
         columnNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                columnNumberLabel.setText( String.format("%1$,.0f", newVal));
+                columnNumberLabel.setText(String.format("%1$,.0f", newVal));
             }
         });
 
@@ -146,8 +145,30 @@ public class UIController implements Initializable {
         rowNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                rowNumberLabel.setText( String.format("%1$,.0f", newVal));
+                rowNumberLabel.setText(String.format("%1$,.0f", newVal));
             }
         });
-	}
+
+        // load help page
+        String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
+        helpPage.getEngine().load(helpLink);
+        helpPage.maxWidthProperty().bind(window.widthProperty().subtract(toolbar.heightProperty()).multiply(0.8));
+        helpPage.maxHeightProperty().bind(window.heightProperty().subtract(helpPage.translateYProperty()).multiply(0.8));
+        helpPage.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
+
+        helpPage.visibleProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean newVal) {
+                helpButton.setSelected(newVal);
+            }
+        });
+        helpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                helpPage.setVisible(!helpPage.isVisible());
+            }
+        });
+
+
+    }
 }

@@ -6,17 +6,15 @@
 package tetris.core;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+
 
 /**
  *
@@ -50,32 +48,18 @@ public class Main extends Application {
         /* full screen feature
         *  this is here because the primary stage will be involved
         * */
-        primaryStage.fullScreenProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean a, Boolean st) {
-                uiController.getFullscreenButton().setSelected(st);
-            }
-        });
-
-        uiController.getFullscreenButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                toggleFullScreen();
-            }
-        });
-
-
 		stage.setScene(new Scene(root));
 		stage.show();
 
 
+        final WebView helpPage = (WebView)root.lookup("#helpPage");
         root.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.F) {
-                    toggleFullScreen();
-                } else if (keyEvent.getCode() == KeyCode.N) {
-                    uiController.newGame();
+                switch (keyEvent.getCode()) {
+                    case F: toggleFullScreen(); break;
+                    case N: uiController.newGame(); break;
+                    case H: helpPage.setVisible(!helpPage.isVisible()); break;
                 }
             }
         });

@@ -1,5 +1,9 @@
 .root {
-	-fx-background-color:white;
+    -fx-background-position: center;
+    -fx-background-image: url('../img/background.jpg');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+
 }
 
 .mybutton{
@@ -20,7 +24,7 @@
     -fx-background-radius: 5,5,4;
     -fx-padding: 15 30 15 30;
     -fx-text-fill: #242d35;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-font-family: "Helvetica";
 }
 
@@ -34,7 +38,7 @@
         -fx-background-radius: 9,8,5,4;
         -fx-padding: 15 30 15 30;
         -fx-font-family: "Helvetica";
-        -fx-font-size: 18px;
+        -fx-font-size: 16px;
         -fx-font-weight: bold;
         -fx-text-fill: #333333;
         -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
@@ -51,26 +55,17 @@
     -fx-background-radius: 9,8,5,4,3;
     -fx-padding: 15 30 15 30;
     -fx-font-family: "Helvetica";
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
 }
-
-.label {
-    -fx-font-size:16px;
-}
-
 
 .button:hover, .button:focused{
    -fx-background-color:
         rgba(0,0,0,0.08),
         linear-gradient(#5a61af, #51536d),
         linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
-}
-
-#center {
-    -fx-background-color:grey;
 }
 
 .shapeI, .shapeO, .shapeT, .shapeS, .shapeZ, .shapeJ, .shapeL {
@@ -110,13 +105,12 @@
     -fx-fill: darkorange;
 }
 
-#wall {
+.wall {
     -fx-fill: rgba(44, 24, 58, 0.77);
-    -fx-stroke: black;
+    -fx-stroke: white;
     -fx-stroke-width:2;
 }
 
 #previewBox {
     -fx-background-color: black;
 }
-

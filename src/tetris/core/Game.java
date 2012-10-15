@@ -278,7 +278,7 @@ class Game{
             int columns = option.columnNumberProperty().get();
             int rows    = option.rowNumberProperty().get();
             frameRate = option.frameRateProperty().get();
-            frameIntervalInMileSecond = 1000 / frameRate;
+            frameIntervalInMileSecond = ((double)1000) / frameRate;
             frameInterval = Duration.millis(frameIntervalInMileSecond);
             baseSpeed = distancePerFrame / frameRate;
 
@@ -317,7 +317,7 @@ class Game{
 
             wall = new Rectangle();
             wall.setManaged(false);
-            wall.setId("wall");
+            wall.getStyleClass().add("wall");
             wall.xProperty().bind(playField.xShiftProperty());
             wall.yProperty().bind(playField.yShiftProperty());
             wall.widthProperty().bind(playField.minoWidthProperty().multiply(playField.getColumnNo()));
