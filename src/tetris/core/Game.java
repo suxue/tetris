@@ -354,9 +354,6 @@ class Game {
                     case ENTER:
                         toggle();
                         break;
-                    case R:
-                        restart();
-                        break;
                     case UP: // rotateLeft
                         if (getState() == ST_DROPPING) {
                             movingStartingCycle = cycleCount;

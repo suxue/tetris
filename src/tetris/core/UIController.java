@@ -88,13 +88,14 @@ public class UIController implements Initializable {
     private Option option;
 
 
-    @FXML
-    private void restartGame() {
+    public void restartGame() {
         // restart current game
-        toggleButton.setDisable(false);
-        game.restart();
-        root.setCenter(center);
-        center.requestFocus();
+        if (game != null) {
+            toggleButton.setDisable(false);
+            game.restart();
+            root.setCenter(center);
+            center.requestFocus();
+        }
     }
 
     @FXML

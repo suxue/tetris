@@ -70,6 +70,9 @@ public class Main extends Application {
                     case H:
                         helpPage.setVisible(!helpPage.isVisible());
                         break;
+                    case R:
+                        uiController.restartGame();
+                        break;
                 }
             }
         });
