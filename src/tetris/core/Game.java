@@ -38,10 +38,10 @@ class Game{
         private Grid playField;
         private Grid previewField;
 
-        private final int frameRate = 60;
+        private final int frameRate;
         private Rand randGenerator = new Rand();
-        private final double frameIntervalInMileSecond = 1000 / frameRate;
-        private final Duration frameInterval = Duration.millis(frameIntervalInMileSecond);
+        private final double frameIntervalInMileSecond;
+        private final Duration frameInterval;
 
         private State state;
         private State oldState;
@@ -62,38 +62,14 @@ class Game{
         private int movingDelay = 10; // frames
         private int startDelay = 60; // frames
 
-        private double baseSpeed = 1 / 48.0; // how many grids to be moved within a frame
+        private static final double distancePerFrame = 1.25;
+        private final double baseSpeed;
         private double speedFactor = 1;
 
 
 
-        private final KeyFrame mainFrame = new KeyFrame(frameInterval,
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        if (getState() == ST_PAUSED) {
-                            return;
-                        }
-
-                        cycleCount++;
-
-                        //
-                        // timer related code below
-                        //
-                        if (sleepCycles != 0) {
-                            sleepCycles--; // skip left code
-                            return;
-                        }
-
-
-                        // run into state machine
-                        runStateMachine();
-                    }
-                }
-        );
-        private final Timeline timeline = TimelineBuilder.create().cycleCount(Animation.INDEFINITE)
-                .keyFrames(mainFrame).build();
-
+        private final KeyFrame mainFrame;
+        private final Timeline timeline ;
 
         /////////////////////////////////////////////////////////////////////
         //             Auxiliary Functions                                 //
@@ -301,9 +277,43 @@ class Game{
 
             int columns = option.columnNumberProperty().get();
             int rows    = option.rowNumberProperty().get();
+            frameRate = option.frameRateProperty().get();
+            frameIntervalInMileSecond = 1000 / frameRate;
+            frameInterval = Duration.millis(frameIntervalInMileSecond);
+            baseSpeed = distancePerFrame / frameRate;
 
             playField = new Grid(rows, columns, parent);
             previewField = new Grid(2, 4, uiController.getPreviewBox());
+
+
+            mainFrame = new KeyFrame(frameInterval,
+                    new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            if (getState() == ST_PAUSED) {
+                                return;
+                            }
+
+                            cycleCount++;
+
+                            //
+                            // timer related code below
+                            //
+                            if (sleepCycles != 0) {
+                                sleepCycles--; // skip left code
+                                return;
+                            }
+
+
+                            // run into state machine
+                            runStateMachine();
+                        }
+                    }
+            );
+
+
+            timeline = TimelineBuilder.create().cycleCount(Animation.INDEFINITE)
+                    .keyFrames(mainFrame).build();
 
             wall = new Rectangle();
             wall.setManaged(false);

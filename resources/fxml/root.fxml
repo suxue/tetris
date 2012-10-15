@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.geometry.Pos?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.layout.Priority?>
 <?import javafx.geometry.Orientation?>
 <?import javafx.scene.layout.Priority?>
@@ -33,62 +33,95 @@
             <TilePane fx:id="gameOverPage">
                 <Label text="Game Over"/>
             </TilePane>
-            <TilePane fx:id="optionPage" prefWidth="500">
+            
+            <VBox fx:id="optionPage">
                 <alignment><Pos fx:constant="CENTER"/></alignment>
-                <orientation><Orientation fx:constant="VERTICAL"/></orientation>
-                <prefTileWidth>500</prefTileWidth>
-                <vgap>50</vgap>
-                
-                <HBox>
-                    <Label text="frame rate"/>
-                    <Slider fx:id="frameRateSlider" >
-                        <min>50</min>
-                        <max>80</max>
-                        <showTickLabels>true</showTickLabels>
-                        <showTickMarks>true</showTickMarks>
-                        <minorTickCount>1</minorTickCount>
-                        <blockIncrement>5</blockIncrement>
-                        <majorTickUnit>5</majorTickUnit>
-                        <!-- set the default framerate -->
-                        <value>60</value>
-                    </Slider>
-                </HBox>
+                <GridPane hgap="10" vgap="50" style="-fx-padding: 20 20 20 20" >
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="20"/>
+                        <ColumnConstraints>
+                            <hgrow><Priority fx:constant="ALWAYS"/></hgrow>
+                        </ColumnConstraints>
+                        <ColumnConstraints percentWidth="10" />
+                    </columnConstraints>
+                    <children>
+                        <Label text="frame rate">
+                            <GridPane.rowIndex>0</GridPane.rowIndex>
+                            <GridPane.columnIndex>0</GridPane.columnIndex>
+                        </Label>
+                        <Slider fx:id="frameRateSlider">
+                            <GridPane.rowIndex>0</GridPane.rowIndex>
+                            <GridPane.columnIndex>1</GridPane.columnIndex>
+                            <min>50</min>
+                            <max>80</max>
+                            <showTickLabels>true</showTickLabels>
+                            <showTickMarks>true</showTickMarks>
+                            <minorTickCount>1</minorTickCount>
+                            <blockIncrement>5</blockIncrement>
+                            <majorTickUnit>5</majorTickUnit>
+                            <!-- set the default framerate -->
+                            <value>60</value>
+                        </Slider>
+                        <Label fx:id="frameRateLabel">
+                            <GridPane.rowIndex>0</GridPane.rowIndex>
+                            <GridPane.columnIndex>2</GridPane.columnIndex>
+                        </Label>
 
-                <HBox>
-                    <Label text="column number"/>
-                    <Slider fx:id="columnNumberSlider" >
-                        <min>10</min>
-                        <max>50</max>
-                        <showTickLabels>true</showTickLabels>
-                        <showTickMarks>true</showTickMarks>
-                        <minorTickCount>1</minorTickCount>
-                        <blockIncrement>5</blockIncrement>
-                        <majorTickUnit>5</majorTickUnit>
-                        <!-- set the default framerate -->
-                        <value>10</value>
-                    </Slider>
-                </HBox>
 
-                <HBox>
-                    <Label text="row number"/>
-                    <Slider fx:id="rowNumberSlider" >
-                        <min>10</min>
-                        <max>50</max>
-                        <showTickLabels>true</showTickLabels>
-                        <showTickMarks>true</showTickMarks>
-                        <minorTickCount>1</minorTickCount>
-                        <blockIncrement>5</blockIncrement>
-                        <majorTickUnit>5</majorTickUnit>
-                        <!-- set the default framerate -->
-                        <value>20</value>
-                    </Slider>
-                </HBox>
+                        <Label text="column number">
+                            <GridPane.rowIndex>1</GridPane.rowIndex>
+                            <GridPane.columnIndex>0</GridPane.columnIndex>
+                        </Label>
+                        <Slider fx:id="columnNumberSlider" >
+                            <GridPane.rowIndex>1</GridPane.rowIndex>
+                            <GridPane.columnIndex>1</GridPane.columnIndex>
+                            <min>10</min>
+                            <max>50</max>
+                            <showTickLabels>true</showTickLabels>
+                            <showTickMarks>true</showTickMarks>
+                            <minorTickCount>1</minorTickCount>
+                            <blockIncrement>5</blockIncrement>
+                            <majorTickUnit>5</majorTickUnit>
+                            <!-- set the default framerate -->
+                            <value>10</value>
+                        </Slider>
+                        <Label fx:id="columnNumberLabel" >
+                            <GridPane.rowIndex>1</GridPane.rowIndex>
+                            <GridPane.columnIndex>2</GridPane.columnIndex>
+                        </Label>
 
-                <Button text="Start" onAction="#startNewGame">
-                    <TilePane.alignment><Pos fx:constant="BOTTOM_RIGHT"/></TilePane.alignment>
-                </Button>
 
-            </TilePane>
+                        <Label text="row number">
+                            <GridPane.rowIndex>2</GridPane.rowIndex>
+                            <GridPane.columnIndex>0</GridPane.columnIndex>
+                        </Label>
+                        <Slider fx:id="rowNumberSlider" >
+                            <GridPane.rowIndex>2</GridPane.rowIndex>
+                            <GridPane.columnIndex>1</GridPane.columnIndex>
+                            <min>10</min>
+                            <max>50</max>
+                            <showTickLabels>true</showTickLabels>
+                            <showTickMarks>true</showTickMarks>
+                            <minorTickCount>1</minorTickCount>
+                            <blockIncrement>5</blockIncrement>
+                            <majorTickUnit>5</majorTickUnit>
+                            <!-- set the default framerate -->
+                            <value>20</value>
+                        </Slider>
+                        <Label fx:id="rowNumberLabel">
+                            <GridPane.rowIndex>2</GridPane.rowIndex>
+                            <GridPane.columnIndex>2</GridPane.columnIndex>
+                        </Label>
+
+                        <Button text="Start" onAction="#startNewGame">
+                            <GridPane.rowIndex>3</GridPane.rowIndex>
+                            <GridPane.columnIndex>1</GridPane.columnIndex>
+                            <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>
+                        </Button>
+                    </children>
+                </GridPane>
+            </VBox>
+
         </fx:define>
         <HBox fx:id="center">
         </HBox>
