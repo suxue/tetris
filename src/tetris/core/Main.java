@@ -74,6 +74,8 @@ public class Main extends Application {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.F) {
                     toggleFullScreen();
+                } else if (keyEvent.getCode() == KeyCode.N) {
+                    uiController.newGame();
                 }
             }
         });

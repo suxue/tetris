@@ -40,11 +40,6 @@
         -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
 }
 
-.toggle-button Text {
-    -fx-effect: dropshadow( one-pass-box , white , 0, 0.0 , 0 , 1 );
-}
-
-
 .toggle-button:selected{
     -fx-background-color:
         linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
@@ -66,10 +61,8 @@
     -fx-font-size:16px;
 }
 
-.toggle-button:selected Text {
-     -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );}
 
-.button:hover {
+.button:hover, .button:focused{
    -fx-background-color:
         rgba(0,0,0,0.08),
         linear-gradient(#5a61af, #51536d),

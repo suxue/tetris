@@ -93,8 +93,7 @@ public class UIController implements Initializable {
         restartButton.setDisable(false);
     }
 
-    @FXML
-    private void newGame() {
+    public void newGame() {
 
         if (game != null) {
             // delete current game
