@@ -14,6 +14,7 @@ import javafx.scene.control.ToggleButton;
 
 public class AltToggleButton extends ToggleButton {
     public AltToggleButton() {
+        getStyleClass().add("alt-toggle-button");
         setFocusTraversable(false);
     }
 }

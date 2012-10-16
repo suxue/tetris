@@ -77,6 +77,7 @@ class Game {
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
     private double speedFactor = 1;
+    private final int    accelerationFactor;
 
 
     private final KeyFrame mainFrame;
@@ -287,6 +288,7 @@ class Game {
 
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
+        accelerationFactor = option.softDropSpeedProperty().get();
         frameRate = option.frameRateProperty().get();
         frameIntervalInMileSecond = ((double) 1000) / frameRate;
         frameInterval = Duration.millis(frameIntervalInMileSecond);
@@ -348,7 +350,7 @@ class Game {
 
                 switch (keyEvent.getCode()) {
                     case SPACE:
-                        speedFactor = 20;
+                        speedFactor = accelerationFactor;
                         break;
                     case P:
                     case ENTER:

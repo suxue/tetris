@@ -12,12 +12,9 @@
 package tetris.ui;
 
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-
-import java.io.IOException;
 
 /*
   delegation pattern
@@ -76,14 +73,6 @@ public class LargeLabel extends Label {
 
     public LargeLabel() {
         ga = new GridPaneAuxiliary(this);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/largeLabel.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        getStyleClass().add("large-label");
     }
 }

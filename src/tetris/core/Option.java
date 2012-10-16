@@ -18,6 +18,7 @@ public final class Option {
     private SimpleIntegerProperty columnNumberProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty rowNumberProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty frameRateProperty = new SimpleIntegerProperty();
+    private SimpleIntegerProperty softDropSpeedProperty = new SimpleIntegerProperty();
 
     public IntegerProperty columnNumberProperty() {
         return columnNumberProperty;
@@ -30,5 +31,9 @@ public final class Option {
 
     public IntegerProperty frameRateProperty() {
         return frameRateProperty;
+    }
+
+    public IntegerProperty softDropSpeedProperty() {
+        return softDropSpeedProperty;
     }
 }

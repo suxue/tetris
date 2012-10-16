@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
+import tetris.ui.LargeLabel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,8 +44,6 @@ public class UIController implements Initializable {
     @FXML
     private Pane optionPage;
     @FXML
-    private Button restartButton;
-    @FXML
     private BorderPane root;
     @FXML
     private HBox center;
@@ -59,11 +58,11 @@ public class UIController implements Initializable {
     @FXML
     private Pane gameOverPage;
     @FXML
-    private Label columnNumberLabel;
+    private LargeLabel columnNumberLabel;
     @FXML
-    private Label rowNumberLabel;
+    private LargeLabel rowNumberLabel;
     @FXML
-    private Label frameRateLabel;
+    private LargeLabel frameRateLabel;
     @FXML
     private GridPane optionDisplay;
     @FXML
@@ -72,6 +71,12 @@ public class UIController implements Initializable {
     private ToggleButton helpButton;
     @FXML
     private  HBox helpContainer;
+    @FXML
+    private LargeLabel softDropSpeedLabel;
+    @FXML
+    private Slider softDropSpeedSlider;
+    @FXML
+    private Button newGameButton;
 
 
     public HBox getCenter() {
@@ -100,8 +105,7 @@ public class UIController implements Initializable {
         }
     }
 
-    @FXML
-    void startNewGame() {
+    private void startNewGame() {
         game = new Game(this, option) {
             @Override
             public void stop() {
@@ -112,19 +116,22 @@ public class UIController implements Initializable {
 
         restartGame();
         toggleButton.setSelected(false);
-        restartButton.setDisable(false);
+        newGameButton.setText("New Game");
     }
 
     public void newGame() {
-
-        if (game != null) {
-            // delete current game
-            game.delete();
-            game = null;
+        if (root.getCenter() != optionPage) {
+            if (game != null) {
+                // delete current game
+                game.delete();
+                game = null;
+            }
+            toggleButton.setDisable(true);
+            root.setCenter(optionPage);
+            newGameButton.setText("Start");
+        } else {
+            startNewGame();
         }
-        toggleButton.setDisable(true);
-        restartButton.setDisable(true);
-        root.setCenter(optionPage);
     }
 
     @FXML
@@ -143,11 +150,13 @@ public class UIController implements Initializable {
         option.frameRateProperty().bind(frameRateSlider.valueProperty());
         option.rowNumberProperty().bind(rowNumberSlider.valueProperty());
         option.columnNumberProperty().bind(columnNumberSlider.valueProperty());
+        option.softDropSpeedProperty().bind(softDropSpeedSlider.valueProperty());
 
 
         frameRateLabel.setText(String.valueOf(frameRateSlider.valueProperty().intValue()));
         columnNumberLabel.setText(String.valueOf(columnNumberSlider.valueProperty().intValue()));
         rowNumberLabel.setText(String.valueOf(rowNumberSlider.valueProperty().intValue()));
+        softDropSpeedLabel.setText(String.valueOf(softDropSpeedSlider.valueProperty().intValue()) + "x");
         // initialize sliders and their labels
         frameRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -167,10 +176,22 @@ public class UIController implements Initializable {
 
         rowNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
                 rowNumberLabel.setText(String.format("%1$,.0f", newVal));
+                if (oldVal.intValue() == Math.round(softDropSpeedSlider.getValue())) {
+                    softDropSpeedSlider.setValue(newVal.intValue());
+                }
             }
         });
+
+
+        softDropSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                softDropSpeedLabel.setText(String.format("%1$,.0f", newVal) + "x");
+            }
+        });
+
 
         // load help page
         String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
