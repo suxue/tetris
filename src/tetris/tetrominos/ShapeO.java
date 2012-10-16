@@ -11,6 +11,8 @@
 package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 /*
  *    ---------
@@ -24,6 +26,12 @@ public class ShapeO extends Tetromino {
     private final static double[] line = {-1, -1, 0, -1, -1, 0, 0, 0};
     private final static double[][] data = {line, line, line, line};
 
+    @Override
+    protected void setStyle(Shape s) {
+        super.setStyle(s);
+        s.setFill(Color.GOLD);
+        s.setStroke(Color.DARKBLUE);
+    }
 
     @Override
     public final double[][] getRotatingData() {

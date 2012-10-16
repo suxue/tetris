@@ -14,6 +14,10 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 
 // combination of cells
 // maintain my rotation status
@@ -25,7 +29,16 @@ abstract public class Tetromino {
 
     protected boolean hasBound = false;
 
+    protected void setStyle(Shape s) {
+        s.setStroke(Color.LIGHTGRAY);
+        s.setStrokeWidth(1.2);
+        s.setStrokeType(StrokeType.INSIDE);
+        s.setStrokeLineCap(StrokeLineCap.ROUND);
+    }
+
     protected Tetromino(Grid grid) {
+        // set style
+
         allMinos = grid.allocateMinos(4);
         setStatus(0);
         rebindMinos();
@@ -68,6 +81,7 @@ abstract public class Tetromino {
     // after attaching, I'll be showed in that grid
     public final void attach(Grid grid, int rowNo, int columnNo) {
         for (Mino c : allMinos) {
+            setStyle(c);
             c.attach(grid);
         }
         // set to the top middle position

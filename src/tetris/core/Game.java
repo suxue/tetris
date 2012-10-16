@@ -37,7 +37,6 @@ import static tetris.core.State.*;
     all states in the game finite autometon
  */
 enum State {
-    ST_IDLE,
     ST_PAUSED,
     ST_STARTED,
     ST_SPAWNING,  // auto awake
@@ -78,7 +77,6 @@ class Game {
     // after it has stopped?
     private final int lockDelay; //  frames
     private int movingDelay = 10; // frames
-    private int startDelay = 5; // delay before start game
 
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
@@ -136,8 +134,7 @@ class Game {
     }
 
     public void restart() {
-        startDelay = 5;
-        goTo(ST_IDLE);
+        goTo(ST_STARTED);
         timeline.play();
     }
 
@@ -240,11 +237,6 @@ class Game {
 
     private void runStateMachine() {
         switch (getState()) {
-            case ST_IDLE:
-                if (--startDelay <= 0) {
-                    goTo(ST_STARTED);
-                }
-                break;
             case ST_STARTED:
                 //
                 // reset all counters
