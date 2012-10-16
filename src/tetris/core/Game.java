@@ -37,6 +37,7 @@ import static tetris.core.State.*;
     all states in the game finite autometon
  */
 enum State {
+    ST_IDLE,
     ST_PAUSED,
     ST_STARTED,
     ST_SPAWNING,  // auto awake
@@ -68,8 +69,6 @@ class Game {
     private Tetromino staticTetromino;
     private int cycleCount;
 
-    // how many cycles are left for sleeping, 0 if awake
-    private int sleepCycles;
 
     // how many cycles has the dynamicTetromino been stopped?
     private int stopCycles;
@@ -77,9 +76,9 @@ class Game {
     private int movingStartingCycle;
     // how many cycles should be wait before locking the dynamicTetromino
     // after it has stopped?
-    private int lockDelay = 30; //  frames
+    private int lockDelay = 20; //  frames
     private int movingDelay = 10; // frames
-    private int startDelay = 60; // frames
+    private int startDelay = 5; // delay before start game
 
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
@@ -137,7 +136,8 @@ class Game {
     }
 
     public void restart() {
-        goTo(ST_STARTED);
+        startDelay = 5;
+        goTo(ST_IDLE);
         timeline.play();
     }
 
@@ -150,9 +150,6 @@ class Game {
         }
     }
 
-    private void sleep(int frames) {
-        sleepCycles = frames;
-    }
 
     private void goTo(State newState) {
         oldState = getState();
@@ -243,12 +240,16 @@ class Game {
 
     private void runStateMachine() {
         switch (getState()) {
+            case ST_IDLE:
+                if (--startDelay <= 0) {
+                    goTo(ST_STARTED);
+                }
+                break;
             case ST_STARTED:
                 //
                 // reset all counters
                 //
                 cycleCount = 0;
-                sleepCycles = 0;
                 scoreCounter.set(0);
                 currentTime.set(0);
 
@@ -260,9 +261,7 @@ class Game {
                 dynamicTetromino = null;
                 staticTetromino.attach(previewField);
 
-                // then sleep for some seconds
                 goTo(ST_SPAWNING);
-                sleep(startDelay);
 
                 break;
             case ST_SPAWNING:
@@ -273,7 +272,7 @@ class Game {
                 dynamicTetromino = staticTetromino;
                 staticTetromino = getNewTetromino();
                 staticTetromino.attach(previewField);
-                dynamicTetromino.attach(playField);
+                dynamicTetromino.attach(playField, -2);
 
                 // IF reach boundary
                 if (!dynamicTetromino.canMoveDown(0.001)) {
@@ -362,16 +361,6 @@ class Game {
                         if ((cycleCount++ % 20) == 0) {
                             updateTimer();
                         }
-
-                        //
-                        // timer related code below
-                        //
-                        if (sleepCycles != 0) {
-                            sleepCycles--; // skip left code
-                            return;
-                        }
-
-
                         // run into state machine
                         runStateMachine();
                     }
@@ -481,4 +470,4 @@ class Game {
         parent.getChildren().remove(wall);
     }
 
-}  // end GameLogic
+}  // end Game

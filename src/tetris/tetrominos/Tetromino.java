@@ -66,13 +66,22 @@ abstract public class Tetromino {
 
 
     // after attaching, I'll be showed in that grid
-    public final void attach(Grid grid) {
+    public final void attach(Grid grid, int rowNo, int columnNo) {
         for (Mino c : allMinos) {
             c.attach(grid);
         }
         // set to the top middle position
-        setPivot(boundingBoxToPivot(new Point2D((grid.getColumnNo() / 2) - 2, 0)));
+//        setPivot(boundingBoxToPivot(new Point2D((grid.getColumnNo() / 2) - 2, 0)));
+        setPivot(boundingBoxToPivot(new Point2D(columnNo, rowNo)));
         hostGrid = grid;
+    }
+
+    public final void attach(Grid grid, int rowNo) {
+        attach(grid, rowNo, grid.getColumnNo() / 2 - 2) ;
+    }
+
+    public final void attach(Grid grid) {
+        attach(grid, 0);
     }
 
 
