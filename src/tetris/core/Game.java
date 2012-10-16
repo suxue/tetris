@@ -14,6 +14,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -22,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import tetris.tetrominos.*;
+import tetris.ui.LargeLabel;
 import tetris.util.Rand;
 
 import static tetris.core.State.*;
@@ -79,6 +86,35 @@ class Game {
     private double speedFactor = 1;
     private final int    accelerationFactor;
 
+    private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
+    private LongProperty currentTime = new SimpleLongProperty(-1); // in seconds
+    private LargeLabel   scoreLabel = new LargeLabel();
+    private LargeLabel   timerLabel = new LargeLabel();
+    private Pane scoreBox;
+    private Pane timerBox;
+
+    {
+        scoreLabel.getStyleClass().add("score-label");
+        timerLabel.getStyleClass().add("timer-label");
+        currentTime.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                int seconds = newVal.intValue();
+                int minutes = seconds / 60;
+                seconds %= 60;
+                timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+        });
+
+        scoreCounter.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                scoreLabel.setText(String.format("%03d", 100 * newVal.intValue()));
+            }
+        });
+    }
+
+
 
     private final KeyFrame mainFrame;
     private final Timeline timeline;
@@ -87,18 +123,29 @@ class Game {
     //             Auxiliary Functions                                 //
     /////////////////////////////////////////////////////////////////////
 
+    private void increaseScore(int add) {
+        if (add > 0) {
+            scoreCounter.set(scoreCounter.get() + add);
+        }
+    }
+
+    private void updateTimer() {
+        long newTime = Math.round((cycleCount * frameIntervalInMileSecond) / 1000.0f);
+        if (newTime > currentTime.get()) {
+            currentTime.set(newTime);
+        }
+    }
+
     public void restart() {
         goTo(ST_STARTED);
         timeline.play();
     }
 
 
-    public void toggle() {
+    protected void toggle() {
         if (getState() == ST_PAUSED) {
-            System.out.println("resumed");
             goTo(getOldState());
         } else {
-            System.out.println("paused");
             goTo(ST_PAUSED);
         }
     }
@@ -113,7 +160,7 @@ class Game {
         //System.out.println("from " + oldState + " to " + newState);
     }
 
-    private State getState() {
+    protected  State getState() {
         return state;
     }
 
@@ -202,6 +249,8 @@ class Game {
                 //
                 cycleCount = 0;
                 sleepCycles = 0;
+                scoreCounter.set(0);
+                currentTime.set(0);
 
                 // memory recovery
                 playField.recoverAllocatedMinos();
@@ -258,7 +307,7 @@ class Game {
                 //  pin every minos to the grid
                 dynamicTetromino.pin();
                 // clear lines
-                playField.squeeze();
+                increaseScore(playField.squeeze());
                 goTo(ST_SPAWNING);
                 break;
             case ST_STOPPED:
@@ -285,6 +334,10 @@ class Game {
 
 
         parent = uiController.getCenter();
+        scoreBox = uiController.getScoreBox();
+        timerBox = uiController.getTimerBox();
+        scoreBox.getChildren().add(scoreLabel);
+        timerBox.getChildren().add(timerLabel);
 
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
@@ -306,7 +359,9 @@ class Game {
                             return;
                         }
 
-                        cycleCount++;
+                        if ((cycleCount++ % 20) == 0) {
+                            updateTimer();
+                        }
 
                         //
                         // timer related code below
@@ -420,6 +475,8 @@ class Game {
 
     public void delete() {
         timeline.stop();
+        scoreBox.getChildren().remove(scoreLabel);
+        timerBox.getChildren().remove(timerLabel);
         playField.recoverAllocatedMinos();
         parent.getChildren().remove(wall);
     }

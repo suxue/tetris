@@ -77,6 +77,10 @@ public class UIController implements Initializable {
     private Slider softDropSpeedSlider;
     @FXML
     private Button newGameButton;
+    @FXML
+    private Pane scoreBox;
+    @FXML
+    private Pane timerBox;
 
 
     public HBox getCenter() {
@@ -85,6 +89,14 @@ public class UIController implements Initializable {
 
     public Pane getPreviewBox() {
         return previewBox;
+    }
+
+    public Pane getScoreBox() {
+        return scoreBox;
+    }
+
+    public Pane getTimerBox() {
+        return timerBox;
     }
 
 
@@ -105,12 +117,25 @@ public class UIController implements Initializable {
         }
     }
 
+    @FXML
     private void startNewGame() {
         game = new Game(this, option) {
             @Override
             public void stop() {
                 root.setCenter(gameOverPage);
                 toggleButton.setDisable(true);
+            }
+
+            @Override
+            protected final void toggle() {
+                super.toggle();
+                if (getState() == State.ST_PAUSED) {
+                    toggleButton.setSelected(true);
+                    toggleButton.setText("Resume");
+                } else {
+                    toggleButton.setSelected(false);
+                    toggleButton.setText("Pause");
+                }
             }
         };
 
@@ -145,6 +170,15 @@ public class UIController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // install tooltip
+        Tooltip.install(scoreBox, new Tooltip("score board"));
+        Tooltip.install(previewBox, new Tooltip("tetromino preview"));
+        Tooltip.install(timerBox, new Tooltip("timer for current game"));
+        Tooltip.install(frameRateLabel, new Tooltip("frame rate"));
+        Tooltip.install(rowNumberLabel, new Tooltip("row number"));
+        Tooltip.install(columnNumberLabel, new Tooltip("column number"));
+        Tooltip.install(softDropSpeedLabel, new Tooltip("dropping speed will increase by X times when soft dropping"));
+
         // initialize option
         option = new Option();
         option.frameRateProperty().bind(frameRateSlider.valueProperty());
@@ -196,9 +230,29 @@ public class UIController implements Initializable {
         // load help page
         String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
         helpPage.getEngine().load(helpLink);
-        helpContainer.maxWidthProperty().bind(window.widthProperty().subtract(toolbar.heightProperty()).multiply(0.8));
-        helpContainer.maxHeightProperty().bind(window.heightProperty().subtract(helpContainer.translateYProperty()).multiply(0.8));
+
+        // bind helpPage width
+        window.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                double width = 0.8 * newVal.doubleValue();
+                width = width > 365 ? 365 : width;
+                helpContainer.setMaxWidth(width);
+            }
+        });
+
+        window.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                double height = 0.8 * newVal.doubleValue();
+                height = height > 490? 490: height;
+                helpContainer.setMaxHeight(height);
+            }
+        });
+
+
         helpContainer.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
+        helpContainer.translateXProperty().bind(window.widthProperty().subtract(helpContainer.widthProperty()).divide(16.0f));
 
         helpContainer.visibleProperty().addListener(new ChangeListener<Boolean>() {
             @Override

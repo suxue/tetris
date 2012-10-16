@@ -2,16 +2,6 @@
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, repeat, #d7fbdd 0.0, #439670 0.3, #c7d496 0.55, #def9c5 1.0);
 }
 
-.mybutton{
-	-fx-background-color: red;
-}
-
-.rect {
-	-fx-fill: red;
-}
-
-
-
 .alt-button  {
     -fx-background-color:
         rgba(0,0,0,0.08),
@@ -22,11 +12,10 @@
     -fx-padding: 15 30 15 30;
     -fx-text-fill: #242d35;
     -fx-font-size: 16px;
-    -fx-font-family: "Helvetica";
 }
 
 
-.alt-button:hover, .alt-button:focused{
+.alt-button:hover, .alt-button:focused, .alt-toggle-button:hover{
     -fx-background-color:
         rgba(0,0,0,0.08),
         linear-gradient(#5a61af, #51536d),
@@ -42,14 +31,13 @@
         -fx-background-insets: 0,1,4,5;
         -fx-background-radius: 9,8,5,4;
         -fx-padding: 15 30 15 30;
-        -fx-font-family: "Helvetica";
         -fx-font-size: 16px;
         -fx-font-weight: bold;
         -fx-text-fill: #333333;
         -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
 }
 
-.alt-toggle-button:selected, .alt-toggle-button:hover {
+.alt-toggle-button:selected,  {
     -fx-background-color:
         linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
         linear-gradient(#020b02, #3a3a3a),
@@ -59,7 +47,6 @@
     -fx-background-insets: 0,1,4,5,6;
     -fx-background-radius: 9,8,5,4,3;
     -fx-padding: 15 30 15 30;
-    -fx-font-family: "Helvetica";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -104,6 +91,12 @@
     -fx-fill: darkorange;
 }
 
+
+.large-label {
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%,  #5a0507 0.0,  #70432f 1.0);
+    -fx-font-size:24pt;
+}
+
 .wall {
     -fx-fill: rgba(44, 24, 58, 0.77);
     /* token from http://localhost/javadocs/javafx-css.html#labeled */
@@ -114,15 +107,16 @@
     -fx-stroke-line-cap: butt;
 }
 
-#previewBox {
-    -fx-background-color: black;
+#previewBox, #scoreBox, #timerBox {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
 }
+
 
 #helpContainer{
     -fx-border-color: linear-gradient(from 0% 0% to 100% 100%, white 0.0, darkgreen 1.0);
     -fx-border-width:5px;
     -fx-border-radius: 9, 9, 9, 9;
-    -fx-background-color: #e0ffff;
+    -fx-background-color: #d7e6d0;
     -fx-background-radius: 9, 9, 9, 9;
 }
 
@@ -134,7 +128,9 @@
     -fx-major-tick-unit:5;
 }
 
-.large-label {
-    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%,  #5a0507 0.0,  #70432f 1.0);
-    -fx-font-size:24pt;
+
+.score-label, .timer-label {
+    -fx-text-fill: white;
+    -fx-font-family: monospace;
 }
+

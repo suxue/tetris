@@ -62,6 +62,7 @@ public class Main extends Application {
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case F:
+                    case F11:
                         toggleFullScreen();
                         break;
                     case N:
