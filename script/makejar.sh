@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cp ../gpl.txt .
+
 rm -f game.jar
 
 javafxpackager  -createjar -nocss2bin -appclass tetris.core.Main -srcdir . \

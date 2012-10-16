@@ -203,8 +203,8 @@ public class UIController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
                 frameRateLabel.setText(String.valueOf(newVal.intValue()));
-                if (Math.round(oldVal.intValue() / 3.0f) == lockDelaySlider.getValue()) {
-                    lockDelaySlider.setValue(Math.round(newVal.intValue() / 3.0f));
+                if (Math.round(oldVal.intValue() / 2.0f) == lockDelaySlider.getValue()) {
+                    lockDelaySlider.setValue(Math.round(newVal.intValue() / 2.0f));
                 }
             }
         });
