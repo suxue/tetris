@@ -81,6 +81,10 @@ public class UIController implements Initializable {
     private Pane scoreBox;
     @FXML
     private Pane timerBox;
+    @FXML
+    private Slider lockDelaySlider;
+    @FXML
+    private LargeLabel lockDelayLabel;
 
 
     public HBox getCenter() {
@@ -178,6 +182,7 @@ public class UIController implements Initializable {
         Tooltip.install(rowNumberLabel, new Tooltip("row number"));
         Tooltip.install(columnNumberLabel, new Tooltip("column number"));
         Tooltip.install(softDropSpeedLabel, new Tooltip("dropping speed will increase by X times when soft dropping"));
+        Tooltip.install(lockDelayLabel, new Tooltip("how many frames will be counted before the tetromino is locked in the bottom"));
 
         // initialize option
         option = new Option();
@@ -185,8 +190,10 @@ public class UIController implements Initializable {
         option.rowNumberProperty().bind(rowNumberSlider.valueProperty());
         option.columnNumberProperty().bind(columnNumberSlider.valueProperty());
         option.softDropSpeedProperty().bind(softDropSpeedSlider.valueProperty());
+        option.lockDelayProperty().bind(lockDelaySlider.valueProperty());
 
 
+        lockDelayLabel.setText(lockDelaySlider.valueProperty().intValue() + "f");
         frameRateLabel.setText(String.valueOf(frameRateSlider.valueProperty().intValue()));
         columnNumberLabel.setText(String.valueOf(columnNumberSlider.valueProperty().intValue()));
         rowNumberLabel.setText(String.valueOf(rowNumberSlider.valueProperty().intValue()));
@@ -194,9 +201,11 @@ public class UIController implements Initializable {
         // initialize sliders and their labels
         frameRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
                 frameRateLabel.setText(String.valueOf(newVal.intValue()));
-
+                if (Math.round(oldVal.intValue() / 3.0f) == lockDelaySlider.getValue()) {
+                    lockDelaySlider.setValue(Math.round(newVal.intValue() / 3.0f));
+                }
             }
         });
 
@@ -223,6 +232,13 @@ public class UIController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
                 softDropSpeedLabel.setText(String.format("%1$,.0f", newVal) + "x");
+            }
+        });
+
+        lockDelaySlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                lockDelayLabel.setText(String.format("%1$,.0f", newVal) + "f");
             }
         });
 

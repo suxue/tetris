@@ -41,25 +41,27 @@
                         <CustomizedSlider  row="0" column="1" fx:id="frameRateSlider" min="50" max="80" value="60"/>
                         <LargeLabel  row="0" column="2" fx:id="frameRateLabel"/>
 
-                        <CenteredContainer row="1" column="0"><LargeLabel  text="row"/></CenteredContainer>
-                        <CustomizedSlider row="1" column="1" fx:id="rowNumberSlider" min="10" max="50" value="20" />
+                        <CenteredContainer row="1" column="0"><LargeLabel  text="lock delay"/></CenteredContainer>
+                        <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="80" value="20"/>
+                        <LargeLabel  row="1" column="2" fx:id="lockDelayLabel"/>
+
+                        <CenteredContainer row="2" column="0"><LargeLabel  text="row"/></CenteredContainer>
+                        <CustomizedSlider row="2" column="1" fx:id="rowNumberSlider" min="10" max="50" value="20" />
                         <LargeLabel row="2" column="2" fx:id="rowNumberLabel" />
 
-                        <CenteredContainer row="2" column="0"><LargeLabel  text="column"/></CenteredContainer>
-                        <CustomizedSlider row="2" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
-                        <LargeLabel row="1" column="2" fx:id="columnNumberLabel"  />
+                        <CenteredContainer row="3" column="0"><LargeLabel  text="column"/></CenteredContainer>
+                        <CustomizedSlider row="3" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
+                        <LargeLabel row="3" column="2" fx:id="columnNumberLabel"  />
 
-                        <CenteredContainer row="3" column="0"><LargeLabel  text="soft drop"/></CenteredContainer>
-                        <CustomizedSlider row="3" column="1" fx:id="softDropSpeedSlider" min="10" max="50" value="20" />
-                        <LargeLabel row="3" column="2" fx:id="softDropSpeedLabel" />
+                        <CenteredContainer row="4" column="0"><LargeLabel  text="soft drop"/></CenteredContainer>
+                        <CustomizedSlider row="4" column="1" fx:id="softDropSpeedSlider" min="10" max="50" value="20" />
+                        <LargeLabel row="4" column="2" fx:id="softDropSpeedLabel" />
 
-                         <AltButton text="Start" onAction="#startNewGame">
-                            <GridPane.rowIndex>4</GridPane.rowIndex>
+                      <AltButton text="Start" onAction="#startNewGame">
+                            <GridPane.rowIndex>5</GridPane.rowIndex>
                             <GridPane.columnIndex>1</GridPane.columnIndex>
                             <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>
                         </AltButton>
-
-
                     </GridPane>
                 </VBox>
 

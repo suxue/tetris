@@ -76,7 +76,7 @@ class Game {
     private int movingStartingCycle;
     // how many cycles should be wait before locking the dynamicTetromino
     // after it has stopped?
-    private int lockDelay = 20; //  frames
+    private final int lockDelay; //  frames
     private int movingDelay = 10; // frames
     private int startDelay = 5; // delay before start game
 
@@ -340,6 +340,7 @@ class Game {
 
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
+        lockDelay = option.lockDelayProperty().get();
         accelerationFactor = option.softDropSpeedProperty().get();
         frameRate = option.frameRateProperty().get();
         frameIntervalInMileSecond = ((double) 1000) / frameRate;
@@ -348,7 +349,6 @@ class Game {
 
         playField = new Grid(rows, columns, parent);
         previewField = new Grid(2, 4, uiController.getPreviewBox());
-
 
         mainFrame = new KeyFrame(frameInterval,
                 new EventHandler<ActionEvent>() {
