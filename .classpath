@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
+	<classpathentry kind="lib" path="/usr/local/javafx-sdk2.2.0-beta/rt/lib/jfxrt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
