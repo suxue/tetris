@@ -83,7 +83,8 @@ class Game {
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
     private double speedFactor = 1;
-    private  int    accelerationFactor;
+    private int level;
+    private  int accelerationFactor=20;
 
     private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
     private LongProperty currentTime = new SimpleLongProperty(-1); // in seconds
@@ -108,7 +109,7 @@ class Game {
         scoreCounter.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                scoreLabel.setText(String.format("%03d", 100 * newVal.intValue()));
+                scoreLabel.setText(String.format("%03d",newVal.intValue()));
             }
         });
     }
@@ -123,10 +124,26 @@ class Game {
     /////////////////////////////////////////////////////////////////////
 
     private void increaseScore(int add) {
-        if (add > 0) {
-            scoreCounter.set(scoreCounter.get() + add);
+        int score=0;
+        switch (add) {
+        
+        case 1:
+            score=100*level;
+            break;
+        case 2:
+            score=300*level;
+            break;
+        case 3:
+            score=500*level;
+            break;
+        case 4:
+            score=800*level;
+            break;
         }
-    }
+            
+            scoreCounter.set(scoreCounter.get() + score);
+        }
+    
 
     private void updateTimer() {
         long newTime = Math.round((cycleCount * frameIntervalInMileSecond) / 1000.0f);
@@ -236,7 +253,7 @@ class Game {
             }
         }
     }
-    private double a;
+    
 
     private void runStateMachine() {
         switch (getState()) {
@@ -265,7 +282,7 @@ class Game {
 
                 break;
             case ST_SPAWNING:
-                speedFactor = a;
+                speedFactor = level;
                 stopCycles = 0;
 
                 staticTetromino.detach();
@@ -341,7 +358,7 @@ class Game {
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
         lockDelay = option.lockDelayProperty().get();
-        a = option.frameRateProperty().get();
+        level = option.frameRateProperty().get();
         frameRate = 60;
         frameIntervalInMileSecond = ((double) 1000) / frameRate;
         frameInterval = Duration.millis(frameIntervalInMileSecond);
