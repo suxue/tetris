@@ -83,7 +83,7 @@ class Game {
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
     private double speedFactor = 1;
-    private final int    accelerationFactor;
+    private  int    accelerationFactor;
 
     private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
     private LongProperty currentTime = new SimpleLongProperty(-1); // in seconds
@@ -236,7 +236,7 @@ class Game {
             }
         }
     }
-
+    private double a;
 
     private void runStateMachine() {
         switch (getState()) {
@@ -265,7 +265,7 @@ class Game {
 
                 break;
             case ST_SPAWNING:
-                speedFactor = 1.0;
+                speedFactor = a;
                 stopCycles = 0;
 
                 staticTetromino.detach();
@@ -341,11 +341,11 @@ class Game {
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
         lockDelay = option.lockDelayProperty().get();
-        accelerationFactor = option.softDropSpeedProperty().get();
-        frameRate = option.frameRateProperty().get();
+        a = option.frameRateProperty().get();
+        frameRate = 60;
         frameIntervalInMileSecond = ((double) 1000) / frameRate;
         frameInterval = Duration.millis(frameIntervalInMileSecond);
-        baseSpeed = distancePerFrame / frameRate;
+        baseSpeed = distancePerFrame / 60;
 
         playField = new Grid(rows, columns, parent);
         previewField = new Grid(2, 4, uiController.getPreviewBox());
