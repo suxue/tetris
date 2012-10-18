@@ -21,6 +21,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
+
+
 /**
  * @author shellfish
  */
@@ -28,6 +30,10 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private Point2D cachedPosition;
+    private UIController uiController;
+    
+   
+
 
     private void toggleFullScreen() {
         if (primaryStage.fullScreenProperty().get()) {
@@ -40,19 +46,28 @@ public class Main extends Application {
         }
     }
 
+    @Override
+    public void stop() {
+        uiController.getPlayer().close();
+    }
+
 
     @Override
     public void start(final Stage stage) throws Exception {
+        
         primaryStage = stage;
-
+        
+     
+        
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = (Parent) fxmlLoader.load(getClass().getResource("/fxml/root.fxml").openStream());
-        final UIController uiController = (UIController) (fxmlLoader.getController());
+        uiController = (UIController) (fxmlLoader.getController());
 
         /* full screen feature
         *  this is here because the primary stage will be involved
         * */
         stage.setScene(new Scene(root));
+        stage.setTitle("Tetris Game(thu10e)");
         stage.show();
 
 
@@ -62,9 +77,11 @@ public class Main extends Application {
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case F:
+                    case F11:
                         toggleFullScreen();
                         break;
                     case N:
+                        
                         uiController.newGame();
                         break;
                     case H:
@@ -76,6 +93,8 @@ public class Main extends Application {
                 }
             }
         });
+
+        uiController.getPlayer().listen(0);
     }
 
     /**

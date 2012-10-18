@@ -17,7 +17,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 public final class Option {
     private SimpleIntegerProperty columnNumberProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty rowNumberProperty = new SimpleIntegerProperty();
-    private SimpleIntegerProperty frameRateProperty = new SimpleIntegerProperty();
+    private SimpleIntegerProperty lockDelayProperty = new SimpleIntegerProperty();
+    private SimpleIntegerProperty levelProperty = new SimpleIntegerProperty();
+
+    public IntegerProperty levelProperty () {
+        return levelProperty;
+    }
 
     public IntegerProperty columnNumberProperty() {
         return columnNumberProperty;
@@ -28,7 +33,9 @@ public final class Option {
         return rowNumberProperty;
     }
 
-    public IntegerProperty frameRateProperty() {
-        return frameRateProperty;
+
+
+    public IntegerProperty lockDelayProperty() {
+        return lockDelayProperty;
     }
 }

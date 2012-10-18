@@ -10,18 +10,20 @@
  */
 package tetris.core;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TimelineBuilder;
-import javafx.event.ActionEvent;
+import javafx.animation.AnimationTimer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import tetris.tetrominos.*;
+import tetris.ui.LargeLabel;
 import tetris.util.Rand;
 
 import static tetris.core.State.*;
@@ -50,10 +52,7 @@ class Game {
     private Grid playField;
     private Grid previewField;
 
-    private final int frameRate;
     private Rand randGenerator = new Rand();
-    private final double frameIntervalInMileSecond;
-    private final Duration frameInterval;
 
     private State state;
     private State oldState;
@@ -61,8 +60,6 @@ class Game {
     private Tetromino staticTetromino;
     private int cycleCount;
 
-    // how many cycles are left for sleeping, 0 if awake
-    private int sleepCycles;
 
     // how many cycles has the dynamicTetromino been stopped?
     private int stopCycles;
@@ -70,49 +67,71 @@ class Game {
     private int movingStartingCycle;
     // how many cycles should be wait before locking the dynamicTetromino
     // after it has stopped?
-    private int lockDelay = 30; //  frames
+    private final int lockDelay; //  frames
     private int movingDelay = 10; // frames
-    private int startDelay = 60; // frames
 
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
-    private double speedFactor = 1;
+    private double gravity;
+    private double softDropFactor;
+    private final int softDropBase;
+
+    private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
+    private LargeLabel   scoreLabel = new LargeLabel();
+    private LargeLabel   timerLabel = new LargeLabel();
+    private Pane scoreBox;
+    private Pane timerBox;
+    private final int level;
+
+    {
+        scoreLabel.getStyleClass().add("score-label");
+        timerLabel.getStyleClass().add("timer-label");
+
+        scoreCounter.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                scoreLabel.setText(String.format("%03d", 100 * newVal.intValue()));
+            }
+        });
+    }
 
 
-    private final KeyFrame mainFrame;
-    private final Timeline timeline;
+    long runningTimeInSeconds;
+    Timer timer = new Timer();
+
 
     /////////////////////////////////////////////////////////////////////
     //             Auxiliary Functions                                 //
     /////////////////////////////////////////////////////////////////////
 
-    public void restart() {
-        goTo(ST_STARTED);
-        timeline.play();
+    private void increaseScore(int add) {
+        if (add > 0) {
+            scoreCounter.set(scoreCounter.get() + add);
+        }
     }
 
 
-    public void toggle() {
+    public void restart() {
+        goTo(ST_STARTED);
+        timer.start();
+    }
+
+
+    protected void toggle() {
         if (getState() == ST_PAUSED) {
-            System.out.println("resumed");
             goTo(getOldState());
         } else {
-            System.out.println("paused");
             goTo(ST_PAUSED);
         }
     }
 
-    private void sleep(int frames) {
-        sleepCycles = frames;
-    }
 
     private void goTo(State newState) {
         oldState = getState();
         state = newState;
-        //System.out.println("from " + oldState + " to " + newState);
     }
 
-    private State getState() {
+    protected  State getState() {
         return state;
     }
 
@@ -154,7 +173,7 @@ class Game {
     }
 
     private double getSpeed() {
-        return baseSpeed * speedFactor;
+        return gravity * (softDropFactor + level);
     }
 
     private void drop() {
@@ -200,7 +219,10 @@ class Game {
                 // reset all counters
                 //
                 cycleCount = 0;
-                sleepCycles = 0;
+                scoreCounter.set(0);
+                timer.reset();
+                gravity = (1/48.0f);
+
 
                 // memory recovery
                 playField.recoverAllocatedMinos();
@@ -210,20 +232,18 @@ class Game {
                 dynamicTetromino = null;
                 staticTetromino.attach(previewField);
 
-                // then sleep for some seconds
                 goTo(ST_SPAWNING);
-                sleep(startDelay);
 
                 break;
             case ST_SPAWNING:
-                speedFactor = 1.0;
+                softDropFactor = 0.0;
                 stopCycles = 0;
 
                 staticTetromino.detach();
                 dynamicTetromino = staticTetromino;
                 staticTetromino = getNewTetromino();
                 staticTetromino.attach(previewField);
-                dynamicTetromino.attach(playField);
+                dynamicTetromino.attach(playField, -2);
 
                 // IF reach boundary
                 if (!dynamicTetromino.canMoveDown(0.001)) {
@@ -257,11 +277,11 @@ class Game {
                 //  pin every minos to the grid
                 dynamicTetromino.pin();
                 // clear lines
-                playField.squeeze();
+                increaseScore(playField.squeeze());
                 goTo(ST_SPAWNING);
                 break;
             case ST_STOPPED:
-                timeline.stop();
+                timer.pause();
                 stop();
                 break;
             default:  // should not reach here
@@ -277,6 +297,68 @@ class Game {
     private Pane parent;
     private Rectangle wall;
 
+
+    private class Timer extends AnimationTimer {
+        private LongProperty runningTimeInNanoSecond = new SimpleLongProperty();
+        private IntegerProperty runningTimeInSecond = new SimpleIntegerProperty();
+        private boolean isPause = true;
+
+        public Timer() {
+            runningTimeInSecond.bind(runningTimeInNanoSecond.divide(1000000000));
+            runningTimeInSecond.addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                    int seconds = newVal.intValue();
+                    int minutes = seconds / 60;
+                    seconds %= 60;
+                    timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+                }
+            });
+        }
+
+
+        private long oldTime;
+        @Override
+        public void handle(long newTime) {
+            long interval = newTime - oldTime;
+            oldTime = newTime;
+            if (getState() == ST_PAUSED) {
+                return;
+            }
+
+            if (interval < 70000000000l) {
+                runningTimeInNanoSecond.set(runningTimeInNanoSecond.get() + interval);
+                gravity = baseSpeed * interval;
+            }
+
+            myhandler(interval / (100000000.0));
+        }
+
+        public void myhandler(double interval) {
+            cycleCount++;
+            runStateMachine();
+        }
+
+        @Override
+        public void start() {
+            if (isPause) {
+                isPause = false;
+                super.start();
+            }
+        }
+
+        public void reset() {
+            oldTime = 0;
+            runningTimeInNanoSecond.set(0);
+        }
+
+        public void pause() {
+            isPause = true;
+            stop();
+        }
+    }
+
+
     /////////////////////////////////////////////////////////////////////
     //             Constructor                                         //
     /////////////////////////////////////////////////////////////////////
@@ -284,46 +366,21 @@ class Game {
 
 
         parent = uiController.getCenter();
+        scoreBox = uiController.getScoreBox();
+        timerBox = uiController.getTimerBox();
+        scoreBox.getChildren().add(scoreLabel);
+        timerBox.getChildren().add(timerLabel);
 
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
-        frameRate = option.frameRateProperty().get();
-        frameIntervalInMileSecond = ((double) 1000) / frameRate;
-        frameInterval = Duration.millis(frameIntervalInMileSecond);
-        baseSpeed = distancePerFrame / frameRate;
+        lockDelay = option.lockDelayProperty().get();
+        softDropBase = 20;
+        baseSpeed = 1.25e-09;
+        level = option.levelProperty().get();
 
         playField = new Grid(rows, columns, parent);
         previewField = new Grid(2, 4, uiController.getPreviewBox());
 
-
-        mainFrame = new KeyFrame(frameInterval,
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        if (getState() == ST_PAUSED) {
-                            return;
-                        }
-
-                        cycleCount++;
-
-                        //
-                        // timer related code below
-                        //
-                        if (sleepCycles != 0) {
-                            sleepCycles--; // skip left code
-                            return;
-                        }
-
-
-                        // run into state machine
-                        runStateMachine();
-                    }
-                }
-        );
-
-
-        timeline = TimelineBuilder.create().cycleCount(Animation.INDEFINITE)
-                .keyFrames(mainFrame).build();
 
         wall = new Rectangle();
         wall.setManaged(false);
@@ -348,7 +405,7 @@ class Game {
 
                 switch (keyEvent.getCode()) {
                     case SPACE:
-                        speedFactor = 20;
+                        softDropFactor = softDropBase * (1+level/10.0f);
                         break;
                     case P:
                     case ENTER:
@@ -417,9 +474,11 @@ class Game {
     } // end GameLogic()
 
     public void delete() {
-        timeline.stop();
+        timer.stop();
+        scoreBox.getChildren().remove(scoreLabel);
+        timerBox.getChildren().remove(timerLabel);
         playField.recoverAllocatedMinos();
         parent.getChildren().remove(wall);
     }
 
-}  // end GameLogic
+}  // end Game

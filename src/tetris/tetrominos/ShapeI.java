@@ -11,6 +11,8 @@
 package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 
 /*
@@ -46,6 +48,13 @@ public final class ShapeI extends Tetromino {
         return rotationData;
     }
 
+
+    @Override
+    protected void setStyle(Shape s) {
+        super.setStyle(s);
+        s.setFill(Color.DEEPSKYBLUE);
+        s.setStroke(Color.PURPLE);
+    }
 
     public ShapeI(Grid grid) {
         super(grid);

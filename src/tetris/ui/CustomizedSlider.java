@@ -11,10 +11,7 @@
 
 package tetris.ui;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
-
-import java.io.IOException;
 
 public class CustomizedSlider extends Slider {
     public void setRow(int row) {
@@ -41,16 +38,11 @@ public class CustomizedSlider extends Slider {
 
     public CustomizedSlider() {
         ga = new GridPaneAuxiliary(this);
-        getStyleClass().add("customizedSlider");
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/customizedSlider.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        getStyleClass().add("customized-slider");
+        setShowTickLabels(true);
+        setShowTickMarks(true);
+        setMinorTickCount(1);
+        setBlockIncrement(5);
+        setMajorTickUnit(5);
     }
 }

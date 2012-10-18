@@ -14,6 +14,10 @@ package tetris.tetrominos;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 
 // combination of cells
 // maintain my rotation status
@@ -25,7 +29,16 @@ abstract public class Tetromino {
 
     protected boolean hasBound = false;
 
+    protected void setStyle(Shape s) {
+        s.setStroke(Color.LIGHTGRAY);
+        s.setStrokeWidth(1.2);
+        s.setStrokeType(StrokeType.INSIDE);
+        s.setStrokeLineCap(StrokeLineCap.ROUND);
+    }
+
     protected Tetromino(Grid grid) {
+        // set style
+
         allMinos = grid.allocateMinos(4);
         setStatus(0);
         rebindMinos();
@@ -66,13 +79,23 @@ abstract public class Tetromino {
 
 
     // after attaching, I'll be showed in that grid
-    public final void attach(Grid grid) {
+    public final void attach(Grid grid, int rowNo, int columnNo) {
         for (Mino c : allMinos) {
+            setStyle(c);
             c.attach(grid);
         }
         // set to the top middle position
-        setPivot(boundingBoxToPivot(new Point2D((grid.getColumnNo() / 2) - 2, 0)));
+//        setPivot(boundingBoxToPivot(new Point2D((grid.getColumnNo() / 2) - 2, 0)));
+        setPivot(boundingBoxToPivot(new Point2D(columnNo, rowNo)));
         hostGrid = grid;
+    }
+
+    public final void attach(Grid grid, int rowNo) {
+        attach(grid, rowNo, grid.getColumnNo() / 2 - 2) ;
+    }
+
+    public final void attach(Grid grid) {
+        attach(grid, 0);
     }
 
 
@@ -89,14 +112,6 @@ abstract public class Tetromino {
             c.getStyleClass().add(cssClass);
         }
 
-    }
-
-    public final void align() {
-        Mino firstMino = allMinos[0];
-        double offset = Math.ceil(firstMino.getMinoYProperty().get())
-                - firstMino.getMinoYProperty().get();
-        Point2D pivot = getPivot();
-        setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
     }
 
 
@@ -139,6 +154,22 @@ abstract public class Tetromino {
     public final void moveDown(double len) {
         yProperty().set(yProperty().get() + len);
     }
+
+    // move directly to the bottom
+    public final void align() {
+        double distance = Double.MAX_VALUE;
+        double d;
+        for (int i=0; i < 4; i++) {
+            d =  hostGrid.getHighestOccupiedRow(
+                    (int)(allMinos[i].getMinoXProperty().get())) - 1 - allMinos[i].getMinoYProperty().get();
+            if (d < distance && d >= 0)
+                distance = d;
+        }
+        if (distance != Double.MAX_VALUE) {
+            moveDown(distance);
+        }
+    }
+
 
     public final void moveLeft() {
         xProperty().set(xProperty().get() - 1);

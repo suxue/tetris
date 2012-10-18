@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 
 public class AltButton extends Button {
     public AltButton() {
+        getStyleClass().add("alt-button");
         setFocusTraversable(false);
     }
 }

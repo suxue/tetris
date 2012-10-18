@@ -21,7 +21,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
+import tetris.ui.LargeLabel;
+import tetris.util.midi.Player;
+import tetris.util.midi.Track;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,6 +39,10 @@ public class UIController implements Initializable {
         UI Components
      */
     @FXML
+    private LargeLabel levelLabel;
+    @FXML
+    private Slider    levelSlider;
+    @FXML
     private StackPane window;
     @FXML
     private ToolBar toolbar;
@@ -42,8 +50,6 @@ public class UIController implements Initializable {
     private ToggleButton toggleButton;
     @FXML
     private Pane optionPage;
-    @FXML
-    private Button restartButton;
     @FXML
     private BorderPane root;
     @FXML
@@ -55,15 +61,11 @@ public class UIController implements Initializable {
     @FXML
     private Slider rowNumberSlider;
     @FXML
-    private Slider frameRateSlider;
-    @FXML
     private Pane gameOverPage;
     @FXML
-    private Label columnNumberLabel;
+    private LargeLabel columnNumberLabel;
     @FXML
-    private Label rowNumberLabel;
-    @FXML
-    private Label frameRateLabel;
+    private LargeLabel rowNumberLabel;
     @FXML
     private GridPane optionDisplay;
     @FXML
@@ -72,6 +74,16 @@ public class UIController implements Initializable {
     private ToggleButton helpButton;
     @FXML
     private  HBox helpContainer;
+    @FXML
+    private Button newGameButton;
+    @FXML
+    private Pane scoreBox;
+    @FXML
+    private Pane timerBox;
+    @FXML
+    private Slider lockDelaySlider;
+    @FXML
+    private LargeLabel lockDelayLabel;
 
 
     public HBox getCenter() {
@@ -82,12 +94,31 @@ public class UIController implements Initializable {
         return previewBox;
     }
 
+    public Pane getScoreBox() {
+        return scoreBox;
+    }
 
+    public Pane getTimerBox() {
+        return timerBox;
+    }
+
+    private Player player = new Player();
+    public UIController() throws URISyntaxException
+    {
+        player.add(new Track("/sound/menu.mid"));
+        player.add(new Track("/sound/play.mid"));
+    }
+
+    
     /*
         UI State machine
      */
     private Game game;
     private Option option;
+
+    public Player getPlayer() {
+        return player;
+    }
 
 
     public void restartGame() {
@@ -101,30 +132,47 @@ public class UIController implements Initializable {
     }
 
     @FXML
-    void startNewGame() {
+    private void startNewGame() {
         game = new Game(this, option) {
             @Override
             public void stop() {
                 root.setCenter(gameOverPage);
                 toggleButton.setDisable(true);
             }
+
+            @Override
+            protected final void toggle() {
+                super.toggle();
+                if (getState() == State.ST_PAUSED) {
+                    toggleButton.setSelected(true);
+                    toggleButton.setText("Resume");
+                } else {
+                    toggleButton.setSelected(false);
+                    toggleButton.setText("Pause");
+                }
+            }
         };
 
         restartGame();
+        player.listen(1);
         toggleButton.setSelected(false);
-        restartButton.setDisable(false);
+        newGameButton.setText("New Game");
     }
 
     public void newGame() {
-
-        if (game != null) {
-            // delete current game
-            game.delete();
-            game = null;
+        if (root.getCenter() != optionPage) {
+            if (game != null) {
+                // delete current game
+                game.delete();
+                game = null;
+            }
+            toggleButton.setDisable(true);
+            root.setCenter(optionPage);
+            player.listen(0);
+            newGameButton.setText("Start");
+        } else {
+            startNewGame();
         }
-        toggleButton.setDisable(true);
-        restartButton.setDisable(true);
-        root.setCenter(optionPage);
     }
 
     @FXML
@@ -135,27 +183,46 @@ public class UIController implements Initializable {
         }
     }
 
+    private final static String easy   = "Easy";
+    private final static String normal = "Normal";
+    private final static String hard   = "Hard";
+    private String levelToDesc(int level) {
+        switch (level) {
+            case 1:case 2:case 3:
+                return  easy;
+            case 4:case 5:case 6:
+                return normal;
+            case 7:case 8:case 9:case 10:
+                return hard;
+            default:
+                throw  new RuntimeException();
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // install tooltip
+        Tooltip.install(scoreBox, new Tooltip("score board"));
+        Tooltip.install(previewBox, new Tooltip("tetromino preview"));
+        Tooltip.install(timerBox, new Tooltip("timer for current game"));
+        Tooltip.install(rowNumberLabel, new Tooltip("row number"));
+        Tooltip.install(columnNumberLabel, new Tooltip("column number"));
+        Tooltip.install(lockDelayLabel, new Tooltip("how many frames will be counted before the tetromino is locked in the bottom"));
+
+
         // initialize option
         option = new Option();
-        option.frameRateProperty().bind(frameRateSlider.valueProperty());
         option.rowNumberProperty().bind(rowNumberSlider.valueProperty());
         option.columnNumberProperty().bind(columnNumberSlider.valueProperty());
+        option.lockDelayProperty().bind(lockDelaySlider.valueProperty());
+        option.levelProperty().bind(levelSlider.valueProperty());
 
 
-        frameRateLabel.setText(String.valueOf(frameRateSlider.valueProperty().intValue()));
+        levelLabel.setText(levelToDesc((int)Math.round(levelSlider.getValue())));
+        lockDelayLabel.setText(lockDelaySlider.valueProperty().intValue() + "f");
         columnNumberLabel.setText(String.valueOf(columnNumberSlider.valueProperty().intValue()));
         rowNumberLabel.setText(String.valueOf(rowNumberSlider.valueProperty().intValue()));
-        // initialize sliders and their labels
-        frameRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                frameRateLabel.setText(String.valueOf(newVal.intValue()));
-
-            }
-        });
 
         columnNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -167,17 +234,54 @@ public class UIController implements Initializable {
 
         rowNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
                 rowNumberLabel.setText(String.format("%1$,.0f", newVal));
             }
         });
 
+
+        lockDelaySlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                lockDelayLabel.setText(String.format("%1$,.0f", newVal) + "f");
+            }
+        });
+
+        levelSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                levelLabel.setText(levelToDesc((int)Math.round(levelSlider.getValue())));
+            }
+        });
+
+
+
         // load help page
         String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
         helpPage.getEngine().load(helpLink);
-        helpContainer.maxWidthProperty().bind(window.widthProperty().subtract(toolbar.heightProperty()).multiply(0.8));
-        helpContainer.maxHeightProperty().bind(window.heightProperty().subtract(helpContainer.translateYProperty()).multiply(0.8));
+
+        // bind helpPage width
+        window.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                double width = 0.8 * newVal.doubleValue();
+                width = width > 365 ? 365 : width;
+                helpContainer.setMaxWidth(width);
+            }
+        });
+
+        window.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                double height = 0.8 * newVal.doubleValue();
+                height = height > 490? 490: height;
+                helpContainer.setMaxHeight(height);
+            }
+        });
+
+
         helpContainer.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
+        helpContainer.translateXProperty().bind(window.widthProperty().subtract(helpContainer.widthProperty()).divide(16.0f));
 
         helpContainer.visibleProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -191,7 +295,6 @@ public class UIController implements Initializable {
                 helpContainer.setVisible(!helpContainer.isVisible());
             }
         });
-
 
     }
 }

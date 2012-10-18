@@ -11,8 +11,16 @@
 package tetris.tetrominos;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 public class ShapeZ extends ShapeJLSTZ {
+    @Override
+    protected void setStyle(Shape s) {
+        super.setStyle(s);
+        s.setFill(Color.RED);
+    }
+
     public ShapeZ(Grid grid) {
         super(grid);
         setCssClass("shapeZ");
