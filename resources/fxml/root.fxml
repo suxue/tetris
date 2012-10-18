@@ -42,7 +42,7 @@
                         <LargeLabel  row="0" column="2" fx:id="levelLabel"/>
 
                         <CenteredContainer row="1" column="0"><LargeLabel  text="lock delay"/></CenteredContainer>
-                        <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="80" value="30"/>
+                        <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="50" value="20"/>
                         <LargeLabel  row="1" column="2" fx:id="lockDelayLabel"/>
 
                         <CenteredContainer row="2" column="0"><LargeLabel  text="row"/></CenteredContainer>
@@ -53,7 +53,7 @@
                         <CustomizedSlider row="3" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
                         <LargeLabel row="3" column="2" fx:id="columnNumberLabel"  />
 
-                      <Button styleClass="greenButton" text="Start" onAction="#startNewGame">
+                      <Button focusTraversable="true" styleClass="greenButton" text="Start" onAction="#startNewGame">
                             <GridPane.rowIndex>5</GridPane.rowIndex>
                             <GridPane.columnIndex>1</GridPane.columnIndex>
                             <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>

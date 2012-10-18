@@ -63,7 +63,9 @@ public final class Grid {
         private Mino[][] chessBoard;
 
         void set(int x, int y, Mino c) {
-            chessBoard[x][y] = c;
+            if (y >= 0) {
+                chessBoard[x][y] = c;
+            }
         }
 
         void unset(int x, int y) {
@@ -156,7 +158,7 @@ public final class Grid {
 
         MinoPool() {
             super(getColumnNo() * getRowNo());
-            for (int i = 0; i < getColumnNo() * getRowNo(); i++)
+            for (int i = 0; i < getColumnNo() * getRowNo() + 10; i++)
                 add(new Mino());
 
             allMinos = toArray(new Mino[size()]);
