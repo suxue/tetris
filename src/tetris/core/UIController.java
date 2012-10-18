@@ -197,6 +197,22 @@ public class UIController implements Initializable {
         }
     }
 
+    private final static String easy   = "Easy";
+    private final static String normal = "Normal";
+    private final static String hard   = "Hard";
+    private String levelToDesc(int level) {
+        switch (level) {
+            case 1:case 2:case 3:
+                return  easy;
+            case 4:case 5:case 6:
+                return normal;
+            case 7:case 8:case 9:case 10:
+                return hard;
+            default:
+                throw  new RuntimeException();
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -217,7 +233,7 @@ public class UIController implements Initializable {
         option.levelProperty().bind(levelSlider.valueProperty());
 
 
-        levelLabel.setText(levelSlider.valueProperty().intValue() + "");
+        levelLabel.setText(levelToDesc((int)Math.round(levelSlider.getValue())));
         lockDelayLabel.setText(lockDelaySlider.valueProperty().intValue() + "f");
         columnNumberLabel.setText(String.valueOf(columnNumberSlider.valueProperty().intValue()));
         rowNumberLabel.setText(String.valueOf(rowNumberSlider.valueProperty().intValue()));
@@ -248,7 +264,7 @@ public class UIController implements Initializable {
         levelSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                levelLabel.setText((String.format("%1$,.0f", newVal)));
+                levelLabel.setText(levelToDesc((int)Math.round(levelSlider.getValue())));
             }
         });
 

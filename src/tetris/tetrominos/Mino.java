@@ -100,4 +100,5 @@ public final class Mino extends Rectangle {
 
         return hostGrid.isAccessible(targetX, targetY);
     }
+
 }

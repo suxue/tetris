@@ -39,5 +39,10 @@ public class CustomizedSlider extends Slider {
     public CustomizedSlider() {
         ga = new GridPaneAuxiliary(this);
         getStyleClass().add("customized-slider");
+        setShowTickLabels(true);
+        setShowTickMarks(true);
+        setMinorTickCount(1);
+        setBlockIncrement(5);
+        setMajorTickUnit(5);
     }
 }

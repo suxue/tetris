@@ -114,14 +114,6 @@ abstract public class Tetromino {
 
     }
 
-    public final void align() {
-        Mino firstMino = allMinos[0];
-        double offset = Math.ceil(firstMino.getMinoYProperty().get())
-                - firstMino.getMinoYProperty().get();
-        Point2D pivot = getPivot();
-        setPivot(new Point2D(pivot.getX(), pivot.getY() + offset));
-    }
-
 
     public final void pin() {
         for (Mino c : allMinos) {
@@ -161,6 +153,21 @@ abstract public class Tetromino {
 
     public final void moveDown(double len) {
         yProperty().set(yProperty().get() + len);
+    }
+
+    // move directly to the bottom
+    public final void align() {
+        double distance = Double.MAX_VALUE;
+        double d;
+        for (int i=0; i < 4; i++) {
+            d =  hostGrid.getHighestOccupiedRow(
+                    (int)(allMinos[i].getMinoXProperty().get())) - 1 - allMinos[i].getMinoYProperty().get();
+            if (d < distance)
+                distance = d;
+        }
+        if (distance != Double.MAX_VALUE) {
+            moveDown(distance);
+        }
     }
 
     public final void moveLeft() {

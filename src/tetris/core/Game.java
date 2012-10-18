@@ -70,8 +70,8 @@ class Game {
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
     private double gravity;
-    private double speedFactor = 1;
-    private final int    accelerationFactor;
+    private double softDropFactor;
+    private final int softDropBase;
 
     private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
     private LargeLabel   scoreLabel = new LargeLabel();
@@ -170,7 +170,7 @@ class Game {
     }
 
     private double getSpeed() {
-        return gravity * speedFactor * (1+ level/4.0f);
+        return gravity * (softDropFactor + level);
     }
 
     private void drop() {
@@ -233,7 +233,7 @@ class Game {
 
                 break;
             case ST_SPAWNING:
-                speedFactor = 1.0;
+                softDropFactor = 0.0;
                 stopCycles = 0;
 
                 staticTetromino.detach();
@@ -371,7 +371,7 @@ class Game {
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
         lockDelay = option.lockDelayProperty().get();
-        accelerationFactor = 20;
+        softDropBase = 20;
         baseSpeed = 1.25e-09;
         level = option.levelProperty().get();
 
@@ -402,7 +402,7 @@ class Game {
 
                 switch (keyEvent.getCode()) {
                     case SPACE:
-                        speedFactor = accelerationFactor;
+                        softDropFactor = softDropBase * (1+level/10.0f);
                         break;
                     case P:
                     case ENTER:

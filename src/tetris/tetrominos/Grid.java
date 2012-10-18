@@ -48,6 +48,16 @@ public final class Grid {
         return getOccupationMonitor().isAccessible(x, y);
     }
 
+    public int getHighestOccupiedRow(int columnNo) {
+        int r = getRowNo();
+        for (int i=r - 1; i >= 0; i--) {
+            if (get(columnNo, i) != null) {
+                r = i;
+            }
+        }
+        return r;
+    }
+
 
     private class OccupationMonitor {
         private Mino[][] chessBoard;

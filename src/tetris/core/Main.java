@@ -10,8 +10,6 @@
  */
 package tetris.core;
 
-import java.net.URL;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -20,12 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javafx.scene.media.AudioClip;
-
-import sun.security.krb5.Config;
 
 
 
@@ -68,6 +61,7 @@ public class Main extends Application {
         *  this is here because the primary stage will be involved
         * */
         stage.setScene(new Scene(root));
+        stage.setTitle("Tetris Game(thu10e)");
         stage.show();
 
 
