@@ -10,6 +10,8 @@
  */
 package tetris.core;
 
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +20,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.scene.media.AudioClip;
+
+import sun.security.krb5.Config;
+
+
 
 
 /**
@@ -28,6 +37,9 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private Point2D cachedPosition;
+    
+   
+
 
     private void toggleFullScreen() {
         if (primaryStage.fullScreenProperty().get()) {
@@ -43,8 +55,11 @@ public class Main extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
+        
         primaryStage = stage;
-
+        
+     
+        
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = (Parent) fxmlLoader.load(getClass().getResource("/fxml/root.fxml").openStream());
         final UIController uiController = (UIController) (fxmlLoader.getController());
@@ -66,6 +81,7 @@ public class Main extends Application {
                         toggleFullScreen();
                         break;
                     case N:
+                        
                         uiController.newGame();
                         break;
                     case H:

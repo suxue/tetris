@@ -104,6 +104,18 @@ public class UIController implements Initializable {
     }
 
 
+    private final AudioClip clipMenu;
+    private final AudioClip clipGamePlay;
+
+    
+    public UIController() throws URISyntaxException 
+    {
+           clipMenu  = new AudioClip(getClass().getResource("/sounds/tetris.mp3").toURI().toString());;
+           clipGamePlay =   new AudioClip(getClass().getResource("/sounds/gameplay.mp3").toURI().toString());
+            
+    }
+
+    
     /*
         UI State machine
      */
