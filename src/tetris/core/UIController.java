@@ -20,9 +20,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
 import javafx.scene.web.WebView;
 import tetris.ui.LargeLabel;
+import tetris.util.midi.Player;
+import tetris.util.midi.Track;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -101,30 +102,11 @@ public class UIController implements Initializable {
         return timerBox;
     }
 
-
-
-    private final AudioClip clipMenu;
-    private final AudioClip clipGamePlay;
-    private int trackNo = -1;
-    private void switchTrack(int trackNo) {
-        if (this.trackNo != trackNo) {
-            if (trackNo == 0) {
-                clipGamePlay.stop();
-                clipMenu.play();
-            } else if (trackNo == 1) {
-                clipMenu.stop();
-                clipGamePlay.play();
-            }
-
-            this.trackNo = trackNo;
-        }
-    }
-
-    
+    private Player player = new Player();
     public UIController() throws URISyntaxException
     {
-           clipMenu  = new AudioClip(getClass().getResource("/sounds/tetris.mp3").toURI().toString());;
-           clipGamePlay =   new AudioClip(getClass().getResource("/sounds/gameplay.mp3").toURI().toString());
+        player.add(new Track("/sound/menu.mid"));
+        player.add(new Track("/sound/play.mid"));
     }
 
     
@@ -133,6 +115,10 @@ public class UIController implements Initializable {
      */
     private Game game;
     private Option option;
+
+    public Player getPlayer() {
+        return player;
+    }
 
 
     public void restartGame() {
@@ -168,7 +154,7 @@ public class UIController implements Initializable {
         };
 
         restartGame();
-        switchTrack(1);
+        player.listen(1);
         toggleButton.setSelected(false);
         newGameButton.setText("New Game");
     }
@@ -182,7 +168,7 @@ public class UIController implements Initializable {
             }
             toggleButton.setDisable(true);
             root.setCenter(optionPage);
-            switchTrack(0);
+            player.listen(0);
             newGameButton.setText("Start");
         } else {
             startNewGame();
@@ -309,8 +295,6 @@ public class UIController implements Initializable {
                 helpContainer.setVisible(!helpContainer.isVisible());
             }
         });
-
-        switchTrack(0);
 
     }
 }

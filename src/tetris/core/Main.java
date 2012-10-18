@@ -30,6 +30,7 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private Point2D cachedPosition;
+    private UIController uiController;
     
    
 
@@ -45,6 +46,11 @@ public class Main extends Application {
         }
     }
 
+    @Override
+    public void stop() {
+        uiController.getPlayer().close();
+    }
+
 
     @Override
     public void start(final Stage stage) throws Exception {
@@ -55,7 +61,7 @@ public class Main extends Application {
         
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = (Parent) fxmlLoader.load(getClass().getResource("/fxml/root.fxml").openStream());
-        final UIController uiController = (UIController) (fxmlLoader.getController());
+        uiController = (UIController) (fxmlLoader.getController());
 
         /* full screen feature
         *  this is here because the primary stage will be involved
@@ -87,6 +93,8 @@ public class Main extends Application {
                 }
             }
         });
+
+        uiController.getPlayer().listen(0);
     }
 
     /**
