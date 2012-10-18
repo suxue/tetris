@@ -20,9 +20,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.web.WebView;
 import tetris.ui.LargeLabel;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -108,7 +110,7 @@ public class UIController implements Initializable {
     private final AudioClip clipGamePlay;
 
     
-    public UIController() throws URISyntaxException 
+    public UIController() throws URISyntaxException
     {
            clipMenu  = new AudioClip(getClass().getResource("/sounds/tetris.mp3").toURI().toString());;
            clipGamePlay =   new AudioClip(getClass().getResource("/sounds/gameplay.mp3").toURI().toString());
