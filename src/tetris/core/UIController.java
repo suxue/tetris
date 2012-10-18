@@ -74,10 +74,6 @@ public class UIController implements Initializable {
     @FXML
     private  HBox helpContainer;
     @FXML
-    private LargeLabel softDropSpeedLabel;
-    @FXML
-    private Slider softDropSpeedSlider;
-    @FXML
     private Button newGameButton;
     @FXML
     private Pane scoreBox;
@@ -106,15 +102,29 @@ public class UIController implements Initializable {
     }
 
 
+
     private final AudioClip clipMenu;
     private final AudioClip clipGamePlay;
+    private int trackNo = -1;
+    private void switchTrack(int trackNo) {
+        if (this.trackNo != trackNo) {
+            if (trackNo == 0) {
+                clipGamePlay.stop();
+                clipMenu.play();
+            } else if (trackNo == 1) {
+                clipMenu.stop();
+                clipGamePlay.play();
+            }
+
+            this.trackNo = trackNo;
+        }
+    }
 
     
     public UIController() throws URISyntaxException
     {
            clipMenu  = new AudioClip(getClass().getResource("/sounds/tetris.mp3").toURI().toString());;
            clipGamePlay =   new AudioClip(getClass().getResource("/sounds/gameplay.mp3").toURI().toString());
-            
     }
 
     
@@ -158,6 +168,7 @@ public class UIController implements Initializable {
         };
 
         restartGame();
+        switchTrack(1);
         toggleButton.setSelected(false);
         newGameButton.setText("New Game");
     }
@@ -171,6 +182,7 @@ public class UIController implements Initializable {
             }
             toggleButton.setDisable(true);
             root.setCenter(optionPage);
+            switchTrack(0);
             newGameButton.setText("Start");
         } else {
             startNewGame();
@@ -194,7 +206,6 @@ public class UIController implements Initializable {
         Tooltip.install(timerBox, new Tooltip("timer for current game"));
         Tooltip.install(rowNumberLabel, new Tooltip("row number"));
         Tooltip.install(columnNumberLabel, new Tooltip("column number"));
-        Tooltip.install(softDropSpeedLabel, new Tooltip("dropping speed will increase by X times when soft dropping"));
         Tooltip.install(lockDelayLabel, new Tooltip("how many frames will be counted before the tetromino is locked in the bottom"));
 
 
@@ -202,7 +213,6 @@ public class UIController implements Initializable {
         option = new Option();
         option.rowNumberProperty().bind(rowNumberSlider.valueProperty());
         option.columnNumberProperty().bind(columnNumberSlider.valueProperty());
-        option.softDropSpeedProperty().bind(softDropSpeedSlider.valueProperty());
         option.lockDelayProperty().bind(lockDelaySlider.valueProperty());
         option.levelProperty().bind(levelSlider.valueProperty());
 
@@ -211,7 +221,6 @@ public class UIController implements Initializable {
         lockDelayLabel.setText(lockDelaySlider.valueProperty().intValue() + "f");
         columnNumberLabel.setText(String.valueOf(columnNumberSlider.valueProperty().intValue()));
         rowNumberLabel.setText(String.valueOf(rowNumberSlider.valueProperty().intValue()));
-        softDropSpeedLabel.setText(String.valueOf(softDropSpeedSlider.valueProperty().intValue()) + "x");
 
         columnNumberSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -225,19 +234,9 @@ public class UIController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
                 rowNumberLabel.setText(String.format("%1$,.0f", newVal));
-                if (oldVal.intValue() == Math.round(softDropSpeedSlider.getValue())) {
-                    softDropSpeedSlider.setValue(newVal.intValue());
-                }
             }
         });
 
-
-        softDropSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                softDropSpeedLabel.setText(String.format("%1$,.0f", newVal) + "x");
-            }
-        });
 
         lockDelaySlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -295,6 +294,7 @@ public class UIController implements Initializable {
             }
         });
 
+        switchTrack(0);
 
     }
 }

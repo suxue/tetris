@@ -53,10 +53,6 @@
                         <CustomizedSlider row="3" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
                         <LargeLabel row="3" column="2" fx:id="columnNumberLabel"  />
 
-                        <CenteredContainer row="4" column="0"><LargeLabel  text="soft drop"/></CenteredContainer>
-                        <CustomizedSlider row="4" column="1" fx:id="softDropSpeedSlider" min="10" max="50" value="20" />
-                        <LargeLabel row="4" column="2" fx:id="softDropSpeedLabel" />
-
                       <Button styleClass="greenButton" text="Start" onAction="#startNewGame">
                             <GridPane.rowIndex>5</GridPane.rowIndex>
                             <GridPane.columnIndex>1</GridPane.columnIndex>

@@ -170,7 +170,7 @@ class Game {
     }
 
     private double getSpeed() {
-        return gravity * speedFactor * level;
+        return gravity * speedFactor * (1+ level/4.0f);
     }
 
     private void drop() {
@@ -371,8 +371,8 @@ class Game {
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
         lockDelay = option.lockDelayProperty().get();
-        accelerationFactor = 10;
-        baseSpeed = (1/200000000.0f);
+        accelerationFactor = 20;
+        baseSpeed = 1.25e-09;
         level = option.levelProperty().get();
 
         playField = new Grid(rows, columns, parent);

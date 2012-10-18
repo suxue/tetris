@@ -17,7 +17,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 public final class Option {
     private SimpleIntegerProperty columnNumberProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty rowNumberProperty = new SimpleIntegerProperty();
-    private SimpleIntegerProperty softDropSpeedProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty lockDelayProperty = new SimpleIntegerProperty();
     private SimpleIntegerProperty levelProperty = new SimpleIntegerProperty();
 
@@ -35,9 +34,6 @@ public final class Option {
     }
 
 
-    public IntegerProperty softDropSpeedProperty() {
-        return softDropSpeedProperty;
-    }
 
     public IntegerProperty lockDelayProperty() {
         return lockDelayProperty;
