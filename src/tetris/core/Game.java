@@ -179,7 +179,6 @@ class Game {
     private void drop() {
         if (dynamicTetromino.canMoveDown(getSpeed())) {
             dynamicTetromino.moveDown(getSpeed());
-            stopCycles = 0;
         } else {
             // cannot move, align first
             dynamicTetromino.align();
@@ -191,7 +190,7 @@ class Game {
 
     private void rotate(boolean clockwise) {
         if ((cycleCount - movingStartingCycle) % movingDelay == 0) {
-            dynamicTetromino.rotate(clockwise, (stopCycles == 0));
+            dynamicTetromino.rotate(clockwise);
         }
     }
 
