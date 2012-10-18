@@ -162,13 +162,14 @@ abstract public class Tetromino {
         for (int i=0; i < 4; i++) {
             d =  hostGrid.getHighestOccupiedRow(
                     (int)(allMinos[i].getMinoXProperty().get())) - 1 - allMinos[i].getMinoYProperty().get();
-            if (d < distance)
+            if (d < distance && d >= 0)
                 distance = d;
         }
         if (distance != Double.MAX_VALUE) {
             moveDown(distance);
         }
     }
+
 
     public final void moveLeft() {
         xProperty().set(xProperty().get() - 1);
