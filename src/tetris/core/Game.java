@@ -78,6 +78,7 @@ class Game {
     private LargeLabel   timerLabel = new LargeLabel();
     private Pane scoreBox;
     private Pane timerBox;
+    private final int level;
 
     {
         scoreLabel.getStyleClass().add("score-label");
@@ -169,7 +170,7 @@ class Game {
     }
 
     private double getSpeed() {
-        return gravity * speedFactor;
+        return gravity * speedFactor * level;
     }
 
     private void drop() {
@@ -372,6 +373,7 @@ class Game {
         lockDelay = option.lockDelayProperty().get();
         accelerationFactor = 10;
         baseSpeed = (1/200000000.0f);
+        level = option.levelProperty().get();
 
         playField = new Grid(rows, columns, parent);
         previewField = new Grid(2, 4, uiController.getPreviewBox());

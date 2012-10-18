@@ -37,9 +37,9 @@
                             </ColumnConstraints>
                             <ColumnConstraints percentWidth="10" />
                         </columnConstraints>
-                        <CenteredContainer row="0" column="0"><LargeLabel  text="fps"/></CenteredContainer>
-                        <CustomizedSlider  row="0" column="1" fx:id="frameRateSlider" min="50" max="80" value="60"/>
-                        <LargeLabel  row="0" column="2" fx:id="frameRateLabel"/>
+                        <CenteredContainer row="0" column="0"><LargeLabel  text="level"/></CenteredContainer>
+                        <CustomizedSlider  row="0" column="1" fx:id="levelSlider" min="1" max="10" value="1"/>
+                        <LargeLabel  row="0" column="2" fx:id="levelLabel"/>
 
                         <CenteredContainer row="1" column="0"><LargeLabel  text="lock delay"/></CenteredContainer>
                         <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="80" value="30"/>
