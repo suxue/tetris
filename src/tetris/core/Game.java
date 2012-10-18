@@ -10,23 +10,15 @@
  */
 package tetris.core;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TimelineBuilder;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.animation.AnimationTimer;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import tetris.tetrominos.*;
 import tetris.ui.LargeLabel;
 import tetris.util.Rand;
@@ -57,10 +49,7 @@ class Game {
     private Grid playField;
     private Grid previewField;
 
-    private final int frameRate;
     private Rand randGenerator = new Rand();
-    private final double frameIntervalInMileSecond;
-    private final Duration frameInterval;
 
     private State state;
     private State oldState;
@@ -80,11 +69,11 @@ class Game {
 
     private static final double distancePerFrame = 1.25;
     private final double baseSpeed;
+    private double gravity;
     private double speedFactor = 1;
     private final int    accelerationFactor;
 
     private IntegerProperty scoreCounter = new SimpleIntegerProperty(-1);
-    private LongProperty currentTime = new SimpleLongProperty(-1); // in seconds
     private LargeLabel   scoreLabel = new LargeLabel();
     private LargeLabel   timerLabel = new LargeLabel();
     private Pane scoreBox;
@@ -93,15 +82,6 @@ class Game {
     {
         scoreLabel.getStyleClass().add("score-label");
         timerLabel.getStyleClass().add("timer-label");
-        currentTime.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                int seconds = newVal.intValue();
-                int minutes = seconds / 60;
-                seconds %= 60;
-                timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
-            }
-        });
 
         scoreCounter.addListener(new ChangeListener<Number>() {
             @Override
@@ -112,9 +92,9 @@ class Game {
     }
 
 
+    long runningTimeInSeconds;
+    Timer timer = new Timer();
 
-    private final KeyFrame mainFrame;
-    private final Timeline timeline;
 
     /////////////////////////////////////////////////////////////////////
     //             Auxiliary Functions                                 //
@@ -126,16 +106,10 @@ class Game {
         }
     }
 
-    private void updateTimer() {
-        long newTime = Math.round((cycleCount * frameIntervalInMileSecond) / 1000.0f);
-        if (newTime > currentTime.get()) {
-            currentTime.set(newTime);
-        }
-    }
 
     public void restart() {
         goTo(ST_STARTED);
-        timeline.play();
+        timer.start();
     }
 
 
@@ -151,7 +125,6 @@ class Game {
     private void goTo(State newState) {
         oldState = getState();
         state = newState;
-        //System.out.println("from " + oldState + " to " + newState);
     }
 
     protected  State getState() {
@@ -196,7 +169,7 @@ class Game {
     }
 
     private double getSpeed() {
-        return baseSpeed * speedFactor;
+        return gravity * speedFactor;
     }
 
     private void drop() {
@@ -243,7 +216,9 @@ class Game {
                 //
                 cycleCount = 0;
                 scoreCounter.set(0);
-                currentTime.set(0);
+                timer.reset();
+                gravity = (1/48.0f);
+
 
                 // memory recovery
                 playField.recoverAllocatedMinos();
@@ -302,7 +277,7 @@ class Game {
                 goTo(ST_SPAWNING);
                 break;
             case ST_STOPPED:
-                timeline.stop();
+                timer.pause();
                 stop();
                 break;
             default:  // should not reach here
@@ -317,6 +292,68 @@ class Game {
 
     private Pane parent;
     private Rectangle wall;
+
+
+    private class Timer extends AnimationTimer {
+        private LongProperty runningTimeInNanoSecond = new SimpleLongProperty();
+        private IntegerProperty runningTimeInSecond = new SimpleIntegerProperty();
+        private boolean isPause = true;
+
+        public Timer() {
+            runningTimeInSecond.bind(runningTimeInNanoSecond.divide(1000000000));
+            runningTimeInSecond.addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
+                    int seconds = newVal.intValue();
+                    int minutes = seconds / 60;
+                    seconds %= 60;
+                    timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+                }
+            });
+        }
+
+
+        private long oldTime;
+        @Override
+        public void handle(long newTime) {
+            long interval = newTime - oldTime;
+            oldTime = newTime;
+            if (getState() == ST_PAUSED) {
+                return;
+            }
+
+            if (interval < 70000000000l) {
+                runningTimeInNanoSecond.set(runningTimeInNanoSecond.get() + interval);
+                gravity = baseSpeed * interval;
+            }
+
+            myhandler(interval / (100000000.0));
+        }
+
+        public void myhandler(double interval) {
+            cycleCount++;
+            runStateMachine();
+        }
+
+        @Override
+        public void start() {
+            if (isPause) {
+                isPause = false;
+                super.start();
+            }
+        }
+
+        public void reset() {
+            oldTime = 0;
+            runningTimeInNanoSecond.set(0);
+        }
+
+        public void pause() {
+            isPause = true;
+            stop();
+        }
+    }
+
 
     /////////////////////////////////////////////////////////////////////
     //             Constructor                                         //
@@ -333,35 +370,12 @@ class Game {
         int columns = option.columnNumberProperty().get();
         int rows = option.rowNumberProperty().get();
         lockDelay = option.lockDelayProperty().get();
-        accelerationFactor = option.softDropSpeedProperty().get();
-        frameRate = option.frameRateProperty().get();
-        frameIntervalInMileSecond = ((double) 1000) / frameRate;
-        frameInterval = Duration.millis(frameIntervalInMileSecond);
-        baseSpeed = distancePerFrame / frameRate;
+        accelerationFactor = 10;
+        baseSpeed = (1/200000000.0f);
 
         playField = new Grid(rows, columns, parent);
         previewField = new Grid(2, 4, uiController.getPreviewBox());
 
-        mainFrame = new KeyFrame(frameInterval,
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        if (getState() == ST_PAUSED) {
-                            return;
-                        }
-
-                        if ((cycleCount++ % 20) == 0) {
-                            updateTimer();
-                        }
-                        // run into state machine
-                        runStateMachine();
-                    }
-                }
-        );
-
-
-        timeline = TimelineBuilder.create().cycleCount(Animation.INDEFINITE)
-                .keyFrames(mainFrame).build();
 
         wall = new Rectangle();
         wall.setManaged(false);
@@ -455,7 +469,7 @@ class Game {
     } // end GameLogic()
 
     public void delete() {
-        timeline.stop();
+        timer.stop();
         scoreBox.getChildren().remove(scoreLabel);
         timerBox.getChildren().remove(timerLabel);
         playField.recoverAllocatedMinos();
