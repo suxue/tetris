@@ -6,7 +6,6 @@ project
           http://repo.crystalsnow.info/thu10e
     *  Read and Write (username: hg)
           ssh://repo.crystalsnow.info/thu10e
-          ssh://partch.anu.edu.au/thu10e
 *  Issue Tracker
           http://trac.crystalsnow.info/projects/thu10e
 
