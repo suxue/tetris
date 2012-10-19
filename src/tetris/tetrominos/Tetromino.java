@@ -209,7 +209,7 @@ abstract public class Tetromino {
 
     //  clock-wise/right
     //  counter clock-wise/left
-    public boolean rotate(boolean clockWise, boolean canRotateUp) {
+    public boolean rotate(boolean clockWise) {
         Point2D pivot = getPivot();
         double kickOffset;
         {
@@ -252,8 +252,6 @@ abstract public class Tetromino {
                 offsetX = wd[i * 2];
                 offsetY = wd[i * 2 + 1];
 
-                if (!canRotateUp && offsetY < 0)
-                    break;
 
                 x = pivot.getX() + offsetX + rd[j * 2];
                 y = pivot.getY() + offsetY + rd[j * 2 + 1];
@@ -277,8 +275,6 @@ abstract public class Tetromino {
                 for (k = 0; k < 4; k++) {
                     offsetX = wd[i * 2];
                     offsetY = wd[i * 2 + 1];
-                    if (!canRotateUp && offsetY < 0)
-                        break;
 
                     x = pivot.getX() + offsetX + rd[k * 2];
                     y = pivot.getY() + offsetY + rd[k * 2 + 1] + kickOffset;

@@ -1,3 +1,13 @@
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  midi player, can hold multiple tracks.
+ *  @author: $Author$
+ *  @date:   $Date$
+ */
 package tetris.util.midi;
 
 import java.util.ArrayList;

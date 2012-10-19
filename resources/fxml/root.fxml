@@ -10,9 +10,10 @@
 <?import javafx.scene.web.*?>
 <?import javafx.scene.text.*?>
 <?import tetris.ui.*?>
+<?import javafx.scene.image.*?>
 
 
-<StackPane fx:id="window" prefHeight="602" prefWidth="739"
+<StackPane fx:id="window" prefHeight="652" prefWidth="833"
     xmlns:fx="http://javafx.com/fxml" 
     fx:controller="tetris.core.UIController"
     stylesheets="/css/stylesheet.css">
@@ -24,7 +25,6 @@
         <center>
             <fx:define>
                 <TilePane fx:id="gameOverPage">
-                    <Label text="Game Over"/>
                 </TilePane>
 
                 <VBox fx:id="optionPage">
@@ -42,7 +42,7 @@
                         <LargeLabel  row="0" column="2" fx:id="levelLabel"/>
 
                         <CenteredContainer row="1" column="0"><LargeLabel  text="lock delay"/></CenteredContainer>
-                        <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="80" value="30"/>
+                        <CustomizedSlider  row="1" column="1" fx:id="lockDelaySlider" min="10" max="50" value="20"/>
                         <LargeLabel  row="1" column="2" fx:id="lockDelayLabel"/>
 
                         <CenteredContainer row="2" column="0"><LargeLabel  text="row"/></CenteredContainer>
@@ -53,7 +53,7 @@
                         <CustomizedSlider row="3" column="1" fx:id="columnNumberSlider"  min="10" max="50" value="10"/>
                         <LargeLabel row="3" column="2" fx:id="columnNumberLabel"  />
 
-                      <Button styleClass="greenButton" text="Start" onAction="#startNewGame">
+                      <Button focusTraversable="true" styleClass="greenButton" text="Start" onAction="#startNewGame">
                             <GridPane.rowIndex>5</GridPane.rowIndex>
                             <GridPane.columnIndex>1</GridPane.columnIndex>
                             <GridPane.halignment><HPos fx:constant="RIGHT"/></GridPane.halignment>
@@ -72,16 +72,16 @@
             <AltButton    fx:id="newGameButton"   text="New Game"  onAction="#newGame" />
             <AltToggleButton text="Pause"      onAction="#toggleGame" fx:id="toggleButton" disable="true"/>
             <AltToggleButton text="help"   fx:id="helpButton" />
+            <ImageView preserveRatio="true" fitHeight="${toolbar.prefHeight}"><Image url="/img/tetrislogo.png"/></ImageView>
             <HSpacer/>
             <StackPane prefWidth="100" prefHeight="50" fx:id="scoreBox"></StackPane>
             <StackPane prefWidth="100" prefHeight="50" fx:id="timerBox"></StackPane>
             <StackPane prefWidth="100" prefHeight="50" fx:id="previewBox"></StackPane>
     </ToolBar>
 </StackPane>
-    <HBox fx:id="helpContainer" prefWidth="500" prefHeight="500" opacity="0.60">
-        <WebView fx:id="helpPage">
+    <StackPane fx:id="helpContainer" visible="false" opacity="0.77" disable="true">
+        <WebView fx:id="helpPage" >
             <focusTraversable>false</focusTraversable>
         </WebView>
-        <visible>false</visible>
-    </HBox>
+    </StackPane>
 </StackPane>
