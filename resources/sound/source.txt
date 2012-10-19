@@ -1,2 +1,0 @@
-menu.mid http://www.vgmusic.com/music/console/sony/ps2/MMX8_Ending-KM.mid
-play.mid http://home2.swipnet.se/~w-22134/nmm/tetrisc.mid
