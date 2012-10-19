@@ -108,5 +108,9 @@ from http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
 }
 
 #gameOverPage {
-    -fx-background-color: red;
+    -fx-background-size: 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url('../img/gameOver.jpg');
+
 }
