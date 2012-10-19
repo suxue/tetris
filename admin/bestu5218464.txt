@@ -1,0 +1,7 @@
+I submit the class <tetris.tetrmino.ShapeZ> for assessment as my best class.
+
+I declare that this class is entirely my own work, with the following
+documented exceptions:
+
+
+Signed: Karun Agarwal (u5218464)
