@@ -12,7 +12,7 @@
 <?import tetris.ui.*?>
 
 
-<StackPane fx:id="window" prefHeight="602" prefWidth="739"
+<StackPane fx:id="window" prefHeight="652" prefWidth="833"
     xmlns:fx="http://javafx.com/fxml" 
     fx:controller="tetris.core.UIController"
     stylesheets="/css/stylesheet.css">
@@ -78,10 +78,9 @@
             <StackPane prefWidth="100" prefHeight="50" fx:id="previewBox"></StackPane>
     </ToolBar>
 </StackPane>
-    <HBox fx:id="helpContainer" prefWidth="500" prefHeight="500" opacity="0.60">
-        <WebView fx:id="helpPage">
+    <StackPane fx:id="helpContainer" visible="false" opacity="0.77" disable="true">
+        <WebView fx:id="helpPage" >
             <focusTraversable>false</focusTraversable>
         </WebView>
-        <visible>false</visible>
-    </HBox>
+    </StackPane>
 </StackPane>

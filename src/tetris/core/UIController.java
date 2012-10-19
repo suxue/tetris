@@ -73,8 +73,6 @@ public class UIController implements Initializable {
     @FXML
     private ToggleButton helpButton;
     @FXML
-    private  HBox helpContainer;
-    @FXML
     private Button newGameButton;
     @FXML
     private Pane scoreBox;
@@ -84,6 +82,8 @@ public class UIController implements Initializable {
     private Slider lockDelaySlider;
     @FXML
     private LargeLabel lockDelayLabel;
+    @FXML
+    private Pane helpContainer;
 
 
     public HBox getCenter() {
@@ -256,32 +256,13 @@ public class UIController implements Initializable {
 
 
 
+
+        helpContainer.setScaleX(0.7);
+        helpContainer.setScaleY(0.7);
+
         // load help page
         String helpLink = getClass().getResource("/doc/help.html").toExternalForm();
         helpPage.getEngine().load(helpLink);
-
-        // bind helpPage width
-        window.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                double width = 0.8 * newVal.doubleValue();
-                width = width > 365 ? 365 : width;
-                helpContainer.setMaxWidth(width);
-            }
-        });
-
-        window.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newVal) {
-                double height = 0.8 * newVal.doubleValue();
-                height = height > 490? 490: height;
-                helpContainer.setMaxHeight(height);
-            }
-        });
-
-
-        helpContainer.translateYProperty().bind(toolbar.heightProperty().divide(2.0f));
-        helpContainer.translateXProperty().bind(window.widthProperty().subtract(helpContainer.widthProperty()).divide(16.0f));
 
         helpContainer.visibleProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -295,6 +276,5 @@ public class UIController implements Initializable {
                 helpContainer.setVisible(!helpContainer.isVisible());
             }
         });
-
     }
 }

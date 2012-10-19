@@ -1,3 +1,14 @@
+
+/*  Copyright (c) 2012 All Right Reserved
+ *
+ *  This source is subject to the GNU general public License.  Please see the
+ *  gpl.txt file for more information.  All other rights reserved.
+ *
+ *  @file:   $File$
+ *  @brief:  represent one track in the midi player
+ *  @author: $Author$
+ *  @date:   $Date$
+ */
 package tetris.util.midi;
 
 import javax.sound.midi.*;
@@ -25,7 +36,6 @@ public class Track
                 @Override
                 public void meta(MetaMessage event) {
                     if (event.getType() == END_OF_TRACK_MESSAGE) {
-                        System.out.println("restart");
                         player.setMicrosecondPosition(0);
                         player.start();
                     }
