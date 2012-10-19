@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
+import tetris.util.Algo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,6 +100,7 @@ public final class Grid {
         }
 
 
+
         // test whole lines and erase them
         // return the answer to 'how many lines have been erased?'
         final int squeeze() {
@@ -145,7 +147,14 @@ public final class Grid {
                 }
             }
 
+            squeezeAlt();
+
             return emptyLines;
+        }
+
+
+        private void squeezeAlt() {
+            Algo.compact(((Object[][]) chessBoard));
         }
 
         OccupationMonitor() {
