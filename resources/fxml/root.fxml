@@ -10,6 +10,7 @@
 <?import javafx.scene.web.*?>
 <?import javafx.scene.text.*?>
 <?import tetris.ui.*?>
+<?import javafx.scene.image.*?>
 
 
 <StackPane fx:id="window" prefHeight="652" prefWidth="833"
@@ -24,7 +25,6 @@
         <center>
             <fx:define>
                 <TilePane fx:id="gameOverPage">
-                    <Label text="Game Over"/>
                 </TilePane>
 
                 <VBox fx:id="optionPage">
@@ -72,6 +72,7 @@
             <AltButton    fx:id="newGameButton"   text="New Game"  onAction="#newGame" />
             <AltToggleButton text="Pause"      onAction="#toggleGame" fx:id="toggleButton" disable="true"/>
             <AltToggleButton text="help"   fx:id="helpButton" />
+            <ImageView preserveRatio="true" fitHeight="${toolbar.prefHeight}"><Image url="/img/tetrislogo.png"/></ImageView>
             <HSpacer/>
             <StackPane prefWidth="100" prefHeight="50" fx:id="scoreBox"></StackPane>
             <StackPane prefWidth="100" prefHeight="50" fx:id="timerBox"></StackPane>

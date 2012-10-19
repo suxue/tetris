@@ -106,3 +106,7 @@ from http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
         linear-gradient(#f0ff35, #a9ff00),
         radial-gradient(center 50% -40%, radius 200%, #d8fd80 45%, #a5e532 50%);
 }
+
+#gameOverPage {
+    -fx-background-color: red;
+}
