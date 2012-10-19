@@ -1,7 +1,0 @@
-I submit the class <tetris.core.Game> for assessment as my best class.
-
-I declare that this class is entirely my own work, with the following
-documented exceptions:
-
-
-Signed: Hao Fei (u5074277)
