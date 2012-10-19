@@ -1,0 +1,5 @@
+We declare that the work we have submitted for Stage 5 of this
+assignment and all stages before it is entirely our own work, with the
+following documented exceptions:
+
+Signed: Tasneem Tayeb (u5183102), Karun Agarwal (u5218464), Hao Fei (u5074277) 
