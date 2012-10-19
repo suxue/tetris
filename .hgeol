@@ -1,0 +1,13 @@
+[repository]
+native = LF
+
+[patterns]
+**.pub          = LF
+**.jpg          = BIN
+**.png          = BIN
+**.class        = BIN
+**.txt          = NATIVE
+**.css          = NATIVE
+**.java         = NATIVE
+**.classpath    = NATIVE
+**.project      = NATIVE

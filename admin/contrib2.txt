@@ -1,9 +1,0 @@
-We declare that the work toward our submission of Stage <?> was
-distributed among the group members as follows:
-
-u5183102 33
-u5218464 33
-u5074277 33
-
-Signed: Tasneem Tayeb (u5183102), Karun Agarwal (u5218464), Hao Fei (u5074277) 
-

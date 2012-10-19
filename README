@@ -1,0 +1,18 @@
+project 
+=======
+*  Mailing List: comp1110thu10e@googlegroups.com
+*  Clone URL
+    *  Read only
+          http://repo.crystalsnow.info/thu10e
+    *  Read and Write (username: hg)
+          ssh://repo.crystalsnow.info/thu10e
+*  Issue Tracker
+          http://trac.crystalsnow.info/projects/thu10e
+
+
+Setup
+=====
+
+To play this game, import this folder as an existing project to eclipse.
+
+Note: Don't forget add a user library named 'JavaFX'.

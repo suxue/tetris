@@ -1,0 +1,116 @@
+.root {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, repeat, #d7fbdd 0.0, #439670 0.3, #c7d496 0.55, #def9c5 1.0);
+}
+
+.alt-button  {
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 15 30 15 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 16px;
+}
+
+
+.alt-button:hover, .alt-button:focused, .alt-toggle-button:hover{
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#5a61af, #51536d),
+        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
+}
+
+.alt-toggle-button {
+        -fx-background-color:
+            linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+            linear-gradient(#020b02, #3a3a3a),
+            linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),
+            linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);
+        -fx-background-insets: 0,1,4,5;
+        -fx-background-radius: 9,8,5,4;
+        -fx-padding: 15 30 15 30;
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #333333;
+        -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+
+.alt-toggle-button:selected,  {
+    -fx-background-color:
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-padding: 15 30 15 30;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+
+.large-label {
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%,  #5a0507 0.0,  #70432f 1.0);
+    -fx-font-size:24pt;
+}
+
+.wall {
+    -fx-fill: rgba(44, 24, 58, 0.77);
+    /* token from http://localhost/javadocs/javafx-css.html#labeled */
+    -fx-stroke: green;
+    -fx-stroke-width: 7.7;
+    -fx-stroke-dash-array: 12 2 4 2;
+    -fx-stroke-dash-offset: 6;
+    -fx-stroke-line-cap: butt;
+}
+
+#previewBox, #scoreBox, #timerBox {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+
+#helpContainer{
+    -fx-border-color: linear-gradient(from 0% 0% to 100% 100%, white 0.0, darkgreen 1.0);
+    -fx-border-width:5px;
+    -fx-border-radius: 9, 9, 9, 9;
+    -fx-background-color: #d7e6d0;
+    -fx-background-radius: 9, 9, 9, 9;
+}
+
+
+.score-label, .timer-label {
+    -fx-text-fill: white;
+    -fx-font-family: monospace;
+}
+
+/*
+from http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
+*/
+.greenButton {
+    -fx-background-color:
+        linear-gradient(#f0ff35, #a9ff00),
+        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #395306;
+    -fx-font-size: 20px;
+}
+
+.greenButton:hover, .greenButton:focused,{
+    -fx-background-color:
+        linear-gradient(#f0ff35, #a9ff00),
+        radial-gradient(center 50% -40%, radius 200%, #d8fd80 45%, #a5e532 50%);
+}
+
+#gameOverPage {
+    -fx-background-size: 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url('../img/gameOver.jpg');
+
+}
